@@ -19,14 +19,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="cz.trask.zenid.sdk.MatcherActivity"
-            android:screenOrientation="landscape" />
-
-        <activity
-            android:name="cz.trask.zenid.sdk.FaceLivenessDetectorActivity"
-            android:screenOrientation="portrait" />
-
     </application>
 
 </manifest>
