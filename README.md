@@ -5,8 +5,6 @@ A simple sample app that shows how to use the ZenID Android SDK. The SDK can hel
 * verification of your documents (Identity card, Driving license, Passport)
 * real-time face liveness detection
 
-### Obtaining tokens
-
 In order to start integration, you will need the **API key** and **URL** of the backend system.
 
 ### Instalation
