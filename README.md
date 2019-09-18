@@ -3,7 +3,7 @@
 A collection of samples that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
 * OCR and data extraction
-* verficiation of authenticity
+* verification of authenticity
 * real-time face liveness detection
 
 Czech and Slovak identity cards, driving licenses and passports are supported.
