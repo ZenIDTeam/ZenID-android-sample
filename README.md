@@ -1,15 +1,22 @@
-## ZenID Android SDK
+## ZenID Android SDK samples
 
-A simple sample app that shows how to use the ZenID Android SDK. The SDK can help you with:
+A collection of samples that shows how to use the ZenID Android SDK. The SDK can help you with:
 
 * verification of your documents (Identity card, Driving license, Passport)
 * real-time face liveness detection
 
-In order to start integration, you will need the **API key** and **URL** of the backend system.
+### Samples
+
+* **[basic-sample]** - Shows how to run document scanner or face liveness detector.
+
+* **[basic-dagger-sample]** - Extends basic-sample with the well-known dependency injection framework Dagger.
+
+* **[full-dagger-sample]** - Shows how to compose a full flow (scan a document, pass the liveness check and make a selfie).
+
 
 ### Instalation
 
-* Put **zenid-sdk-release.aar** in the libs folder of the app
+* Put **sdk-core-release.aar** and **sdk-api-zenid-release.aar** in the libs folder of the app
 * Edit the build.gradle file of your app and add
 ```groovy
 ext {
@@ -31,7 +38,6 @@ dependencies {
     implementation 'com.otaliastudios:cameraview:2.1.0'
 }
 ```
-We plan to setup our own maven repository but so far only this option is available
 * Rebuild the project
 
 ### Multi-APK split
@@ -61,80 +67,78 @@ android {
 More information on the [Android documentation](http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits)
 
 ### Initialization
+ 
+ZenID Android SDK is collection of two modules. First one is the core module for offline image processing. Second one is an API integration to our backend system.
 
-To use the SDK, you need to obtain an instance of the RemoteConfig and pass your **URL** and **API key**:
-
-```
-RemoteConfig remoteConfig = new RemoteConfig.Builder()
-        .baseUrl("http://your.frauds.zenid.cz/api/") 
-        .apiKey("your_api_key")
-        .build();
-```
-also you need an instance of the okHttpClient:
-
-```
-OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-        // .addInterceptor() if you want to add a logging interceptor or such cases
-        .build();
-```
-and then initialize the client:
 ```
 ZenId zenId = new ZenId.Builder()
         .applicationContext(getApplicationContext())
-        .remoteConfig(remoteConfig)
-        .okHttpClient(okHttpClient)
         .build();
 
-// Make the client globally accessible.
+// Make the instance globally accessible.
 ZenId.setSingletonInstance(zenId);
 
 // This may take a few seconds. Please do it as soon as possible.
 zenId.initialize();
 ```
+
+In order to start integration, you will need to get an **API key** and **URL** of the backend system.
+
+```
+ApiConfig apiConfig = new ApiConfig.Builder()
+        .baseUrl("http://your.frauds.zenid.cz/api/") 
+        .apiKey("your_api_key")
+        .build();
+```
+
+```
+OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+        // .addInterceptor() if you want to add a logging interceptor and so on
+        .build();
+```
+
+```
+ApiService apiService = new ApiService.Builder()
+        .apiConfig(apiConfig)
+        .okHttpClient(okHttpClient)
+        .build();
+```
+
+Please, check out our samples and you will get the whole picture how it works.
  
 ### Document verification flow
 
-To begin with the document verifier just start the MatcherActivity with expected role, page and country. 
+To begin with the document picture verifier just start with expected role, page and country. 
 ```
-ZenId.get().startMatcherActivity(MyActivity.this, DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
+ZenId.get().startDocumentPictureVerifier(MyActivity.this, DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
+```
+
+Or you can start directly the identity document verifier, similar for driving licenses or passports.
+```
+ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
 ```
 
 ### Face liveness flow
 
 To begin with the real-time face liveness check just start the FaceLivenessDetectorActivity. 
 ```
-ZenId.get().startFaceLivenessDetectorActivity(MyActivity.this);
+ZenId.get().startFaceLivenessDetector(MyActivity.this);
 ```
 
 ### Results
 
-Set the `ZenId.Callback` to receive results from both flows.
+Set the `ZenId.Callback` to handle taken pictures by the core part of the ZenId SDK. 
 ```
 ZenId.get().setCallback(new ZenId.Callback() {
 
     @Override
-    public void onMatcherPictureTaken(DocumentRole documentRole, DocumentPage documentPage, String picturePath) {
-        Timber.i("Match - documentRole: %s, documentPage: %s, picturePath: %s", documentRole, documentPage, picturePath);
+    public void onDocumentPictureTaken(DocumentCountry documentCountry, DocumentRole documentRole, Integer documentCode, DocumentPage documentPage, String documentPicturePath) {
+        Timber.i("picturePath: %s", documentPicturePath);
     }
 
     @Override
-    public void onMatcherResult(DocumentRole documentRole, DocumentPage documentPage, String sampleId) {
-        Timber.i("Match & Succesful response - documentRole: %s, documentPage: %s, sampleId: %s", documentRole, documentPage, sampleId);
-    }
-
-    @Override
-    public void onMatcherError(DocumentRole documentRole, DocumentPage documentPage, MatcherResponseValidator.State state) {
-        Timber.i("Match & Error response - documentRole: %s, documentPage: %s", documentRole, documentPage);
-    }
-
-    @Override
-    public void onFaceLivenessDetectorPictureTaken(String picturePath) {
-        Timber.i("Selfie - picturePath: %s", picturePath);
-    }
-
-    @Override
-    public void onFaceLivenessDetectorResult(String picturePath, String sampleId) {
-        Timber.i("Selfie detected - picturePath: %s, sampleId: %s", picturePath, sampleId);
+    public void onSelfiePictureTaken(String selfiePicturePath) {
+        Timber.i("picturePath: %s", selfiePicturePath);
     }
 
     @Override
@@ -144,6 +148,42 @@ ZenId.get().setCallback(new ZenId.Callback() {
 });
 ```
 
-### Sample project
+To get results of Optical character recognition (OCR) and investigations, you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls, for instance:
 
-You can find a simple example how to use the ZenID Android SDK attached. Please have a look and launch it.
+```
+apiService.postDocumentPictureSample(documentCountry, documentRole, documentCode, documentPage, documentPicturePath).enqueue(new retrofit2.Callback<SampleJson>() {
+
+    @Override
+    public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+        String sampleId = response.body().getSampleId();
+        Timber.i("sampleId: %s", sampleId);
+    }
+
+    @Override
+    public void onFailure(Call<SampleJson> call, Throwable t) {
+        Timber.e(t);
+    }
+}); 
+```
+
+To run OCR or investigation on more documents together (both sides of ID card and/or driving license and so on), you should keep safe `sampleId` of each POST call and then make altogether:
+
+```
+apiService.getInvestigateSamples(sampleIds).enqueue(new Callback<InvestigationResponseJson>() {
+
+    @Override
+    public void onResponse(Call<InvestigationResponseJson> call, Response<InvestigationResponseJson> response) {
+        Timber.i("investigationId: %s", response.body().getInvestigationId() );
+        InvestigationResponseJson investigationResponse = response.body();
+        showMinedData(investigationResponse);
+        showValidatorResults(investigationResponse);
+    }
+
+    @Override
+    public void onFailure(Call<InvestigationResponseJson> call, Throwable t) {
+        Timber.e(t);
+    }
+});
+```
+
+You can find out more detail inside the full-dagger-sample.

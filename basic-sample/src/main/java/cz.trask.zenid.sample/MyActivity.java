@@ -9,7 +9,6 @@ import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
 import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.ZenId;
-import cz.trask.zenid.sdk.api.DocumentPictureResponseValidator;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -27,6 +26,8 @@ public class MyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ZenId.get().startDocumentPictureVerifier(MyActivity.this, DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
+
+                ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
             }
         });
 
@@ -46,13 +47,8 @@ public class MyActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
-                        DocumentPictureResponseValidator.State state = DocumentPictureResponseValidator.validate(documentRole, documentPage, response);
-                        if (state == DocumentPictureResponseValidator.State.CORRECT) {
-                            String sampleId = response.body().getSampleId();
-                            Timber.i("Succesful - documentRole: %s, documentPage: %s, sampleId: %s", documentRole, documentPage, sampleId);
-                        } else {
-                            Timber.w("Error - documentRole: %s, documentPage: %s", documentRole, documentPage);
-                        }
+                        String sampleId = response.body().getSampleId();
+                        Timber.i("sampleId: %s", sampleId);
                     }
 
                     @Override
@@ -69,7 +65,7 @@ public class MyActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
                         String sampleId = response.body().getSampleId();
-                        Timber.i("Succesful - sampleId: %s", sampleId);
+                        Timber.i("sampleId: %s", sampleId);
                     }
 
                     @Override

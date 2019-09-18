@@ -10,7 +10,6 @@ import cz.trask.zenid.sdk.DocumentPage;
 import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiService;
-import cz.trask.zenid.sdk.api.DocumentPictureResponseValidator;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import dagger.android.support.DaggerAppCompatActivity;
 import retrofit2.Call;
@@ -51,13 +50,8 @@ public class MyActivity extends DaggerAppCompatActivity {
 
                     @Override
                     public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
-                        DocumentPictureResponseValidator.State state = DocumentPictureResponseValidator.validate(documentRole, documentPage, response);
-                        if (state == DocumentPictureResponseValidator.State.CORRECT) {
-                            String sampleId = response.body().getSampleId();
-                            Timber.i("Succesful - documentRole: %s, documentPage: %s, sampleId: %s", documentRole, documentPage, sampleId);
-                        } else {
-                            Timber.w("Error - documentRole: %s, documentPage: %s", documentRole, documentPage);
-                        }
+                        String sampleId = response.body().getSampleId();
+                        Timber.i("sampleId: %s", sampleId);
                     }
 
                     @Override
@@ -74,7 +68,7 @@ public class MyActivity extends DaggerAppCompatActivity {
                     @Override
                     public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
                         String sampleId = response.body().getSampleId();
-                        Timber.i("Succesful - sampleId: %s", sampleId);
+                        Timber.i("sampleId: %s", sampleId);
                     }
 
                     @Override
