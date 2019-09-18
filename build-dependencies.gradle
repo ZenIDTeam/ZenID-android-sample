@@ -2,6 +2,8 @@ ext {
     okHttpVersion = '3.13.0'
     retrofitVersion = '2.5.0'
     daggerVersion = '2.19'
+    butterKnifeVersion = '10.0.0'
+    materialVersion = '1.0.0'
 }
 
 dependencies {

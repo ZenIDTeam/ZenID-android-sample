@@ -1,1 +1,1 @@
-include ':basic-dagger-sample', ':basic-sample'
+include ':basic-dagger-sample', ':basic-sample', ':full-dagger-sample'
