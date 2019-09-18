@@ -42,7 +42,7 @@ dependencies {
 
 ### Multi-APK split
 
-C++ code needs to be compiled for each of the CPU architectures (known as "ABIs") present on the Android environment. Currently, the SDK supports the following ABIs:
+The C++ code needs to be compiled for each of the CPU architectures (known as "ABIs") present on the Android environment. Currently, the SDK supports the following ABIs:
 
 * `armeabi-v7a`: Version 7 or higher of the ARM processor. Most recent Android phones use this
 * `arm64-v8a`: 64-bit ARM processors. Found on new generation devices
@@ -68,7 +68,7 @@ More information on the [Android documentation](http://tools.android.com/tech-do
 
 ### Initialization
  
-ZenID Android SDK is collection of two modules. First one is the core module for offline image processing. Second one is an API integration to our backend system.
+The ZenID Android SDK is a collection of two modules. The first one is the core module for offline image processing. The second one is an API integration to our backend system.
 
 ```
 ZenId zenId = new ZenId.Builder()
@@ -104,7 +104,7 @@ ApiService apiService = new ApiService.Builder()
         .build();
 ```
 
-Please, check out our samples and you will get the whole picture how it works.
+Please, check out our samples and you will get the whole picture on how it works.
  
 ### Document verification flow
 
@@ -148,7 +148,7 @@ ZenId.get().setCallback(new ZenId.Callback() {
 });
 ```
 
-To get results of Optical character recognition (OCR) and investigations, you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls, for instance:
+To get results of Optical character recognition (OCR) and investigations, you need to connect to our backend systems. To do so, you need to use our `ApiService` and make appropriate calls, for instance:
 
 ```
 apiService.postDocumentPictureSample(documentCountry, documentRole, documentCode, documentPage, documentPicturePath).enqueue(new retrofit2.Callback<SampleJson>() {
