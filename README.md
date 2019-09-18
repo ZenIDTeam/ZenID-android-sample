@@ -6,7 +6,7 @@ A collection of samples that shows how to use the ZenID Android SDK. The SDK can
 * verification of authenticity
 * real-time face liveness detection
 
-Czech and Slovak identity cards, driving licenses and passports are supported.
+Identity cards, driving licenses and passports from Czechia and Slovakia are supported.
 
 ### Samples
 
