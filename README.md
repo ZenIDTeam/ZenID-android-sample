@@ -1,9 +1,12 @@
 ## ZenID Android SDK samples
 
-A collection of samples that shows how to use the ZenID Android SDK. The SDK can help you with:
+A collection of samples that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
-* verification of your documents (Identity card, Driving license, Passport)
+* OCR and data extraction
+* verficiation of authenticity
 * real-time face liveness detection
+
+Czech and Slovak identity cards, driving licenses and passports are supported.
 
 ### Samples
 
