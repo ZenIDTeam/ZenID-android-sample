@@ -67,7 +67,7 @@ android {
 }
 ```
 
-More information on the [Android documentation](http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits)
+More information on the [Android documentation](https://developer.android.com/studio/build/configure-apk-splits.html)
 
 ### Initialization
  
@@ -151,8 +151,7 @@ ZenId.get().setCallback(new ZenId.Callback() {
 });
 ```
 
-To get results of Optical character recognition (OCR) and investigations, you need to connect to our backend systems. To do so, you need to use our `ApiService` and make appropriate calls, for instance:
-
+To run optical character recognition (OCR) and investigate documents (please follow the link at http://your.frauds.zenid.cz/Sensitivity/Validators to get more details what investigation is about), you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls to upload documents, for instance:
 ```
 apiService.postDocumentPictureSample(documentCountry, documentRole, documentCode, documentPage, documentPicturePath).enqueue(new retrofit2.Callback<SampleJson>() {
 
@@ -169,7 +168,7 @@ apiService.postDocumentPictureSample(documentCountry, documentRole, documentCode
 }); 
 ```
 
-To run OCR or investigation on more documents together (both sides of ID card and/or driving license and so on), you should keep safe `sampleId` of each POST call and then make altogether:
+To run OCR or investigation on more documents altogether (both sides of ID card and/or driving license and so on), you should keep safe `sampleId` of each POST call and then do:
 
 ```
 apiService.getInvestigateSamples(sampleIds).enqueue(new Callback<InvestigationResponseJson>() {
