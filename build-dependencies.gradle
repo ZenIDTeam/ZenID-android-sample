@@ -17,5 +17,5 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'pub.devrel:easypermissions:3.0.0'
-    implementation 'com.otaliastudios:cameraview:2.1.0'
+    implementation 'com.otaliastudios:cameraview:2.6.1'
 }
