@@ -1,7 +1,8 @@
 package cz.trask.zenid.sample;
 
 import android.os.Bundle;
-import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
@@ -11,12 +12,11 @@ import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiService;
 import cz.trask.zenid.sdk.api.model.SampleJson;
-import dagger.android.support.DaggerAppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class MyActivity extends DaggerAppCompatActivity {
+public class MyActivity extends AppCompatActivity {
 
     @Inject
     ApiService apiService;
@@ -26,21 +26,12 @@ public class MyActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.button_document_verifier).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button_document_verifier).setOnClickListener(v ->
+                ZenId.get().startDocumentPictureVerifier(MyActivity.this,
+                        DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ));
 
-            @Override
-            public void onClick(View v) {
-                ZenId.get().startDocumentPictureVerifier(MyActivity.this, DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
-            }
-        });
-
-        findViewById(R.id.button_liveness_check).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                ZenId.get().startFaceLivenessDetector(MyActivity.this);
-            }
-        });
+        findViewById(R.id.button_liveness_check).setOnClickListener(v ->
+                ZenId.get().startFaceLivenessDetector(MyActivity.this));
 
         ZenId.get().setCallback(new ZenId.Callback() {
 

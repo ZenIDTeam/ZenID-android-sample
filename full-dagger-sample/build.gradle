@@ -38,11 +38,9 @@ android {
 
 dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
 
     implementation "com.google.dagger:dagger:$daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     implementation "com.jakewharton:butterknife:$butterKnifeVersion"
     implementation "com.google.android.material:material:$materialVersion"
 }

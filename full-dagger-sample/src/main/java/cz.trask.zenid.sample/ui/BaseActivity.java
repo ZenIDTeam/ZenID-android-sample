@@ -3,11 +3,11 @@ package cz.trask.zenid.sample.ui;
 import android.os.Bundle;
 
 import androidx.annotation.LayoutRes;
+import androidx.appcompat.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
-import dagger.android.support.DaggerAppCompatActivity;
 
-public abstract class BaseActivity extends DaggerAppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
