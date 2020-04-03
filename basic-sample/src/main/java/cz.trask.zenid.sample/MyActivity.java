@@ -25,8 +25,6 @@ public class MyActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                ZenId.get().startDocumentPictureVerifier(MyActivity.this, DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
-
                 ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
             }
         });
