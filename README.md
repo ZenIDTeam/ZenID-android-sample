@@ -23,22 +23,22 @@ Identity cards, driving licenses and passports from Czechia and Slovakia are sup
 * Edit the build.gradle file of your app and add
 ```groovy
 ext {
-    okHttpVersion = '3.13.0'
-    retrofitVersion = '2.5.0'
+    okHttpVersion = '3.14.4'
+    retrofitVersion = '2.6.2'
 }
 
 dependencies {
     implementation fileTree(include: ['*.aar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.fragment:fragment:1.0.0'
+    implementation 'androidx.fragment:fragment:1.2.3'
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'pub.devrel:easypermissions:3.0.0'
-    implementation 'com.otaliastudios:cameraview:2.1.0'
+    implementation 'com.otaliastudios:cameraview:2.6.1'
 }
 ```
 * Rebuild the project
