@@ -20,8 +20,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cz.trask.zenid.sample.R;
-import cz.trask.zenid.sdk.DocumentCountry;
-import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiService;
 import cz.trask.zenid.sdk.api.model.InvestigationResponseJson;
 import cz.trask.zenid.sdk.api.model.InvestigationValidatorResponseJson;
@@ -88,7 +86,7 @@ public class ResultsActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call<InvestigationResponseJson> call, Response<InvestigationResponseJson> response) {
-                Timber.i("investigationId: %s", response.body().getInvestigationId() );
+                Timber.i("investigationId: %s", response.body().getInvestigationId());
                 InvestigationResponseJson investigationResponse = response.body();
                 showMinedData(investigationResponse);
                 showValidatorResults(investigationResponse);
