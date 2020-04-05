@@ -69,6 +69,7 @@ public class ResultsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getMyApplication().getMyApplicationComponent().inject(this);
         getInvestigateSamples(getIntent().getStringArrayListExtra(BUNDLE_SAMPLE_IDS));
     }
 

@@ -5,28 +5,29 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import cz.trask.zenid.sample.MyApplication;
+import cz.trask.zenid.sample.ui.MainActivity;
+import cz.trask.zenid.sample.ui.ResultsActivity;
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.android.AndroidInjector;
-import dagger.android.support.AndroidSupportInjectionModule;
 
 @Component(
         modules = {
-                ActivityBindingModule.class,
-                AndroidSupportInjectionModule.class,
                 ApiModule.class,
                 ContextModule.class,
         }
 )
+
 @Singleton
-public interface MyApplicationComponent extends AndroidInjector<MyApplication> {
+public interface MyApplicationComponent {
 
-    @Component.Builder
-    interface Builder {
+    void inject(MyApplication myApplication);
 
-        @BindsInstance
-        Builder application(Application application);
+    void inject(MainActivity mainActivity);
 
-        MyApplicationComponent build();
+    void inject(ResultsActivity resultsActivity);
+
+    @Component.Factory
+    interface Factory {
+        MyApplicationComponent create(@BindsInstance Application application);
     }
 }
