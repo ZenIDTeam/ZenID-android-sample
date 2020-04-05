@@ -5,6 +5,8 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import cz.trask.zenid.sample.MyApplication;
+import cz.trask.zenid.sample.ui.MainActivity;
+import cz.trask.zenid.sample.ui.ResultsActivity;
 import dagger.BindsInstance;
 import dagger.Component;
 
@@ -17,7 +19,12 @@ import dagger.Component;
 
 @Singleton
 public interface MyApplicationComponent {
+
     void inject(MyApplication myApplication);
+
+    void inject(MainActivity mainActivity);
+
+    void inject(ResultsActivity resultsActivity);
 
     @Component.Factory
     interface Factory {

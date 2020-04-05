@@ -13,6 +13,7 @@ public class MyApplication extends Application {
 
     @Inject
     ZenId zenId;
+
     private MyApplicationComponent myApplicationComponent;
 
     @Override
@@ -23,6 +24,7 @@ public class MyApplication extends Application {
         myApplicationComponent.inject(this);
 
         Timber.plant(new Timber.DebugTree());
+
         ZenId.setSingletonInstance(zenId);
 
         zenId.initialize();

@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.OnClick;
+import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
+import cz.trask.zenid.sample.dagger.MyApplicationComponent;
 import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
 import cz.trask.zenid.sdk.DocumentRole;
@@ -32,6 +34,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getMyApplication().getMyApplicationComponent().inject(this);
         registerZenIdCallback();
     }
 

@@ -6,6 +6,7 @@ import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
+import cz.trask.zenid.sample.MyApplication;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -18,4 +19,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @LayoutRes
     protected abstract int layoutRes();
+
+    protected MyApplication getMyApplication() {
+        return (MyApplication) getApplication();
+    }
 }

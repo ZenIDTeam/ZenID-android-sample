@@ -26,9 +26,10 @@ public class MyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getMyApplication().getMyApplicationComponent().inject(this);
+
         findViewById(R.id.button_document_verifier).setOnClickListener(v ->
-                ZenId.get().startDocumentPictureVerifier(MyActivity.this,
-                        DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ));
+                ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ));
 
         findViewById(R.id.button_liveness_check).setOnClickListener(v ->
                 ZenId.get().startFaceLivenessDetector(MyActivity.this));
@@ -75,5 +76,9 @@ public class MyActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    private MyApplication getMyApplication() {
+        return (MyApplication) getApplication();
     }
 }
