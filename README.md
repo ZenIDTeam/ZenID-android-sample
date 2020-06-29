@@ -5,6 +5,7 @@ A collection of samples that shows how to use the ZenID Android SDK. The SDK can
 * OCR and data extraction
 * verification of authenticity
 * real-time face liveness detection
+* Hologram verification
 
 Identity cards, driving licenses and passports from Czechia and Slovakia are supported.
 
@@ -13,9 +14,6 @@ Identity cards, driving licenses and passports from Czechia and Slovakia are sup
 * **[basic-sample]** - Shows how to run document scanner or face liveness detector.
 
 * **[basic-dagger-sample]** - Extends basic-sample with the well-known dependency injection framework Dagger.
-
-* **[full-dagger-sample]** - Shows how to compose a full flow (scan a document, pass the liveness check and make a selfie).
-
 
 ### Instalation
 
@@ -128,6 +126,20 @@ To begin with the real-time face liveness check just start the FaceLivenessDetec
 ZenId.get().startFaceLivenessDetector(MyActivity.this);
 ```
 
+### Selfie picture flow
+
+To take a good selfie picture without the face liveness check.
+```
+ZenId.get().startSelfieVerifier(getActivity());
+```
+
+### Hologram verification flow
+
+To begin with the hologram verification.
+```
+ZenId.get().startHologramVerifier(getActivity(), DocumentCountry.CZ);
+```
+
 ### Results
 
 Set the `ZenId.Callback` to handle taken pictures by the core part of the ZenId SDK. 
@@ -137,6 +149,11 @@ ZenId.get().setCallback(new ZenId.Callback() {
     @Override
     public void onDocumentPictureTaken(DocumentCountry documentCountry, DocumentRole documentRole, Integer documentCode, DocumentPage documentPage, String documentPicturePath) {
         Timber.i("picturePath: %s", documentPicturePath);
+    }
+
+    @Override
+    public void onDocumentVideoTaken(DocumentCountry documentCountry, DocumentRole documentRole, Integer documentCode, DocumentPage documentPage, String documentVideoPath) {
+        Timber.i("videoPath: %s", documentVideoPath);
     }
 
     @Override
