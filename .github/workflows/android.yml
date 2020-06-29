@@ -20,3 +20,4 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew basic-sample:clean basic-dagger-sample:clean build
+
