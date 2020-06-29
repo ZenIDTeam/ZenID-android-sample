@@ -18,8 +18,8 @@ public class ApiModule {
     @Provides
     public ApiConfig provideApiConfig() {
         return new ApiConfig.Builder()
-                 // .baseUrl("http://your.frauds.zenid.cz/api/")
-                 // .apiKey("your_api_key")
+                // .baseUrl("http://your.frauds.zenid.cz/api/")
+                // .apiKey("your_api_key")
                 .build();
     }
 

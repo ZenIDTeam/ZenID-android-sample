@@ -126,7 +126,7 @@ To begin with the real-time face liveness check just start the FaceLivenessDetec
 ZenId.get().startFaceLivenessDetector(MyActivity.this);
 ```
 
-### Hologram verification flow
+### Selfie picture flow
 
 To take a good selfie picture without the face liveness check.
 ```
