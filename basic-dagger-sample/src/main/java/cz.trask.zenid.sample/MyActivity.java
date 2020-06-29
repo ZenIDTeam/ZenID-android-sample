@@ -54,6 +54,11 @@ public class MyActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onDocumentVideoTaken(DocumentCountry documentCountry, DocumentRole documentRole, Integer documentCode, DocumentPage documentPage, String documentVideoPath) {
+               // Not used yet
+            }
+
+            @Override
             public void onSelfiePictureTaken(String selfiePicturePath) {
                 apiService.postSelfieSample(selfiePicturePath).enqueue(new retrofit2.Callback<SampleJson>() {
 
