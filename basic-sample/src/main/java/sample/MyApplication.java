@@ -1,4 +1,4 @@
-package cz.trask.zenid.sample2;
+package sample;
 
 import android.app.Application;
 
