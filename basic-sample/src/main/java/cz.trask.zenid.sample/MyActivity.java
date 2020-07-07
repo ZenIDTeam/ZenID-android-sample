@@ -1,6 +1,7 @@
 package cz.trask.zenid.sample;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,8 +9,10 @@ import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
 import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.ZenId;
+import cz.trask.zenid.sdk.api.model.InitResponseJson;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
@@ -18,14 +21,61 @@ public class MyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.button_document_verifier).setOnClickListener(v ->
-                ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ));
+        initializeAuthorizeButton();
 
-        findViewById(R.id.button_liveness_check).setOnClickListener(v ->
-                ZenId.get().startFaceLivenessDetector(MyActivity.this));
+        initializeDocumentVerifierButton();
 
+        initializeLivenessCheckButton();
+
+        setZenIdCallback();
+    }
+
+    private void initializeAuthorizeButton() {
+        findViewById(R.id.button_authorize).setOnClickListener(v -> {
+            String challengeToken = ZenId.get().getSecurity().getChallengeToken();
+            Timber.i("challengeToken: %s", challengeToken);
+            MyApplication.apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
+
+                @Override
+                public void onResponse(Call<InitResponseJson> call, Response<InitResponseJson> response) {
+                    String responseToken = response.body().getResponse();
+                    Timber.i("responseToken: %s", response);
+                    ZenId.get().getSecurity().authorize(getApplicationContext(), responseToken);
+                    Toast.makeText(getApplicationContext(), "Authorized", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<InitResponseJson> call, Throwable t) {
+                    Timber.e(t);
+                }
+            });
+        });
+    }
+
+    private void initializeDocumentVerifierButton() {
+        findViewById(R.id.button_document_verifier).setOnClickListener(v -> {
+            if (ZenId.get().getSecurity().isAuthorized()) {
+                ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
+            } else {
+                throwUnauthorizedException();
+            }
+        });
+    }
+
+    private void initializeLivenessCheckButton() {
+        findViewById(R.id.button_liveness_check).setOnClickListener(v -> {
+            if (ZenId.get().getSecurity().isAuthorized()) {
+                ZenId.get().startFaceLivenessDetector(MyActivity.this);
+            } else {
+                throwUnauthorizedException();
+            }
+        });
+    }
+
+    private void setZenIdCallback() {
         ZenId.get().setCallback(new ZenId.Callback() {
 
             @Override
@@ -71,7 +121,10 @@ public class MyActivity extends AppCompatActivity {
             public void onUserLeft() {
                 Timber.i("User left the sdk flow without completing it");
             }
-
         });
+    }
+
+    private void throwUnauthorizedException() {
+        throw new IllegalStateException("Your application " + getApplicationContext().getPackageName() + " is not yet authorized.");
     }
 }

@@ -2,7 +2,7 @@ ext {
     okHttpVersion = '3.14.4'
     retrofitVersion = '2.6.2'
     daggerVersion = '2.25.4'
-    zenIdVersion = '0.19.1'
+    zenIdVersion = '0.22.0'
 }
 
 dependencies {
@@ -15,6 +15,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'cz.trask.zenid.sdk:sdk-core:0.19.1'
-    implementation 'cz.trask.zenid.sdk:sdk-api-zenid:0.19.1'
+    implementation "cz.trask.zenid.sdk:sdk-core:$zenIdVersion"
+    implementation "cz.trask.zenid.sdk:sdk-api-zenid:$zenIdVersion"
 }
