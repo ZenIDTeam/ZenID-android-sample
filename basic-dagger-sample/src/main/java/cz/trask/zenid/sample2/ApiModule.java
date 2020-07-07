@@ -1,4 +1,4 @@
-package cz.trask.zenid.sample2.dagger;
+package cz.trask.zenid.sample2;
 
 import javax.inject.Singleton;
 

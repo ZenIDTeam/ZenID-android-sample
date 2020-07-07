@@ -1,11 +1,9 @@
-package cz.trask.zenid.sample2.dagger;
+package cz.trask.zenid.sample2;
 
 import android.app.Application;
 
 import javax.inject.Singleton;
 
-import cz.trask.zenid.sample2.MyActivity;
-import cz.trask.zenid.sample2.MyApplication;
 import dagger.BindsInstance;
 import dagger.Component;
 

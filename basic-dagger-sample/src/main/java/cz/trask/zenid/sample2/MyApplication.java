@@ -5,7 +5,6 @@ import android.app.Application;
 import javax.inject.Inject;
 
 import cz.trask.zenid.sample2.dagger.DaggerMyApplicationComponent;
-import cz.trask.zenid.sample2.dagger.MyApplicationComponent;
 import cz.trask.zenid.sdk.ZenId;
 import timber.log.Timber;
 
