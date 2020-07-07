@@ -1,11 +1,10 @@
-package sample;
+package cz.trask.zenid.sample;
 
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
 import cz.trask.zenid.sdk.DocumentRole;
@@ -44,8 +43,8 @@ public class MyActivity extends AppCompatActivity {
                 public void onResponse(Call<InitResponseJson> call, Response<InitResponseJson> response) {
                     String responseToken = response.body().getResponse();
                     Timber.i("responseToken: %s", response);
-                    ZenId.get().getSecurity().authorize(getApplicationContext(), responseToken);
-                    Toast.makeText(getApplicationContext(), "Authorized", Toast.LENGTH_SHORT).show();
+                    boolean authorized = ZenId.get().getSecurity().authorize(getApplicationContext(), responseToken);
+                    Toast.makeText(getApplicationContext(), "Authorized: " + authorized, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

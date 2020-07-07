@@ -4,7 +4,7 @@
     package="cz.trask.zenid.sample">
 
     <application
-        android:name="sample.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="sample.MyActivity"
+            android:name=".MyActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
