@@ -7,7 +7,7 @@ android {
     buildToolsVersion androidBuildToolsVersion
 
     defaultConfig {
-        applicationId "cz.trask.zenid.sample"
+        applicationId "cz.trask.zenid.sample2"
         minSdkVersion androidMinSdkVersion
         targetSdkVersion androidTargetSdkVersion
         ndkVersion androidNdkVersion
