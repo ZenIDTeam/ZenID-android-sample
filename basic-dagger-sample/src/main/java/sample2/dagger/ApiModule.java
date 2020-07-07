@@ -1,8 +1,8 @@
-package cz.trask.zenid.sample.dagger;
+package cz.trask.zenid.sample2.dagger;
 
 import javax.inject.Singleton;
 
-import cz.trask.zenid.sample.BuildConfig;
+import cz.trask.zenid.sample2.BuildConfig;
 import cz.trask.zenid.sdk.api.ApiConfig;
 import cz.trask.zenid.sdk.api.ApiService;
 import dagger.Module;

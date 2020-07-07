@@ -1,4 +1,4 @@
-package cz.trask.zenid.sample.dagger;
+package cz.trask.zenid.sample2.dagger;
 
 import android.app.Application;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package cz.trask.zenid.sample;
+package cz.trask.zenid.sample2;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -24,16 +24,16 @@ public class MyActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        initializeAuthorizeButton();
+        initAuthorizeButton();
 
-        initializeDocumentVerifierButton();
+        initDocumentVerifierButton();
 
-        initializeLivenessCheckButton();
+        initLivenessCheckButton();
 
         setZenIdCallback();
     }
 
-    private void initializeAuthorizeButton() {
+    private void initAuthorizeButton() {
         findViewById(R.id.button_authorize).setOnClickListener(v -> {
             String challengeToken = ZenId.get().getSecurity().getChallengeToken();
             Timber.i("challengeToken: %s", challengeToken);
@@ -55,7 +55,7 @@ public class MyActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeDocumentVerifierButton() {
+    private void initDocumentVerifierButton() {
         findViewById(R.id.button_document_verifier).setOnClickListener(v -> {
             if (ZenId.get().getSecurity().isAuthorized()) {
                 ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
@@ -65,7 +65,7 @@ public class MyActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeLivenessCheckButton() {
+    private void initLivenessCheckButton() {
         findViewById(R.id.button_liveness_check).setOnClickListener(v -> {
             if (ZenId.get().getSecurity().isAuthorized()) {
                 ZenId.get().startFaceLivenessDetector(MyActivity.this);
