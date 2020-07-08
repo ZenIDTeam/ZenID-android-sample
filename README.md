@@ -1,6 +1,6 @@
 ## ZenID Android SDK samples
 
-A collection of samples that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
+Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
 * OCR and data extraction
 * verification of authenticity
@@ -8,12 +8,6 @@ A collection of samples that shows how to use the ZenID Android SDK. The SDK can
 * Hologram verification
 
 Identity cards, driving licenses and passports from Czechia and Slovakia are supported.
-
-### Samples
-
-* **[basic-sample]** - Shows how to run document scanner or face liveness detector.
-
-* **[basic-dagger-sample]** - Extends basic-sample with the well-known dependency injection framework Dagger.
 
 ### Instalation
 
@@ -106,7 +100,39 @@ ApiService apiService = new ApiService.Builder()
 ```
 
 Please, check out our samples and you will get the whole picture on how it works.
- 
+
+### Authorization
+
+Starting from 0.21.5, mobile apps need to be authorized by the backend. Here is how you can do it.
+
+Before you start, make sure "Android Package Name" are filled in the settings page of the website.
+
+Step 1. Get the challenge token.
+Step 2. Get the response token by calling /api/initSdk in the backend.
+Step 3. Call authorize using the response token obtained in the previous step. It will return a bool representing success or failure.
+
+These steps need to be performed before any operation on documents, otherwise you will get a RecogLibCException with "Security Error" in the message.
+
+```java
+String challengeToken = ZenId.get().getSecurity().getChallengeToken();
+Timber.i("challengeToken: %s", challengeToken);
+apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
+
+    @Override
+    public void onResponse(Call<InitResponseJson> call, Response<InitResponseJson> response) {
+        String responseToken = response.body().getResponse();
+        Timber.i("responseToken: %s", responseToken);
+        boolean authorized = ZenId.get().getSecurity().authorize(getApplicationContext(), responseToken);
+        Timber.i("Authorized: %s", authorized);
+    }
+
+    @Override
+    public void onFailure(Call<InitResponseJson> call, Throwable t) {
+        Timber.e(t);
+    }
+});
+```
+
 ### Document verification flow
 
 To begin with the document picture verifier just start with expected role, page and country. 
