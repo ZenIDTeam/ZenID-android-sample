@@ -60,7 +60,7 @@ public class MyActivity extends AppCompatActivity {
             if (ZenId.get().getSecurity().isAuthorized()) {
                 ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
             } else {
-                throwUnauthorizedException();
+                logNotAuthorizedError();
             }
         });
     }
@@ -70,7 +70,7 @@ public class MyActivity extends AppCompatActivity {
             if (ZenId.get().getSecurity().isAuthorized()) {
                 ZenId.get().startFaceLivenessDetector(MyActivity.this);
             } else {
-                throwUnauthorizedException();
+                logNotAuthorizedError();
             }
         });
     }
@@ -124,7 +124,9 @@ public class MyActivity extends AppCompatActivity {
         });
     }
 
-    private void throwUnauthorizedException() {
-        throw new IllegalStateException("Your application " + getApplicationContext().getPackageName() + " is not yet authorized.");
+    private void logNotAuthorizedError() {
+        String msg = "Your application " + getApplicationContext().getPackageName() + " is not yet authorized.";
+        Timber.i(msg);
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.22.3
+
+- Default theme
+- Set the default language. It is a new mandatory field - BREAKING CHANGE.
+
 ### 0.22.0
 
 - Authorization

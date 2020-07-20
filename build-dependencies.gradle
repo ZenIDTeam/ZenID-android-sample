@@ -1,7 +1,7 @@
 ext {
     okHttpVersion = '3.14.4'
     retrofitVersion = '2.6.2'
-    zenIdVersion = '0.22.0'
+    zenIdVersion = '0.22.3'
 }
 
 dependencies {
