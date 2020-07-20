@@ -68,6 +68,7 @@ The ZenID Android SDK is a collection of two modules. The first one is the core 
 ```
 ZenId zenId = new ZenId.Builder()
         .applicationContext(getApplicationContext())
+        .defaultLanguage(Language.ENGLISH)
         .build();
 
 // Make the instance globally accessible.
@@ -113,7 +114,7 @@ Step 3. Call authorize using the response token obtained in the previous step. I
 
 These steps need to be performed before any operation on documents, otherwise you will get a RecogLibCException with "Security Error" in the message.
 
-```java
+```
 String challengeToken = ZenId.get().getSecurity().getChallengeToken();
 Timber.i("challengeToken: %s", challengeToken);
 apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
@@ -231,4 +232,13 @@ apiService.getInvestigateSamples(sampleIds).enqueue(new Callback<InvestigationRe
 });
 ```
 
-You can find out more detail inside the full-dagger-sample.
+### Customisation
+It is recommended to set certain colors inside your own colors.xml file:
+
+```
+<color name="zenid_colorPrimary">@color/yourColorPrimary</color>
+<color name="zenid_colorPrimaryDark">@color/yourColorPrimaryDark</color>
+<color name="zenid_colorAccent">@color/yourColorAccent</color>
+```
+
+You can find out more detail inside the sample app.
