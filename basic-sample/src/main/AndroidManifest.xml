@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cz.trask.zenid.sample">
 
+    <!--
     <uses-sdk tools:overrideLibrary="cz.trask.zenid.sdk" />
+    -->
 
     <application
         android:name=".MyApplication"

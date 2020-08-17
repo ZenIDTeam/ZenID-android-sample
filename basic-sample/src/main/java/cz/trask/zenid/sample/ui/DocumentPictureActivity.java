@@ -34,7 +34,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
         documentPictureView.setDocumentType(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
-        // documentPictureView.enableDefaultVizualization(Language.ENGLISH); disabled for now
+        // documentPictureView.enableDefaultVizualization(Language.ENGLISH); // enable/disable
         documentPictureView.setCallback(new DocumentPictureView.Callback() {
 
             @Override
