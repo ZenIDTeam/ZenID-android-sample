@@ -2,7 +2,6 @@ package cz.trask.zenid.sample;
 
 import android.app.Application;
 
-import cz.trask.zenid.sdk.Language;
 import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiConfig;
 import cz.trask.zenid.sdk.api.ApiService;
@@ -28,7 +27,6 @@ public class MyApplication extends Application {
     private void initZenId() {
         ZenId zenId = new ZenId.Builder()
                 .applicationContext(getApplicationContext())
-                .defaultLanguage(Language.ENGLISH)
                 .build();
 
         ZenId.setSingletonInstance(zenId);
@@ -48,6 +46,8 @@ public class MyApplication extends Application {
         ApiConfig apiConfig = new ApiConfig.Builder()
                 // .baseUrl("http://your.frauds.zenid.cz/api/")
                 // .apiKey("your_api_key")
+                .baseUrl("https://mobile.frauds.zenid.cz/api/")
+                .apiKey("vxeN6i9SL7r59cm3F6xAZsI0uPbM6wZz")
                 .build();
 
         apiService = new ApiService.Builder()

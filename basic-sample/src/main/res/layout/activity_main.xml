@@ -1,44 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/button_authorize"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:padding="16dp"
+        android:text="Authorize" />
 
-        <Button
-            android:id="@+id/button_authorize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Authorize" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
+    <Button
+        android:id="@+id/button_documentPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Driving license verification" />
 
-        <Button
-            android:id="@+id/button_document_verifier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Scan ID" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
+    <Button
+        android:id="@+id/button_selfie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Selfie verification" />
 
-        <Button
-            android:id="@+id/button_liveness_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Liveness Check" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_faceLiveness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Face liveness verification" />
 
-</FrameLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <Button
+        android:id="@+id/button_hologram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Hologram verification" />
+
+</LinearLayout>
+
