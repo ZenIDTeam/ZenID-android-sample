@@ -3,9 +3,4 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-
-    <!-- override color resources in the library -->
-    <color name="zenid_colorPrimary">@color/colorPrimary</color>
-    <color name="zenid_colorPrimaryDark">@color/colorPrimaryDark</color>
-    <color name="zenid_colorAccent">@color/colorAccent</color>
 </resources>

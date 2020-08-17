@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cz.trask.zenid.sample">
 
+    <!--
+    <uses-sdk tools:overrideLibrary="cz.trask.zenid.sdk" />
+    -->
+
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
@@ -13,7 +17,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MyActivity"
+            android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -22,6 +26,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.SelfieActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.DocumentPictureActivity"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".ui.FaceLivenessActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.HologramActivity"
+            android:screenOrientation="landscape" />
 
     </application>
 
