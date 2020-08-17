@@ -1,4 +1,4 @@
-## ZenID Android SDK samples
+## ZenID Android SDK
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
@@ -9,29 +9,25 @@ Android sample app that shows how to use the ZenID Android SDK. The SDK can help
 
 Identity cards, driving licenses and passports from Czechia and Slovakia are supported.
 
-### Instalation
+The SDK supports API level 22 and above.
 
-* Put **sdk-core-release.aar** and **sdk-api-zenid-release.aar** in the libs folder of the app
-* Edit the build.gradle file of your app and add
-```groovy
-ext {
-    okHttpVersion = '3.14.4'
-    retrofitVersion = '2.6.2'
-}
+### Installation
 
-dependencies {
-    implementation fileTree(include: ['*.aar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.fragment:fragment:1.2.3'
-    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'pub.devrel:easypermissions:3.0.0'
-    implementation 'com.otaliastudios:cameraview:2.6.1'
+* Add remote repository into your build.gradle file. Use "tomaslad" credentials for now (it will change in the future).
+```
+maven {
+    name = "Github"
+    url = uri("https://maven.pkg.github.com/Licho1/ZenID-android")
+    credentials {
+        username = "tomaslad"
+        password = "018c49e7e3a2f638c158b73e5de7e271110e1c96"
+    }
 }
+```
+* Then simply download the latest version:
+```
+implementation "cz.trask.zenid.sdk:sdk-core:$version"
+implementation "cz.trask.zenid.sdk:sdk-api-zenid:$version"
 ```
 * Rebuild the project
 
@@ -45,7 +41,7 @@ The C++ code needs to be compiled for each of the CPU architectures (known as "A
 The SDK binary contains a copy of the native `.so` file for each of these four platforms.
 You can considerably reduce the size of your `.apk` by applying APK split by ABI, editing your `build.gradle` as the following:
 
-```groovy
+```
 android {
 
   splits {
@@ -63,12 +59,11 @@ More information on the [Android documentation](https://developer.android.com/st
 
 ### Initialization
  
-The ZenID Android SDK is a collection of two modules. The first one is the core module for offline image processing. The second one is an API integration to our backend system.
+The ZenID Android SDK is a collection of two modules. The first one (sdk-core) is the core module for offline image processing. The second one (sdk-api-zenid) is an API integration to our backend system.
 
 ```
 ZenId zenId = new ZenId.Builder()
         .applicationContext(getApplicationContext())
-        .defaultLanguage(Language.ENGLISH)
         .build();
 
 // Make the instance globally accessible.
@@ -134,66 +129,67 @@ apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
 });
 ```
 
-### Document verification flow
+### Architectural overview of the sdk-core module
 
-To begin with the document picture verifier just start with expected role, page and country. 
-```
-ZenId.get().startDocumentPictureVerifier(MyActivity.this, DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
-```
+Every each use-case has its own view class:
+  - cz.trask.zenid.sdk.DocumentPictureView for document picture verification
+  - cz.trask.zenid.sdk.FaceLivenessView for the real-time face liveness check 
+  - cz.trask.zenid.sdk.SelfieView to take a good selfie picture
+  - cz.trask.zenid.sdk.HologramView for the hologram verification
+  
+To use the DocumentPictureView for instance, simply add a DocumentPictureView to your layout. 
 
-Or you can start directly the identity document verifier, similar for driving licenses or passports.
 ```
-ZenId.get().startIdentityDocumentVerifier(MyActivity.this, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
-```
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-### Face liveness flow
+    <cz.trask.zenid.sdk.DocumentPictureView
+        android:id="@+id/documentPictureView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-To begin with the real-time face liveness check just start the FaceLivenessDetectorActivity. 
-```
-ZenId.get().startFaceLivenessDetector(MyActivity.this);
-```
-
-### Selfie picture flow
-
-To take a good selfie picture without the face liveness check.
-```
-ZenId.get().startSelfieVerifier(getActivity());
+</FrameLayout>
 ```
 
-### Hologram verification flow
+Those views are lifecycle-aware. Set lifecycleOwner as soon as possible.
 
-To begin with the hologram verification.
 ```
-ZenId.get().startHologramVerifier(getActivity(), DocumentCountry.CZ);
+// For activities
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    DocumentPictureView documentPictureView = findViewById(R.id.documentPictureView);
+    documentPictureView.setLifecycleOwner(this);
+}
+
+// For fragments
+@Override
+public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    DocumentPictureView documentPictureView = findViewById(R.id.documentPictureView);
+    documentPictureView.setLifecycleOwner(getViewLifecycleOwner());
+}
 ```
 
-### Results
+Register a callback to notify about its events.
 
-Set the `ZenId.Callback` to handle taken pictures by the core part of the ZenId SDK. 
 ```
-ZenId.get().setCallback(new ZenId.Callback() {
+documentPictureView.setCallback(new DocumentPictureView.Callback() {
 
     @Override
-    public void onDocumentPictureTaken(DocumentCountry documentCountry, DocumentRole documentRole, Integer documentCode, DocumentPage documentPage, String documentPicturePath) {
-        Timber.i("picturePath: %s", documentPicturePath);
+    public void onStateChanged(DocumentPictureState state) {
+        Timber.i("state: %s", state);
     }
 
     @Override
-    public void onDocumentVideoTaken(DocumentCountry documentCountry, DocumentRole documentRole, Integer documentCode, DocumentPage documentPage, String documentVideoPath) {
-        Timber.i("videoPath: %s", documentVideoPath);
-    }
-
-    @Override
-    public void onSelfiePictureTaken(String selfiePicturePath) {
-        Timber.i("picturePath: %s", selfiePicturePath);
-    }
-
-    @Override
-    public void userExited() {
-        Timber.i("User left the sdk flow without completing it");
+    public void onPictureTaken(DocumentResult result) {
+        Timber.i("result: %s", result);
     }
 });
 ```
+
+### More details on the sdk-api-zenid module
 
 To run optical character recognition (OCR) and investigate documents (please follow the link at http://your.frauds.zenid.cz/Sensitivity/Validators to get more details what investigation is about), you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls to upload documents, for instance:
 ```
@@ -230,15 +226,6 @@ apiService.getInvestigateSamples(sampleIds).enqueue(new Callback<InvestigationRe
         Timber.e(t);
     }
 });
-```
-
-### Customisation
-It is recommended to set certain colors inside your own colors.xml file:
-
-```
-<color name="zenid_colorPrimary">@color/yourColorPrimary</color>
-<color name="zenid_colorPrimaryDark">@color/yourColorPrimaryDark</color>
-<color name="zenid_colorAccent">@color/yourColorAccent</color>
 ```
 
 You can find out more detail inside the sample app.
