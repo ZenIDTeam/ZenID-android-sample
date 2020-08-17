@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.0.1
+
+- Total refactoring in order to support UI customization
+
 ### 0.22.3
 
 - Default theme
