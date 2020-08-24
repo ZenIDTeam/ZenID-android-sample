@@ -217,7 +217,7 @@ HologramState:
 
 FaceLivenessState:
     - LOOK_AT_ME = Look in the camera.
-    - TURN_HEAD = Slowly turn your head from side to side.
+    - TURN_HEAD = Slowly turn your head to LEFT and RIGHT.
     - SMILE = Smile to the camera or move your mouth.
     - DONE = The scanning is done.
 
