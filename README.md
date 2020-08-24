@@ -192,34 +192,34 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 ### Overview of states
 
 DocumentPictureState:
-    - NO_MATCH_FOUND = no document match was found
-    - ALIGN_CARD = align card in front of your back camera
-    - HOLD_STEADY = hold phone steady for a while
-    - BLURRY = the picture is blurry
-    - REFLECTION_PRESENT = the reflection is present on picture
-    - OK = the picture is ok
-    - HOLOGRAM = ?
-    - DARK = the picture is dark
+    - NO_MATCH_FOUND = No document match was found.
+    - ALIGN_CARD = Align card in front of your back camera.
+    - HOLD_STEADY = Hold the document steady for a while.
+    - BLURRY = The picture is too blurry.
+    - REFLECTION_PRESENT = The reflection is present on text.
+    - OK = The picture is ok.
+    - HOLOGRAM = The hologram is being verified.
+    - DARK = The picture is dark.
 
 SelfieState:
-    - OK = the picture is ok
-    - NO_FACE_FOUND = no face was found
+    - OK = The picture is ok.
+    - NO_FACE_FOUND = No face was found.
 
 HologramState:
-    - NO_MATCH_FOUND = no hologram match was found
-    - TILT_LEFT = till the phone left
-    - TILT_RIGHT = till the phone right
-    - TILT_UP = till the phone up
-    - TILT_DOWN = till the phone down
-    - ROTATE_CLOCKWISE = rotate the phone clockwise
-    - ROTATE_COUNTER_CLOCKWISE = rotate the phone counter clockwise
-    - OK = the hologram is ok
+    - NO_MATCH_FOUND = No hologram match was found.
+    - TILT_LEFT = Till your phone left.
+    - TILT_RIGHT = Till your phone right.
+    - TILT_UP = Till your phone up.
+    - TILT_DOWN = Till your phone down.
+    - ROTATE_CLOCKWISE = Rotate the phone clockwise.
+    - ROTATE_COUNTER_CLOCKWISE = Rotate the phone counter clockwise.
+    - OK = Scanning done, the hologram is ok.
 
 FaceLivenessState:
-    - LOOK_AT_ME = look to the camera
-    - TURN_HEAD = slowly turn your head from side to side
-    - SMILE = smile to the camera
-    - DONE = the scanning is done
+    - LOOK_AT_ME = Look in the camera.
+    - TURN_HEAD = Slowly turn your head from side to side.
+    - SMILE = Smile to the camera or move your mouth.
+    - DONE = The scanning is done.
 
 ### More details on the sdk-api-zenid module
 
