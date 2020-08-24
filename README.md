@@ -1,4 +1,4 @@
-## ZenID Android SDK - v1.0.1
+### ZenID Android SDK - v1.0.1
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
@@ -192,34 +192,34 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 ### Overview of states
 
 DocumentPictureState:
-    NO_MATCH_FOUND = no document match was found
-    ALIGN_CARD = align card in front of your back camera
-    HOLD_STEADY = hold phone steady for a while
-    BLURRY = the picture is blurry
-    REFLECTION_PRESENT = the reflection is present on picture
-    OK = the picture is ok
-    HOLOGRAM = ?
-    DARK = the picture is dark
+    - NO_MATCH_FOUND = no document match was found
+    - ALIGN_CARD = align card in front of your back camera
+    - HOLD_STEADY = hold phone steady for a while
+    - BLURRY = the picture is blurry
+    - REFLECTION_PRESENT = the reflection is present on picture
+    - OK = the picture is ok
+    - HOLOGRAM = ?
+    - DARK = the picture is dark
 
 SelfieState:
-    OK = the picture is ok
-    NO_FACE_FOUND = no face was found
+    - OK = the picture is ok
+    - NO_FACE_FOUND = no face was found
 
 HologramState:
-    NO_MATCH_FOUND = no hologram match was found
-    TILT_LEFT = till the phone left
-    TILT_RIGHT = till the phone right
-    TILT_UP = till the phone up
-    TILT_DOWN = till the phone down
-    ROTATE_CLOCKWISE = rotate the phone clockwise
-    ROTATE_COUNTER_CLOCKWISE = rotate the phone counter clockwise
-    OK = the hologram is ok
+    - NO_MATCH_FOUND = no hologram match was found
+    - TILT_LEFT = till the phone left
+    - TILT_RIGHT = till the phone right
+    - TILT_UP = till the phone up
+    - TILT_DOWN = till the phone down
+    - ROTATE_CLOCKWISE = rotate the phone clockwise
+    - ROTATE_COUNTER_CLOCKWISE = rotate the phone counter clockwise
+    - OK = the hologram is ok
 
 FaceLivenessState:
-    LOOK_AT_ME = look to the camera
-    TURN_HEAD = slowly turn your head from side to side
-    SMILE = smile to the camera
-    DONE = the scanning is done
+    - LOOK_AT_ME = look to the camera
+    - TURN_HEAD = slowly turn your head from side to side
+    - SMILE = smile to the camera
+    - DONE = the scanning is done
 
 ### More details on the sdk-api-zenid module
 
