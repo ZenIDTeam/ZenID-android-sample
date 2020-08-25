@@ -201,24 +201,24 @@ DocumentPictureState:
 - DARK = The picture is dark.
 
 SelfieState:
-    - OK = The picture is ok.
-    - NO_FACE_FOUND = No face was found.
+- OK = The picture is ok.
+- NO_FACE_FOUND = No face was found.
 
 HologramState:
-    - NO_MATCH_FOUND = No document matching input parameters was found.
-    - TILT_LEFT = Tilt your phone left.
-    - TILT_RIGHT = Tilt your phone right.
-    - TILT_UP = Tilt your phone up.
-    - TILT_DOWN = Tilt your phone down.
-    - ROTATE_CLOCKWISE = Rotate the phone clockwise.
-    - ROTATE_COUNTER_CLOCKWISE = Rotate the phone counter clockwise.
-    - OK = Scanning done, the hologram is ok.
+- NO_MATCH_FOUND = No document matching input parameters was found.
+- TILT_LEFT = Tilt your phone left.
+- TILT_RIGHT = Tilt your phone right.
+- TILT_UP = Tilt your phone up.
+- TILT_DOWN = Tilt your phone down.
+- ROTATE_CLOCKWISE = Rotate the phone clockwise.
+- ROTATE_COUNTER_CLOCKWISE = Rotate the phone counter clockwise.
+- OK = Scanning done, the hologram is ok.
 
 FaceLivenessState:
-    - LOOK_AT_ME = Look in the camera.
-    - TURN_HEAD = Slowly turn your head to LEFT and RIGHT.
-    - SMILE = Smile to the camera or move your mouth.
-    - DONE = The scanning is done.
+- LOOK_AT_ME = Look in the camera.
+- TURN_HEAD = Slowly turn your head to LEFT and RIGHT.
+- SMILE = Smile to the camera or move your mouth.
+- DONE = The scanning is done.
 
 ### More details on the sdk-api-zenid module
 
