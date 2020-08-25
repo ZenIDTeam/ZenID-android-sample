@@ -1,6 +1,10 @@
 package cz.trask.zenid.sample.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +27,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
 
     private DocumentPictureView documentPictureView;
     private TextView textView;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_document_picture);
 
         textView = findViewById(R.id.textView);
+        imageView = findViewById(R.id.imageView_camera);
 
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
@@ -40,6 +46,14 @@ public class DocumentPictureActivity extends AppCompatActivity {
             @Override
             public void onStateChanged(DocumentPictureState state) {
                 Timber.i("onStateChanged %s", state);
+
+                if (state.isMatchFound()) {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        imageView.setVisibility(View.VISIBLE);
+                        imageView.setOnClickListener(v -> documentPictureView.activateTakeNextDocumentPicture());
+                    }, 10000);
+                }
+
                 switch (state) {
                     case BLURRY:
                         textView.setText("BLURRY");
