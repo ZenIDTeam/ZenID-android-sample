@@ -198,7 +198,6 @@ DocumentPictureState:
     - BLURRY = The picture is too blurry.
     - REFLECTION_PRESENT = The reflection is present on text.
     - OK = The picture is ok.
-    - HOLOGRAM = The hologram is being verified.
     - DARK = The picture is dark.
 
 SelfieState:
@@ -206,7 +205,7 @@ SelfieState:
     - NO_FACE_FOUND = No face was found.
 
 HologramState:
-    - NO_MATCH_FOUND = No hologram match was found.
+    - NO_MATCH_FOUND = No document match was found.
     - TILT_LEFT = Till your phone left.
     - TILT_RIGHT = Till your phone right.
     - TILT_UP = Till your phone up.
