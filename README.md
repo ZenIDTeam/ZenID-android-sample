@@ -189,6 +189,37 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 });
 ```
 
+### Overview of states
+
+DocumentPictureState:
+- NO_MATCH_FOUND = No document matching input parameters was found.
+- ALIGN_CARD = Align card in front of your back camera.
+- HOLD_STEADY = Hold the document steady for a while.
+- BLURRY = The picture is too blurry.
+- REFLECTION_PRESENT = The reflection is present on text.
+- OK = The picture is ok.
+- DARK = The picture is dark.
+
+SelfieState:
+- OK = The picture is ok.
+- NO_FACE_FOUND = No face was found.
+
+HologramState:
+- NO_MATCH_FOUND = No document matching input parameters was found.
+- TILT_LEFT = Tilt your phone left.
+- TILT_RIGHT = Tilt your phone right.
+- TILT_UP = Tilt your phone up.
+- TILT_DOWN = Tilt your phone down.
+- ROTATE_CLOCKWISE = Rotate the phone clockwise.
+- ROTATE_COUNTER_CLOCKWISE = Rotate the phone counter clockwise.
+- OK = Scanning done, the hologram is ok.
+
+FaceLivenessState:
+- LOOK_AT_ME = Look in the camera.
+- TURN_HEAD = Slowly turn your head to LEFT and RIGHT.
+- SMILE = Smile to the camera or move your mouth.
+- DONE = The scanning is done.
+
 ### More details on the sdk-api-zenid module
 
 To run optical character recognition (OCR) and investigate documents (please follow the link at http://your.frauds.zenid.cz/Sensitivity/Validators to get more details what investigation is about), you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls to upload documents, for instance:
