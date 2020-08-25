@@ -1,4 +1,4 @@
-### ZenID Android SDK - v1.0.1
+## ZenID Android SDK - v1.0.1
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
