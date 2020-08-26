@@ -49,14 +49,12 @@ public class DocumentPictureActivity extends AppCompatActivity {
                 Timber.i("onStateChanged %s", state);
 
                 if (state.isMatchFound() && matchFirstFound) {
-                    Timber.d("postDelayed");
-
+                    matchFirstFound = false;
                     imageView.postDelayed(() -> {
                         imageView.setVisibility(View.VISIBLE);
                         documentPictureView.activateTakeNextDocumentPicture();
                     }, 5000);
 
-                    matchFirstFound = false;
                 }
 
                 switch (state) {
