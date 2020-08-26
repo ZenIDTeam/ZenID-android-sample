@@ -190,7 +190,7 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 ```
 
 Show and set camera button for taking unperfect document pictures.
-It is called after first document match was found and delay is set to 5000ms.
+This method is called after first document match was found and delay is set to 5000ms.
 
 ```
 imageView.postDelayed(() -> {
