@@ -189,6 +189,16 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 });
 ```
 
+Show and set camera button for taking unperfect document pictures.
+This method is called after first document match was found and delay is set to 5000ms.
+
+```
+new Handler().postDelayed(() -> {
+    imageView.setVisibility(View.VISIBLE);
+    documentPictureView.activateTakeNextDocumentPicture();
+}, 5000);
+```
+
 ### Overview of states
 
 DocumentPictureState:
