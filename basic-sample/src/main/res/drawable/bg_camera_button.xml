@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp" />
+            <stroke
+                android:width="1dip"
+                android:color="#303841" />
+            <solid android:color="#3a4750" />
+        </shape>
+    </item>
+    <item
+        android:drawable="@drawable/ic_baseline_camera"
+        android:gravity="center"
+        android:bottom="5dp"
+        android:left="5dp"
+        android:right="5dp"
+        android:top="5dp" />
+</layer-list>
