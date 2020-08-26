@@ -26,7 +26,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
     private DocumentPictureView documentPictureView;
     private TextView textView;
     private ImageView imageView;
-    private Boolean matchFirstFound;
+    private Boolean activateCameraButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         imageView = findViewById(R.id.imageView_camera);
 
-        matchFirstFound = true;
+        activateCameraButton = true;
 
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
@@ -48,8 +48,8 @@ public class DocumentPictureActivity extends AppCompatActivity {
             public void onStateChanged(DocumentPictureState state) {
                 Timber.i("onStateChanged %s", state);
 
-                if (state.isMatchFound() && matchFirstFound) {
-                    matchFirstFound = false;
+                if (state.isMatchFound() && activateCameraButton) {
+                    activateCameraButton = false;
                     imageView.postDelayed(() -> {
                         imageView.setVisibility(View.VISIBLE);
                         documentPictureView.activateTakeNextDocumentPicture();
