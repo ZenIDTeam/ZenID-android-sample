@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.DocumentCountry;
@@ -26,7 +28,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
     private DocumentPictureView documentPictureView;
     private TextView textView;
     private ImageView imageView;
-    private Boolean activateCameraButton;
+    private boolean activateCameraButton = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,9 @@ public class DocumentPictureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_document_picture);
 
         textView = findViewById(R.id.textView);
-        imageView = findViewById(R.id.imageView_camera);
 
-        activateCameraButton = true;
+        imageView = findViewById(R.id.imageView_camera);
+        imageView.setOnClickListener(view -> documentPictureView.activateTakeNextDocumentPicture());
 
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
@@ -50,11 +52,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
 
                 if (state.isMatchFound() && activateCameraButton) {
                     activateCameraButton = false;
-                    imageView.postDelayed(() -> {
-                        imageView.setVisibility(View.VISIBLE);
-                        documentPictureView.activateTakeNextDocumentPicture();
-                    }, 5000);
-
+                    imageView.postDelayed(() -> imageView.setVisibility(View.VISIBLE), 5000);
                 }
 
                 switch (state) {
@@ -76,8 +74,11 @@ public class DocumentPictureActivity extends AppCompatActivity {
             @Override
             public void onPictureTaken(DocumentResult result) {
                 postDocumentPictureSample(result);
+                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture: " + result.getFilePath());
             }
         });
+
+        activateCameraButton = true;
     }
 
     private void postDocumentPictureSample(DocumentResult result) {
@@ -87,10 +88,11 @@ public class DocumentPictureActivity extends AppCompatActivity {
             public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
                 DocumentPictureResponseValidator.State state = DocumentPictureResponseValidator.validate(result.getRole(), result.getPage(), response);
                 if (state == DocumentPictureResponseValidator.State.CORRECT) {
-                    Timber.i("Successful - sampleId: %s", response.body().getSampleId());
+                    LogUtils.logInfo(getApplicationContext(), "Upload success - sampleId: " + response.body().getSampleId());
                 } else {
-                    Timber.i("Error");
+                    LogUtils.logInfo(getApplicationContext(), "Upload failed");
                 }
+                finish();
             }
 
             @Override
