@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.0.2
+
+- An option to take a document picture
+
 ### 1.0.1
 
 - Total refactoring in order to support UI customization

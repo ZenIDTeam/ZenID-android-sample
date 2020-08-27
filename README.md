@@ -1,4 +1,4 @@
-## ZenID Android SDK - v1.0.1
+## ZenID Android SDK - v1.0.2
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
@@ -189,15 +189,8 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 });
 ```
 
-Show and set camera button for taking unperfect document pictures.
-This method is called after first document match was found and delay is set to 5000ms.
-
-```
-new Handler().postDelayed(() -> {
-    imageView.setVisibility(View.VISIBLE);
-    documentPictureView.activateTakeNextDocumentPicture();
-}, 5000);
-```
+To take a blurry etc. document picture (just before it is considered as a perfect match by our SDK) you can use this method `documentPictureView.activateTakeNextDocumentPicture()`.
+This method will take the next video frame which matches requested document type and return it as a picture through `onPictureTaken` callback. please see the sample app for more details.
 
 ### Overview of states
 
