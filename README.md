@@ -1,4 +1,4 @@
-## ZenID Android SDK - v1.0.2
+## ZenID Android SDK - v1.0.3
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
@@ -129,6 +129,8 @@ apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
 });
 ```
 
+If you want to speed up authorization process during development, just ask us. We can provide offline response tokens to you. But only for development purposes. Leak into production would undermine security!
+
 ### Architectural overview of the sdk-core module
 
 Every each use-case has its own view class:
@@ -190,7 +192,12 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 ```
 
 To take a blurry etc. document picture (just before it is considered as a perfect match by our SDK) you can use this method `documentPictureView.activateTakeNextDocumentPicture()`.
-This method will take the next video frame which matches requested document type and return it as a picture through `onPictureTaken` callback. please see the sample app for more details.
+This method will take the next video frame which matches requested document type and return it as a picture through `onPictureTaken` callback.
+
+DocumentPictureView offers two different scale types - CENTER_CROP and CENTER_INSIDE - the same behavior as described at https://developer.android.com/reference/android/widget/ImageView.ScaleType. 
+In addition, we recommend to enable `documentPictureView.adjustPreviewStreamSize()` which will try to set the camera aspect ratio as close as possible to the viewport.
+
+Please see the sample app for more details.
 
 ### Overview of states
 
