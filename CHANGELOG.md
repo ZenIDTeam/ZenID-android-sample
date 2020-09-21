@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.0.3
+
+- Fix aspect ratio issue. 
+
 ### 1.0.2
 
 - An option to take a document picture
