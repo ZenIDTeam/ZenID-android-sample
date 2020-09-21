@@ -195,7 +195,7 @@ To take a blurry etc. document picture (just before it is considered as a perfec
 This method will take the next video frame which matches requested document type and return it as a picture through `onPictureTaken` callback.
 
 DocumentPictureView offers two different scale types - CENTER_CROP and CENTER_INSIDE - the same behavior as described at https://developer.android.com/reference/android/widget/ImageView.ScaleType. 
-In addition, we recommend to enable `documentPictureView.adjustPreviewStreamSize()` which will try to set the camera aspect ratio as close as possible to the viewport.
+In addition, we recommend to use `documentPictureView.adjustPreviewStreamSize()` which will set the camera aspect ratio as close as possible to the viewport with min. required size of the picture.
 
 Please see the sample app for more details.
 
