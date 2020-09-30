@@ -35,8 +35,8 @@ implementation "cz.trask.zenid.sdk:sdk-api-zenid:$version"
 
 The C++ code needs to be compiled for each of the CPU architectures (known as "ABIs") present on the Android environment. Currently, the SDK supports the following ABIs:
 
-* `armeabi-v7a`: Version 7 or higher of the ARM processor. Most recent Android phones use this
-* `arm64-v8a`: 64-bit ARM processors. Found on new generation devices
+* `armeabi-v7a`
+* `arm64-v8a`
 * `x86`
 * `x86_64`
 
