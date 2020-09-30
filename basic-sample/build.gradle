@@ -16,11 +16,27 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-DEBUG'
+            // ndk { abiFilters 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a' } // Generate code for a specific ABI
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // The ABI split approach will produce different apk files for the different architectures.
+    // splits {
+    //     abi {
+    //         enable true
+    //         reset()
+    //         include 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a'
+    //         universalApk false
+    //     }
+    // }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
