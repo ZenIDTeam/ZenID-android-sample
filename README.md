@@ -35,8 +35,10 @@ implementation "cz.trask.zenid.sdk:sdk-api-zenid:$version"
 
 The C++ code needs to be compiled for each of the CPU architectures (known as "ABIs") present on the Android environment. Currently, the SDK supports the following ABIs:
 
-* `armeabi-v7a`: Version 7 or higher of the ARM processor. Most recent Android phones use this
-* `arm64-v8a`: 64-bit ARM processors. Found on new generation devices
+* `armeabi-v7a`
+* `arm64-v8a`
+* `x86`
+* `x86_64`
 
 The SDK binary contains a copy of the native `.so` file for each of these four platforms.
 You can considerably reduce the size of your `.apk` by applying APK split by ABI, editing your `build.gradle` as the following:
@@ -48,7 +50,7 @@ android {
     abi {
         enable true
         reset()
-        include 'arm64-v8a', 'armeabi-v7a'
+        include 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a'
         universalApk false
     }
   }
@@ -194,7 +196,7 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 To take a blurry etc. document picture (just before it is considered as a perfect match by our SDK) you can use this method `documentPictureView.activateTakeNextDocumentPicture()`.
 This method will take the next video frame which matches requested document type and return it as a picture through `onPictureTaken` callback.
 
-DocumentPictureView offers two different scale types - CENTER_CROP and CENTER_INSIDE - the same behavior as described at https://developer.android.com/reference/android/widget/ImageView.ScaleType. 
+DocumentPictureView offers two different scale types - CENTER_CROP and CENTER_INSIDE - the same behavior as described at [Android documentation](https://developer.android.com/reference/android/widget/ImageView.ScaleType). 
 In addition, we recommend to use `documentPictureView.adjustPreviewStreamSize()` which will set the camera aspect ratio as close as possible to the viewport with min. required size of the picture.
 
 Please see the sample app for more details.
