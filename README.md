@@ -37,6 +37,8 @@ The C++ code needs to be compiled for each of the CPU architectures (known as "A
 
 * `armeabi-v7a`: Version 7 or higher of the ARM processor. Most recent Android phones use this
 * `arm64-v8a`: 64-bit ARM processors. Found on new generation devices
+* `x86`
+* `x86_64`
 
 The SDK binary contains a copy of the native `.so` file for each of these four platforms.
 You can considerably reduce the size of your `.apk` by applying APK split by ABI, editing your `build.gradle` as the following:
@@ -48,7 +50,7 @@ android {
     abi {
         enable true
         reset()
-        include 'arm64-v8a', 'armeabi-v7a'
+        include 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a'
         universalApk false
     }
   }
