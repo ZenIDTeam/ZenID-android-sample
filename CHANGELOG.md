@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.0.5
+
+- Fix (Nexus 5X) reverse camera orientation
+
 ### 1.0.3
 
 - Fix aspect ratio issue. 
