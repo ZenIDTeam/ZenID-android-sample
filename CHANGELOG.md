@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.0.6
+
+- Fix debug (offline) tokens for authorization
+- Fix selfie timer issue
+
 ### 1.0.5
 
 - Fix (Nexus 5X) reverse camera orientation
