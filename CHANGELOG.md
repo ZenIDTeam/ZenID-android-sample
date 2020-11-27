@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.1.1
+
+BREAKING CHANGE
+- Separate sdk-selfie and sdk-faceliveness modules from the sdk-core module. You can save a lot of MBs if you don't use
+face-liveness. See the docs.
+
+
 ### 1.0.6
 
 - Fix debug (offline) tokens for authorization
