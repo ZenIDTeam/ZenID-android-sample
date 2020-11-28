@@ -2,7 +2,7 @@
 
 ### 1.1.1
 
-- BREAKING CHANGE Make selfie and faceliveness optional modules. You can save some MBs if you don't include unused modules. See the docs. 
+- BREAKING CHANGE! Selfie and faceliveness are optional modules now. You can save some MBs if you don't include unused modules. See the docs. 
 Migration should we very straightforward.
 
    - Add all modules you need.
