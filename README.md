@@ -220,9 +220,9 @@ DocumentPictureState:
 SelfieState:
 - OK = The picture is ok.
 - NO_FACE_FOUND = No face was found.
-- BLURRY = 
-- DARK = .
-- CONFIRMING_FACE = .
+- BLURRY = The picture is too blurry.
+- DARK = The picture is dark.
+- CONFIRMING_FACE = Face was confirmed.
     
 HologramState:
 - NO_MATCH_FOUND = No document matching input parameters was found.

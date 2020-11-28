@@ -2,9 +2,8 @@
 
 ### 1.1.1
 
-- BREAKING CHANGE Separate sdk-selfie and sdk-faceliveness modules from the sdk-core module. You can save a lot of MBs if you don't use
-face-liveness. See the docs. Migration should we very straightforward.
-- New states ( DARK, CONFIRMING_FACE ) for the selfie module.
+- BREAKING CHANGE Make selfie and faceliveness optional modules. You can save some MBs if you don't include unused modules. See the docs. Migration should we very straightforward.
+- New states (DARK, CONFIRMING_FACE) for the selfie module.
 - Fix *fault addr* crash on some devices
 
 ### 1.0.6
