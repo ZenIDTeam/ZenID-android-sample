@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <cz.trask.zenid.sdk.SelfieView
+    <cz.trask.zenid.sdk.selfie.SelfieView
         android:id="@+id/selfieView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

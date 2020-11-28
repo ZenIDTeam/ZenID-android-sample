@@ -1,4 +1,4 @@
-## ZenID Android SDK - v1.0.6
+## ZenID Android SDK - v1.1.1
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
@@ -7,9 +7,14 @@ Android sample app that shows how to use the ZenID Android SDK. The SDK can help
 * real-time face liveness detection
 * Hologram verification
 
-Identity cards, driving licenses and passports from Czechia and Slovakia are supported.
+Identity cards, driving licenses and passports from Czechia and Slovakia are supported. 
+Only landscape orientation is supported for document processing. 
+On the other hand, only portrait orientation for selfie or face-liveness.
 
 The SDK supports API level 22 and above.
+
+Apps need to use a single NDK and STL for all native code and dependencies - [one STL per app](https://developer.android.com/ndk/guides/cpp-support#one_stl_per_app).
+We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an another native library, please do mutual compatibility check as soon as possible.
 
 ### Installation
 
@@ -27,6 +32,8 @@ maven {
 * Then simply download the latest version:
 ```
 implementation "cz.trask.zenid.sdk:sdk-core:$version"
+implementation "cz.trask.zenid.sdk:sdk-selfie:$version"
+implementation "cz.trask.zenid.sdk:sdk-faceliveness:$version"
 implementation "cz.trask.zenid.sdk:sdk-api-zenid:$version"
 ```
 * Rebuild the project
@@ -61,11 +68,12 @@ More information on the [Android documentation](https://developer.android.com/st
 
 ### Initialization
  
-The ZenID Android SDK is a collection of two modules. The first one (sdk-core) is the core module for offline image processing. The second one (sdk-api-zenid) is an API integration to our backend system.
+The ZenID Android SDK is a collection of four modules. The first one (sdk-core) is the core module for offline document processing. Selfie and face-liveness modules are optional. And the last one (sdk-api-zenid) is an API integration to our backend system.
 
 ```
 ZenId zenId = new ZenId.Builder()
         .applicationContext(getApplicationContext())
+        .extraVerifiers(new SelfieVerifier(), new FaceLivenessVerifier())
         .build();
 
 // Make the instance globally accessible.
@@ -105,9 +113,9 @@ Starting from 0.21.5, mobile apps need to be authorized by the backend. Here is 
 
 Before you start, make sure "Android Package Name" are filled in the settings page of the website.
 
-Step 1. Get the challenge token.
-Step 2. Get the response token by calling /api/initSdk in the backend.
-Step 3. Call authorize using the response token obtained in the previous step. It will return a bool representing success or failure.
+* Step 1. Get the challenge token.
+* Step 2. Get the response token by calling /api/initSdk in the backend.
+* Step 3. Call authorize using the response token obtained in the previous step. It will return a bool representing success or failure.
 
 These steps need to be performed before any operation on documents, otherwise you will get a RecogLibCException with "Security Error" in the message.
 
@@ -133,13 +141,13 @@ apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
 
 If you want to speed up authorization process during development, just ask us. We can provide offline response tokens to you. But only for development purposes. Leak into production would undermine security!
 
-### Architectural overview of the sdk-core module
+### Architectural overview of the SDK
 
 Every each use-case has its own view class:
   - cz.trask.zenid.sdk.DocumentPictureView for document picture verification
-  - cz.trask.zenid.sdk.FaceLivenessView for the real-time face liveness check 
-  - cz.trask.zenid.sdk.SelfieView to take a good selfie picture
   - cz.trask.zenid.sdk.HologramView for the hologram verification
+  - cz.trask.zenid.sdk.faceliveness.FaceLivenessView for the real-time face liveness check 
+  - cz.trask.zenid.sdk.selfie.SelfieView to take a good selfie picture
   
 To use the DocumentPictureView for instance, simply add a DocumentPictureView to your layout. 
 
@@ -193,7 +201,7 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
 });
 ```
 
-To take a blurry etc. document picture (just before it is considered as a perfect match by our SDK) you can use this method `documentPictureView.activateTakeNextDocumentPicture()`.
+To take a blurry etc. document pictures (just before it is considered as a perfect match by our SDK) you can use this method `documentPictureView.activateTakeNextDocumentPicture()`.
 This method will take the next video frame which matches requested document type and return it as a picture through `onPictureTaken` callback.
 
 DocumentPictureView offers two different scale types - CENTER_CROP and CENTER_INSIDE - the same behavior as described at [Android documentation](https://developer.android.com/reference/android/widget/ImageView.ScaleType). 
@@ -215,7 +223,10 @@ DocumentPictureState:
 SelfieState:
 - OK = The picture is ok.
 - NO_FACE_FOUND = No face was found.
-
+- BLURRY = The picture is too blurry.
+- DARK = The picture is dark.
+- CONFIRMING_FACE = Face was confirmed.
+    
 HologramState:
 - NO_MATCH_FOUND = No document matching input parameters was found.
 - TILT_LEFT = Tilt your phone left.

@@ -5,6 +5,8 @@ import android.app.Application;
 import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiConfig;
 import cz.trask.zenid.sdk.api.ApiService;
+import cz.trask.zenid.sdk.faceliveness.FaceLivenessVerifier;
+import cz.trask.zenid.sdk.selfie.SelfieVerifier;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
@@ -27,6 +29,7 @@ public class MyApplication extends Application {
     private void initZenId() {
         ZenId zenId = new ZenId.Builder()
                 .applicationContext(getApplicationContext())
+                .extraVerifiers(new SelfieVerifier(), new FaceLivenessVerifier())
                 .build();
 
         ZenId.setSingletonInstance(zenId);

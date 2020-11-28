@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.R;
-import cz.trask.zenid.sdk.FaceLivenessState;
-import cz.trask.zenid.sdk.FaceLivenessView;
+import cz.trask.zenid.sdk.faceliveness.FaceLivenessState;
+import cz.trask.zenid.sdk.faceliveness.FaceLivenessView;
 import cz.trask.zenid.sdk.Language;
 import timber.log.Timber;
 
