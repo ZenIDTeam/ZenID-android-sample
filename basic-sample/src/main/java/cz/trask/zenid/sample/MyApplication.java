@@ -40,7 +40,7 @@ public class MyApplication extends Application {
 
     private void initApiService() {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(message -> Timber.tag("OkHttp").d(message));
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .addInterceptor(httpLoggingInterceptor)
