@@ -7,7 +7,9 @@ Android sample app that shows how to use the ZenID Android SDK. The SDK can help
 * real-time face liveness detection
 * Hologram verification
 
-Identity cards, driving licenses and passports from Czechia and Slovakia are supported.
+Identity cards, driving licenses and passports from Czechia and Slovakia are supported. 
+Only landscape orientation is supported for document processing. 
+On the other hand, only portrait orientation for selfie or face-liveness.
 
 The SDK supports API level 22 and above.
 
@@ -71,6 +73,7 @@ The ZenID Android SDK is a collection of four modules. The first one (sdk-core) 
 ```
 ZenId zenId = new ZenId.Builder()
         .applicationContext(getApplicationContext())
+        .extraVerifiers(new SelfieVerifier(), new FaceLivenessVerifier())
         .build();
 
 // Make the instance globally accessible.

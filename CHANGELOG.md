@@ -2,7 +2,31 @@
 
 ### 1.1.1
 
-- BREAKING CHANGE Make selfie and faceliveness optional modules. You can save some MBs if you don't include unused modules. See the docs. Migration should we very straightforward.
+- BREAKING CHANGE Make selfie and faceliveness optional modules. You can save some MBs if you don't include unused modules. See the docs. 
+Migration should we very straightforward.
+
+   - Add all modules you need.
+```
+implementation "cz.trask.zenid.sdk:sdk-core:$version"
+implementation "cz.trask.zenid.sdk:sdk-selfie:$version"
+implementation "cz.trask.zenid.sdk:sdk-faceliveness:$version"
+implementation "cz.trask.zenid.sdk:sdk-api-zenid:$version"
+```
+
+   - Pass extra verifiers (selfie and/or face-liveness) you want to use.
+```
+ZenId zenId = new ZenId.Builder()
+        .applicationContext(getApplicationContext())
+        .extraVerifiers(new SelfieVerifier(), new FaceLivenessVerifier())
+        .build();
+```
+
+   - Change package names in java and xml.
+```
+cz.trask.zenid.sdk.SelfieView -> cz.trask.zenid.sdk.faceliveness.SelfieView
+cz.trask.zenid.sdk.FaceLivenessView -> cz.trask.zenid.sdk.faceliveness.FaceLivenessView
+```
+
 - New states (DARK, CONFIRMING_FACE) for the selfie module.
 - Fix *fault addr* crash on some devices
 
