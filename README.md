@@ -18,23 +18,26 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
 ### Installation
 
-* Add remote repository into your build.gradle file. Use "tomaslad" credentials for now (it will change in the future).
+* Put our *.aar files in the libs folder of your app
+* Edit the build.gradle file of your app and add
+
 ```
-maven {
-    name = "Github"
-    url = uri("https://maven.pkg.github.com/Licho1/ZenID-android")
-    credentials {
-        username = "tomaslad"
-        password = "018c49e7e3a2f638c158b73e5de7e271110e1c96"
-    }
+ext {
+    okHttpVersion = '3.14.4'
+    retrofitVersion = '2.6.2'
 }
-```
-* Then simply download the latest version:
-```
-implementation "cz.trask.zenid.sdk:sdk-core:$version"
-implementation "cz.trask.zenid.sdk:sdk-selfie:$version"
-implementation "cz.trask.zenid.sdk:sdk-faceliveness:$version"
-implementation "cz.trask.zenid.sdk:sdk-api-zenid:$version"
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.otaliastudios:cameraview:2.6.1'
+    implementation fileTree(include: ['*.aar'], dir: '../libs')
+}
 ```
 * Rebuild the project
 

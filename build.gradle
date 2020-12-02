@@ -15,15 +15,6 @@ allprojects {
     repositories {
         jcenter()
         google()
-
-        maven {
-            name = "Github"
-            url = uri("https://maven.pkg.github.com/Licho1/ZenID-android")
-            credentials {
-                username = "tomaslad"
-                password = "018c49e7e3a2f638c158b73e5de7e271110e1c96"
-            }
-        }
     }
 }
 
