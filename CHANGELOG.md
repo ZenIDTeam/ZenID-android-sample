@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.1.4
+- Fix CENTER_CROP scale type. Using this method `documentPictureView.adjustPreviewStreamSize()` for CENTER_CROP scale type is not needed anymore.
+- Fix document role/country/page are now optional. 
+
 ### 1.1.1
 
 - BREAKING CHANGE! Selfie and faceliveness are optional modules now. You can save some MBs if you don't include unused modules. See the docs. 

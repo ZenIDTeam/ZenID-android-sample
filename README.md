@@ -1,4 +1,4 @@
-## ZenID Android SDK - v1.1.1
+## ZenID Android SDK - v1.1.4
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
 
@@ -208,7 +208,7 @@ To take a blurry etc. document pictures (just before it is considered as a perfe
 This method will take the next video frame which matches requested document type and return it as a picture through `onPictureTaken` callback.
 
 DocumentPictureView offers two different scale types - CENTER_CROP and CENTER_INSIDE - the same behavior as described at [Android documentation](https://developer.android.com/reference/android/widget/ImageView.ScaleType). 
-In addition, we recommend to use `documentPictureView.adjustPreviewStreamSize()` which will set the camera aspect ratio as close as possible to the viewport with min. required size of the picture.
+In addition, but not necessary, you can use `documentPictureView.adjustPreviewStreamSize()` for CENTER_INSIDE scale type which will set the camera aspect ratio as close as possible to the viewport with min. required size of the picture.
 
 Please see the sample app for more details.
 
