@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.1.5
+- Fix blur detection
+
 ### 1.1.4
 - Fix CENTER_CROP scale type. Using this method `documentPictureView.adjustPreviewStreamSize()` for CENTER_CROP scale type is not needed anymore.
 - Fix document role/country/page are now optional. 
