@@ -1,5 +1,15 @@
 # Changelog
 
+### 1.2.0
+- BREAKING CHANGE! Split document models by country codes into separate packages to optimize SDK size. 
+
+  - Add only model packages on classpath which you really need. Keep the rest out.
+  ```
+  implementation "cz.trask.zenid.sdk:sdk-core:$version"
+  implementation "cz.trask.zenid.sdk:sdk-core-models-cz:$version"
+  implementation "cz.trask.zenid.sdk:sdk-core-models-sk:$version"
+  ```
+
 ### 1.1.5
 - Fix blur detection
 

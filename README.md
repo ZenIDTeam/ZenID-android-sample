@@ -16,6 +16,21 @@ The SDK supports API level 22 and above.
 Apps need to use a single NDK and STL for all native code and dependencies - [one STL per app](https://developer.android.com/ndk/guides/cpp-support#one_stl_per_app).
 We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an another native library, please do mutual compatibility check as soon as possible.
 
+### Package sizes
+
+|  Package name  |  Size (MB)  |  Note  |
+|----------|:-------------:|------|
+|  sdk-core  |  18.4  |  Can be reduced by using abi-filters or abi-split  |
+|  sdk-core-models-at  |  7.5  |  |
+|  sdk-core-models-cz  |  2.1  |  |
+|  sdk-core-models-de  |  2.6  |  |
+|  sdk-core-models-pl  |  2.8  |  |
+|  sdk-core-models-sk  |  4.4  |  |
+|  sdk-faceliveness  |  34.5  |  |
+|  sdk-selfie  |  0.1  |  |
+|  sdk-api-zenid  | 0.05  |  |
+
+
 ### Installation
 
 * Put our *.aar files in the libs folder of your app
