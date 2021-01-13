@@ -19,8 +19,8 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 ### Package sizes
 
 |  Package name  |  Size (MB)  |  Note  |
-|----------|:-------------:|------:|
-|  sdk-core  |  18.4  |  can be reduced using abi-filters or abi-split  |
+|----------|-------------|------|
+|  sdk-core  |  18.4  |  Can be reduced by using abi-filters or abi-split  |
 |  sdk-core-models-at  |  7.5  |  |
 |  sdk-core-models-cz  |  2.1  |  |
 |  sdk-core-models-de  |  2.6  |  |
