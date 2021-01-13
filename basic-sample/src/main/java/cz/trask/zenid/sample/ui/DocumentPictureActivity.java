@@ -44,7 +44,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
         documentPictureView.setDocumentType(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
-        documentPictureView.setScaleType(ScaleType.CENTER_INSIDE);
+        // documentPictureView.setScaleType(ScaleType.CENTER_INSIDE);
         // documentPictureView.adjustPreviewStreamSize(); // enable/disable
         // documentPictureView.enableDefaultVizualization(Language.ENGLISH); // enable/disable
         documentPictureView.setCallback(new DocumentPictureView.Callback() {

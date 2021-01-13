@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "cz.trask.zenid.sample"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 30
         ndkVersion "21.3.6528147"
         versionCode 1

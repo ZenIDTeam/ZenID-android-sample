@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.2.1
+
+- Change minimum API level from 22 to 21.
+
 ### 1.2.0
 - BREAKING CHANGE! Split document models by country codes into separate packages to optimize SDK size. 
 
