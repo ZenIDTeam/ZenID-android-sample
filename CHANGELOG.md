@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.2.0
+- Split document models into separate packages by country codes to optimize SDK size
+
 ### 1.1.5
 - Fix blur detection
 
