@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.3.0
+
+- Support auto-rotate setting for document picture processing. DocumentPictureView doesn't require landscape mode anymore.
+
 ### 1.2.1
 
 - Change minimum API level from 22 to 21.

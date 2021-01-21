@@ -31,8 +31,7 @@
             android:name=".ui.SelfieActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".ui.DocumentPictureActivity" />
+        <activity android:name=".ui.DocumentPictureActivity" />
 
         <activity
             android:name=".ui.FaceLivenessActivity"
