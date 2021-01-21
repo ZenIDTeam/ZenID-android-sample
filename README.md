@@ -11,13 +11,6 @@ The SDK supports API level 21 and above.
 
 Identity cards, driving licenses and passports from Czechia and Slovakia are supported. 
 
-|  View  |  Supported screen orientations  |
-|----------|:-------------:|
-|  DocumentPictureView |  all |  
-|  HologramView  |  landscape  |  
-|  SelfieView  |  portrait  |  
-|  FaceLivenessView  |  portrait  |  
-
 Apps need to use a single NDK and STL for all native code and dependencies - [one STL per app](https://developer.android.com/ndk/guides/cpp-support#one_stl_per_app).
 We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an another native library, please do mutual compatibility check as soon as possible.
 
@@ -35,6 +28,14 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |  sdk-selfie  |  0.1  |  |
 |  sdk-api-zenid  | 0.05  |  |
 
+###  Supported screen orientations 
+
+|  View name |  Screen orientations  |
+|----------|:-------------:|
+|  DocumentPictureView |  no limitations  |  
+|  HologramView  |  landscape  |  
+|  SelfieView  |  portrait  |  
+|  FaceLivenessView  |  portrait  |  
 
 ### Installation
 
