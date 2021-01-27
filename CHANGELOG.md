@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.3.2
+
+- Fix handle camera permission. New method setAutoRequestPermissions for each CameraView. More details in README, section: Camera permission.
+
 ### 1.3.0
 
 - Support auto-rotate setting for document picture processing. DocumentPictureView doesn't require landscape mode anymore.

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,13 +16,15 @@ import cz.trask.zenid.sdk.DocumentPictureState;
 import cz.trask.zenid.sdk.DocumentPictureView;
 import cz.trask.zenid.sdk.DocumentResult;
 import cz.trask.zenid.sdk.DocumentRole;
-import cz.trask.zenid.sdk.ScaleType;
 import cz.trask.zenid.sdk.api.DocumentPictureResponseValidator;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
+/*
+ * This class shows how to create a custom overlay
+ */
 public class DocumentPictureActivity extends AppCompatActivity {
 
     private DocumentPictureView documentPictureView;
