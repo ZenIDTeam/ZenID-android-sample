@@ -30,7 +30,7 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
 ###  Supported screen orientations 
 
-|  View name |  required modes  |
+|  View name |  Required mode  |
 |----------|:-------------:|
 |  DocumentPictureView |  no limitations  |  
 |  HologramView  |  landscape  |  
