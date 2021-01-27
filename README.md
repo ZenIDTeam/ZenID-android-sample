@@ -233,6 +233,35 @@ In addition, but not necessary, you can use `documentPictureView.adjustPreviewSt
 
 Please see the sample app for more details.
 
+### Camera permission
+
+Camera permission is automatically requested when lifecycleOwner is set. You can use `setAutoRequestPermissions` to disable this auto request feature. Recommended way (a code snippet from the sample SelfieActivity) to handle the camera permission:
+
+```
+@Override
+public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    if (isCameraPermissionDenied(grantResults)) {
+        if (shouldShowRequestPermissionRationale()) {
+            Timber.i("Camera permission denied but selfieView will immediately request camera permission again.");
+        } else {
+            selfieView.setAutoRequestPermissions(false);
+            Timber.i("Camera permission denied with -don't ask again- option.");
+        }
+    } else {
+        Timber.i("Camera permission granted!");
+    }
+}
+
+private boolean isCameraPermissionDenied(int[] grantResults) {
+    return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED;
+}
+
+private boolean shouldShowRequestPermissionRationale() {
+    return ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA);
+}
+```
+
 ### Overview of states
 
 DocumentPictureState:

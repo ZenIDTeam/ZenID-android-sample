@@ -51,7 +51,7 @@ public class SelfieActivity extends AppCompatActivity {
                 Timber.i("Camera permission denied but selfieView will immediately request camera permission again.");
             } else {
                 selfieView.setAutoRequestPermissions(false);
-                Timber.i("Camera permission denied with Don't ask again option.");
+                Timber.i("Camera permission denied with -don't ask again- option.");
             }
         } else {
             Timber.i("Camera permission granted!");
