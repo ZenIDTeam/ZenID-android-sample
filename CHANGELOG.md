@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.3.3
+
+- The blur, reflection and darkness validators are now more tolerant and reach their maximum tolerance faster.
+
 ### 1.3.2
 
 - Fix handle camera permission. New method setAutoRequestPermissions for each CameraView. More details in README, section: Camera permission.
