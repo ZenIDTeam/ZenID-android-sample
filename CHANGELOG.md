@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.3.4
+
+-  Add option to show or hide default text messages when using our default visualization. Set parameter `showTextInformation` to `true`.
+
 ### 1.3.3
 
 - The blur, reflection and darkness validators are now more tolerant and reach their maximum tolerance faster.

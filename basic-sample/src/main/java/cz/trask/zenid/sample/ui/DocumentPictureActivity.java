@@ -43,6 +43,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         imageView.setOnClickListener(view -> documentPictureView.activateTakeNextDocumentPicture());
 
         documentPictureView = findViewById(R.id.documentPictureView);
+        documentPictureView.enableDefaultVizualization();
         documentPictureView.setLifecycleOwner(this);
         documentPictureView.setDocumentType(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
         // documentPictureView.setScaleType(ScaleType.CENTER_INSIDE);
