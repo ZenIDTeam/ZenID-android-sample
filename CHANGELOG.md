@@ -2,7 +2,7 @@
 
 ### 1.3.4
 
--  Add option to show or hide default text messages when using our default visualization. Set parameter `showTextInformation` to `true`.
+-  Add option to show or hide default text messages when using our default visualization. Use `showTextInformation` parameter which is set to `true` by default.
 
 ### 1.3.3
 
