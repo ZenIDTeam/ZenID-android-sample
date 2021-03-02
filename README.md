@@ -56,7 +56,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.otaliastudios:cameraview:2.6.1'
+    implementation 'com.otaliastudios:cameraview:2.6.4'
     implementation fileTree(include: ['*.aar'], dir: '../libs')
 }
 ```

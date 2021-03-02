@@ -14,7 +14,8 @@
 
 ### 1.3.0
 
-- Support auto-rotate setting for document picture processing. DocumentPictureView doesn't require landscape mode anymore.
+- Support auto-rotate setting for document picture processing. DocumentPictureView doesn't require landscape mode anymore. 
+- Bump com.otaliastudios:cameraview dependecy version to 2.6.4
 
 ### 1.2.1
 
