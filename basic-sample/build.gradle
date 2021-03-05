@@ -43,8 +43,8 @@ android {
 }
 
 ext {
-    okHttpVersion = '3.14.4'
-    retrofitVersion = '2.6.2'
+    okHttpVersion = '3.14.9'
+    retrofitVersion = '2.8.2'
 }
 
 dependencies {
