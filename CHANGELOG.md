@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.3.5
+
+- Fix scan a document in landscape mode  
+- Bump OkHttp version. Use at least OkHttp 3.14.7 see https://square.github.io/okhttp/changelog_3x/#version-3147
+
 ### 1.3.4
 
 -  Add option to show or hide default text messages when using our default visualization. Use `showTextInformation` parameter which is set to `true` by default.
