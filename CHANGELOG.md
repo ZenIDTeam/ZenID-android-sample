@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.3.6
+
+- Fix exception when NULL document country is provided for `documentPictureView.setDocumentType()`
+
 ### 1.3.5
 
 - Fix scan a document in landscape mode  
