@@ -3,7 +3,7 @@
 ### 1.4.0
 
 - BREAKING CHANGE! ZenId.Builder refactoring. We have moved each verifier into its own module. The goal under the hood is to declare what we consider as a library-private API and what can be changed without warning. 
-  Everything inside `internal` package is not a published API and you should not be very careful when using it.
+  Everything inside `internal` package is not a published API and you should be very careful when using it.
 
   ```
   ZenId zenId = new ZenId.Builder()
