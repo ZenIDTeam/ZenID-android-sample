@@ -97,7 +97,7 @@ The ZenID Android SDK is a collection of four modules. The first one (sdk-core) 
 ```
 ZenId zenId = new ZenId.Builder()
         .applicationContext(getApplicationContext())
-        .extraVerifiers(new SelfieVerifier(), new FaceLivenessVerifier())
+        .modules(new DocumentModule(), new SelfieModule(), new FaceLivenessModule())
         .build();
 
 // Make the instance globally accessible.
