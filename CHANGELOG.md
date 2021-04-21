@@ -1,5 +1,30 @@
 # Changelog
 
+### 1.4.0
+
+- BREAKING CHANGE! ZenId.Builder refactoring. We have moved each verifier into its own module. The goal under the hood is to declare what we consider as a library-private API and what can be changed without warning. 
+  Everything inside `internal` package is not a published API and you should be very careful when using it.
+
+  ```
+  ZenId zenId = new ZenId.Builder()
+    .applicationContext(context)
+    .modules(new DocumentModule(), new SelfieModule(), new FaceLivenessModule())
+    .build();
+  ```
+
+- BREAKING CHANGE! Use `visualizationSettings` for our default visualization. 
+
+  ```
+  VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
+    .language(Language.CZECH)
+    .showDebugVisualization(true)
+    .build();
+  documentPictureView.enableDefaultVisualization(visualizationSettings);
+  ```
+
+- BREAKING CHANGE! Class `DocumentResult` has been splitted into two separate classes: `DocumentPictureResult` and `HologramResult`.
+
+
 ### 1.3.6
 
 - Fix exception when NULL document country is provided for `documentPictureView.setDocumentType()`

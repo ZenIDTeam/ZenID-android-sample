@@ -2,10 +2,13 @@ package cz.trask.zenid.sample;
 
 import android.app.Application;
 
+import cz.trask.zenid.sdk.DocumentModule;
 import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiConfig;
 import cz.trask.zenid.sdk.api.ApiService;
+import cz.trask.zenid.sdk.faceliveness.FaceLivenessModule;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessVerifier;
+import cz.trask.zenid.sdk.selfie.SelfieModule;
 import cz.trask.zenid.sdk.selfie.SelfieVerifier;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -29,7 +32,7 @@ public class MyApplication extends Application {
     private void initZenId() {
         ZenId zenId = new ZenId.Builder()
                 .applicationContext(getApplicationContext())
-                .extraVerifiers(new SelfieVerifier(), new FaceLivenessVerifier())
+                .modules(new DocumentModule(), new SelfieModule(), new FaceLivenessModule())
                 .build();
 
         ZenId.setSingletonInstance(zenId);

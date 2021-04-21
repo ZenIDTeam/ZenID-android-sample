@@ -7,15 +7,20 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Arrays;
+
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
+import cz.trask.zenid.sdk.DocumentAcceptableInput;
 import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
+import cz.trask.zenid.sdk.DocumentPictureResult;
 import cz.trask.zenid.sdk.DocumentPictureState;
 import cz.trask.zenid.sdk.DocumentPictureView;
-import cz.trask.zenid.sdk.DocumentResult;
 import cz.trask.zenid.sdk.DocumentRole;
+import cz.trask.zenid.sdk.Language;
+import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.api.DocumentPictureResponseValidator;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import retrofit2.Call;
@@ -42,12 +47,21 @@ public class DocumentPictureActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView_camera);
         imageView.setOnClickListener(view -> documentPictureView.activateTakeNextDocumentPicture());
 
+        DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, null, DocumentCountry.CZ);
+        DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
+        DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1, filter2));
+
+        VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
+                .showDebugVisualization(true)
+                .language(Language.ENGLISH)
+                .build();
+
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
-        documentPictureView.setDocumentType(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
+        documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
         // documentPictureView.setScaleType(ScaleType.CENTER_INSIDE);
         // documentPictureView.adjustPreviewStreamSize(); // enable/disable
-        // documentPictureView.enableDefaultVizualization(Language.ENGLISH); // enable/disable
+        documentPictureView.enableDefaultVisualization(visualizationSettings); // enable/disable
         documentPictureView.setCallback(new DocumentPictureView.Callback() {
 
             @Override
@@ -76,16 +90,16 @@ public class DocumentPictureActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPictureTaken(DocumentResult result) {
+            public void onPictureTaken(DocumentPictureResult result) {
                 postDocumentPictureSample(result);
-                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture: " + result.getFilePath());
+                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture: " + result.getPictureFilePath());
             }
         });
 
         activateCameraButton = true;
     }
 
-    private void postDocumentPictureSample(DocumentResult result) {
+    private void postDocumentPictureSample(DocumentPictureResult result) {
         MyApplication.apiService.postDocumentPictureSample(result).enqueue(new retrofit2.Callback<SampleJson>() {
 
             @Override

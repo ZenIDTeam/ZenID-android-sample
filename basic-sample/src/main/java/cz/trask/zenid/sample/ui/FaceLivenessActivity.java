@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.R;
+import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessState;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessView;
 import cz.trask.zenid.sdk.Language;
@@ -20,9 +21,14 @@ public class FaceLivenessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_face_liveness);
 
+        VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
+                .showDebugVisualization(true)
+                .language(Language.ENGLISH)
+                .build();
+
         faceLivenessView = findViewById(R.id.faceLivenessView);
         faceLivenessView.setLifecycleOwner(this);
-        faceLivenessView.enableDefaultVizualization(Language.CZECH);
+        faceLivenessView.enableDefaultVisualization(visualizationSettings);
         faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
             @Override

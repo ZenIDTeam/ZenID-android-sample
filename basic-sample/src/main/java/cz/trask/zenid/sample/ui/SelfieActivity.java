@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.Language;
+import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.selfie.SelfieState;
 import cz.trask.zenid.sdk.selfie.SelfieView;
 import timber.log.Timber;
@@ -26,9 +27,14 @@ public class SelfieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selfie);
 
+        VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
+                .showDebugVisualization(true)
+                .language(Language.ENGLISH)
+                .build();
+
         selfieView = findViewById(R.id.selfieView);
         selfieView.setLifecycleOwner(this);
-        selfieView.enableDefaultVizualization(Language.ENGLISH);
+        selfieView.enableDefaultVisualization(visualizationSettings);
         selfieView.setCallback(new SelfieView.Callback() {
 
             @Override
