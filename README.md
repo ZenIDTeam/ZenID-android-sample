@@ -21,7 +21,9 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |  sdk-core  |  18.4  |  Can be reduced by using abi-filters or abi-split  |
 |  sdk-core-models-at  |  7.5  |  |
 |  sdk-core-models-cz  |  2.1  |  |
+|  sdk-core-models-cz-extended  |  6.8  |  |
 |  sdk-core-models-de  |  2.6  |  |
+|  sdk-core-models-it  |  3.6  |  |
 |  sdk-core-models-pl  |  2.8  |  |
 |  sdk-core-models-sk  |  4.4  |  |
 |  sdk-faceliveness  |  34.5  |  |
