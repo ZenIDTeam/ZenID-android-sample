@@ -296,6 +296,25 @@ FaceLivenessState:
 - SMILE = Smile to the camera or move your mouth.
 - DONE = The scanning is done.
 
+### Document picture settings
+
+```
+// Toggles displaying an aiming circle while searching for cards.
+Boolean enableAimingCircle;
+
+// Toggles displaying timer that shows seconds remaining for the validators to become max tolerant.
+Boolean showTimer;
+
+// Can be used for fine tuning the sensitivity of the specular validator. Value range 0-100. Default value is 50.
+Integer specularAcceptableScore;
+
+// Can be used for fine tuning the sensitivity of the document blur validator. Value range 0-100. Default value is 50.
+Integer documentBlurAcceptableScore;
+
+// The time delay for the blur validator to become max tolerant. Default value is 10.
+Integer timeToBlurMaxToleranceInSeconds;
+```
+
 ### More details on the sdk-api-zenid module
 
 To run optical character recognition (OCR) and investigate documents (please follow the link at http://your.frauds.zenid.cz/Sensitivity/Validators to get more details what investigation is about), you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls to upload documents, for instance:
