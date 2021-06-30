@@ -21,7 +21,9 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |  sdk-core  |  18.4  |  Can be reduced by using abi-filters or abi-split  |
 |  sdk-core-models-at  |  7.5  |  |
 |  sdk-core-models-cz  |  2.1  |  |
+|  sdk-core-models-cz-extended  |  6.8  |  |
 |  sdk-core-models-de  |  2.6  |  |
+|  sdk-core-models-it  |  3.6  |  |
 |  sdk-core-models-pl  |  2.8  |  |
 |  sdk-core-models-sk  |  4.4  |  |
 |  sdk-faceliveness  |  34.5  |  |
@@ -295,6 +297,25 @@ FaceLivenessState:
 - TURN_HEAD = Slowly turn your head to LEFT and RIGHT.
 - SMILE = Smile to the camera or move your mouth.
 - DONE = The scanning is done.
+
+### Document picture settings
+
+```
+// Toggles displaying an aiming circle while searching for cards.
+Boolean enableAimingCircle;
+
+// Toggles displaying timer that shows seconds remaining for the validators to become max tolerant.
+Boolean showTimer;
+
+// Can be used for fine tuning the sensitivity of the specular validator. Value range 0-100. Default value is 50.
+Integer specularAcceptableScore;
+
+// Can be used for fine tuning the sensitivity of the document blur validator. Value range 0-100. Default value is 50.
+Integer documentBlurAcceptableScore;
+
+// The time delay for the blur validator to become max tolerant. Default value is 10.
+Integer timeToBlurMaxToleranceInSeconds;
+```
 
 ### More details on the sdk-api-zenid module
 

@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.5.0
+
+- BREAKING CHANGE! `DocumentPictureVisualizationSettings` was renamed to `DocumentPictureSettings` plus more options.
+- New package `sdk-core-models-cz-extended` includes RESIDENCY_PERMIT, GUN_LICENSE and EUROPEAN_HEALTH_INSURANCE document roles
+
 ### 1.4.0
 
 - BREAKING CHANGE! ZenId.Builder refactoring. We have moved each verifier into its own module. The goal under the hood is to declare what we consider as a library-private API and what can be changed without warning. 
