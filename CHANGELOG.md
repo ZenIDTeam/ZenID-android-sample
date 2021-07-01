@@ -2,7 +2,10 @@
 
 ### 1.5.0
 
-- BREAKING CHANGE! `DocumentPictureVisualizationSettings` was renamed to `DocumentPictureSettings` plus more options.
+- BREAKING CHANGE! `DocumentPictureVisualizationSettings` was renamed to `DocumentPictureSettings` plus three new options:
+  - specularAcceptableScore - Can be used for fine tuning the sensitivity of the specular validator. Value range 0-100. Default value is 50.
+  - documentBlurAcceptableScore - Can be used for fine tuning the sensitivity of the document blur validator. Value range 0-100. Default value is 50.
+  - timeToBlurMaxToleranceInSeconds - The time delay for the blur validator to become max tolerant. Default value is 10.
 - New package `sdk-core-models-cz-extended` includes RESIDENCY_PERMIT, GUN_LICENSE and EUROPEAN_HEALTH_INSURANCE document roles
 
 ### 1.4.0

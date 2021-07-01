@@ -301,6 +301,14 @@ FaceLivenessState:
 ### Document picture settings
 
 ```
+DocumentPictureSettings documentPictureSettings = new DocumentPictureSettings.Builder()
+        .specularAcceptableScore(15)
+        .build();
+
+documentPictureView.setDocumentPictureSettings(documentPictureSettings);
+```
+
+```
 // Toggles displaying an aiming circle while searching for cards.
 Boolean enableAimingCircle;
 
