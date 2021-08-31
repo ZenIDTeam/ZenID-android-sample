@@ -92,7 +92,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
             @Override
             public void onPictureTaken(DocumentPictureResult result) {
                 postDocumentPictureSample(result);
-                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture: " + result.getPictureFilePath());
+                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture: " + result.getFilePath());
             }
         });
 

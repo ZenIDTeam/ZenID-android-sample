@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.6.0
+
+- Add picture signature feature, which in conjunction with the backend SDK signature validator, can be used to verify the image. 
+- BREAKING CHANGE! Objects `DocumentPictureResult / SelfieResult / FaceLivenessResult` were unified to return the picture path `getFilePath` and the signature `getSignature`. 
+Use these objects to get the picture signature and send it to the backend.
+
 ### 1.5.0
 
 - BREAKING CHANGE! `DocumentPictureVisualizationSettings` was renamed to `DocumentPictureSettings` plus three new options:
