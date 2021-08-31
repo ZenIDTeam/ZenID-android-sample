@@ -11,6 +11,7 @@ import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.Language;
 import cz.trask.zenid.sdk.VisualizationSettings;
+import cz.trask.zenid.sdk.selfie.SelfieResult;
 import cz.trask.zenid.sdk.selfie.SelfieState;
 import cz.trask.zenid.sdk.selfie.SelfieView;
 import timber.log.Timber;
@@ -43,9 +44,10 @@ public class SelfieActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPictureTaken(String path) {
-                LogUtils.logInfo(getApplicationContext(), "onPictureTaken... " + path);
+            public void onPictureTaken(SelfieResult result) {
+                LogUtils.logInfo(getApplicationContext(), "onPictureTaken... " + result.getFilePath());
             }
+
         });
     }
 
