@@ -325,6 +325,14 @@ Integer documentBlurAcceptableScore;
 Integer timeToBlurMaxToleranceInSeconds;
 ```
 
+### SDK Signature
+
+The SDK now generates a signature for the snapshots it takes. The backend uses the signature to verify picture origin and integrity.
+    
+The SDK returns signature within `DocumentPictureResult / SelfieResult / FaceLivenessResult` objects. Manual snapshots don't have signatures since they bypass SDK checks. 
+    
+You can then send the signature to the backend with the /api/sample request.     
+
 ### More details on the sdk-api-zenid module
 
 To run optical character recognition (OCR) and investigate documents (please follow the link at http://your.frauds.zenid.cz/Sensitivity/Validators to get more details what investigation is about), you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls to upload documents, for instance:
