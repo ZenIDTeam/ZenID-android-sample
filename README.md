@@ -297,6 +297,8 @@ FaceLivenessState:
 - TURN_HEAD = Slowly turn your head to LEFT and RIGHT.
 - SMILE = Smile to the camera or move your mouth.
 - DONE = The scanning is done.
+- BLURRY = The picture is too blurry.
+- DARK = The picture is dark.
 
 ### Document picture settings
 

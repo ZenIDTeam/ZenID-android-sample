@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.6.1
+
+- The FaceLiveness verifier also checks for darkness and blur. It can return "Dark" and "Blurry" states.
+- The FaceLiveness verifier no longer takes pictures when the user is looking sideways or is outside the frame.
+
 ### 1.6.0
 
 - Add picture signature feature, which in conjunction with the backend SDK signature validator, can be used to verify the image. 
