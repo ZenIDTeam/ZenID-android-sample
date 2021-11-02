@@ -47,7 +47,6 @@ public class SelfieActivity extends AppCompatActivity {
             public void onPictureTaken(SelfieResult result) {
                 LogUtils.logInfo(getApplicationContext(), "onPictureTaken... " + result.getFilePath());
             }
-
         });
     }
 
