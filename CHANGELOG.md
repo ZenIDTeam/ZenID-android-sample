@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.6.2
+
+- Fix document code wasn't use when scanning the second page of document. It will be a bit faster. 
+
 ### 1.6.1
 
 - The FaceLiveness verifier also checks for darkness and blur. It can return "Dark" and "Blurry" states.
