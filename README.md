@@ -375,3 +375,12 @@ apiService.getInvestigateSamples(sampleIds).enqueue(new Callback<InvestigationRe
 ```
 
 You can find out more detail inside the sample app.
+
+### Sample App
+
+Don't forget to add the right package name into the backend system if you want to do end-to-end test. The build system adds .debug to the package name for debug builds.
+
+- cz.trask.zenid.sample.debug for DEBUG builds
+- cz.trask.zenid.sample for RELEASE builds
+
+ 
