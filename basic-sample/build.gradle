@@ -15,14 +15,7 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-DEBUG'
             // ndk { abiFilters 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a' } // Generate code for a specific ABI
-        }
-
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 

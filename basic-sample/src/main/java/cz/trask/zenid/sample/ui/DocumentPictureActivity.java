@@ -3,7 +3,6 @@ package cz.trask.zenid.sample.ui;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +20,6 @@ import cz.trask.zenid.sdk.DocumentPictureView;
 import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.Language;
 import cz.trask.zenid.sdk.VisualizationSettings;
-import cz.trask.zenid.sdk.api.DocumentPictureResponseValidator;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -33,7 +31,6 @@ import timber.log.Timber;
 public class DocumentPictureActivity extends AppCompatActivity {
 
     private DocumentPictureView documentPictureView;
-    private TextView textView;
     private ImageView imageView;
     private boolean activateCameraButton = false;
 
@@ -41,8 +38,6 @@ public class DocumentPictureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document_picture);
-
-        textView = findViewById(R.id.textView);
 
         imageView = findViewById(R.id.imageView_camera);
         imageView.setOnClickListener(view -> documentPictureView.activateTakeNextDocumentPicture());
@@ -59,8 +54,6 @@ public class DocumentPictureActivity extends AppCompatActivity {
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
         documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
-        // documentPictureView.setScaleType(ScaleType.CENTER_INSIDE);
-        // documentPictureView.adjustPreviewStreamSize(); // enable/disable
         documentPictureView.enableDefaultVisualization(visualizationSettings); // enable/disable
         documentPictureView.setCallback(new DocumentPictureView.Callback() {
 
@@ -72,27 +65,12 @@ public class DocumentPictureActivity extends AppCompatActivity {
                     activateCameraButton = false;
                     imageView.postDelayed(() -> imageView.setVisibility(View.VISIBLE), 5000);
                 }
-
-                switch (state) {
-                    case BLURRY:
-                        textView.setText("BLURRY");
-                        break;
-                    case HOLD_STEADY:
-                        textView.setText("HOLD_STEADY");
-                        break;
-                    case ALIGN_CARD:
-                        textView.setText("ALIGN_CARD");
-                        break;
-                    case OK:
-                        textView.setText("OK");
-                        break;
-                }
             }
 
             @Override
             public void onPictureTaken(DocumentPictureResult result) {
                 postDocumentPictureSample(result);
-                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture: " + result.getFilePath());
+                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture...");
             }
         });
 
@@ -104,12 +82,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
-                DocumentPictureResponseValidator.State state = DocumentPictureResponseValidator.validate(result.getRole(), result.getPage(), response);
-                if (state == DocumentPictureResponseValidator.State.CORRECT) {
-                    LogUtils.logInfo(getApplicationContext(), "Upload success - sampleId: " + response.body().getSampleId());
-                } else {
-                    LogUtils.logInfo(getApplicationContext(), "Upload failed");
-                }
+                LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
                 finish();
             }
 
