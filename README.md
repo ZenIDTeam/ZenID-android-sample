@@ -5,7 +5,6 @@ Android sample app that shows how to use the ZenID Android SDK. The SDK can help
 * OCR and data extraction
 * verification of authenticity
 * real-time face liveness detection
-* Hologram verification
 
 The SDK supports API level 21 and above.
 
@@ -35,7 +34,6 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |  View name |  Required mode  |
 |----------|:-------------:|
 |  DocumentPictureView |  no limitations  |  
-|  HologramView  |  landscape  |  
 |  SelfieView  |  portrait  |  
 |  FaceLivenessView  |  portrait  |  
 
@@ -171,7 +169,6 @@ If you want to speed up authorization process during development, just ask us. W
 
 Every each use-case has its own view class:
   - cz.trask.zenid.sdk.DocumentPictureView for document picture verification
-  - cz.trask.zenid.sdk.HologramView for the hologram verification
   - cz.trask.zenid.sdk.faceliveness.FaceLivenessView for the real-time face liveness check 
   - cz.trask.zenid.sdk.selfie.SelfieView to take a good selfie picture
   
@@ -282,16 +279,6 @@ SelfieState:
 - DARK = The picture is dark.
 - CONFIRMING_FACE = Face was confirmed.
     
-HologramState:
-- NO_MATCH_FOUND = No document matching input parameters was found.
-- TILT_LEFT = Tilt your phone left.
-- TILT_RIGHT = Tilt your phone right.
-- TILT_UP = Tilt your phone up.
-- TILT_DOWN = Tilt your phone down.
-- ROTATE_CLOCKWISE = Rotate the phone clockwise.
-- ROTATE_COUNTER_CLOCKWISE = Rotate the phone counter clockwise.
-- OK = Scanning done, the hologram is ok.
-
 FaceLivenessState:
 - LOOK_AT_ME = Look in the camera.
 - TURN_HEAD = Slowly turn your head to LEFT and RIGHT.
@@ -375,3 +362,12 @@ apiService.getInvestigateSamples(sampleIds).enqueue(new Callback<InvestigationRe
 ```
 
 You can find out more detail inside the sample app.
+
+### Sample App
+
+Don't forget to add the right package name into the backend system if you want to do end-to-end test. The build system adds .debug to the package name for debug builds.
+
+- cz.trask.zenid.sample.debug for DEBUG builds
+- cz.trask.zenid.sample for RELEASE builds
+
+ 

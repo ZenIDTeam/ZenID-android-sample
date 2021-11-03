@@ -41,7 +41,6 @@ public class FaceLivenessActivity extends AppCompatActivity {
             public void onPictureTaken(FaceLivenessResult result) {
                 LogUtils.logInfo(getApplicationContext(), "onPictureTaken... " + result.getFilePath());
             }
-
         });
     }
 }

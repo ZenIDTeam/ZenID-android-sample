@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
         initSelfieButton();
 
         initFaceLivenessButton();
-
-        initHologramButton();
     }
 
     private void initAuthorizeButton() {
@@ -80,16 +78,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button_faceLiveness).setOnClickListener(v -> {
             if (ZenId.get().getSecurity().isAuthorized()) {
                 startActivity(new Intent(getApplicationContext(), FaceLivenessActivity.class));
-            } else {
-                logNotAuthorizedError();
-            }
-        });
-    }
-
-    private void initHologramButton() {
-        findViewById(R.id.button_hologram).setOnClickListener(v -> {
-            if (ZenId.get().getSecurity().isAuthorized()) {
-                startActivity(new Intent(getApplicationContext(), HologramActivity.class));
             } else {
                 logNotAuthorizedError();
             }
