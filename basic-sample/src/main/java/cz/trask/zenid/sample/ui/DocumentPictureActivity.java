@@ -69,8 +69,8 @@ public class DocumentPictureActivity extends AppCompatActivity {
 
             @Override
             public void onPictureTaken(DocumentPictureResult result) {
+                Timber.i("onPictureTaken... " + result.getFilePath());
                 postDocumentPictureSample(result);
-                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture...");
             }
         });
 
