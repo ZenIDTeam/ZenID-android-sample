@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.6.3
+
+- Add Croatia and Hungary models.
+- Fix missing fields in `SampleJson` class.
+- Fix and depredecate `DocumentPictureResponseValidator` class.
+
 ### 1.6.2
 
 - Fix document code wasn't use when scanning the second page of document. It will be a bit faster. 
