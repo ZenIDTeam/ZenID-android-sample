@@ -32,7 +32,7 @@ public class FaceLivenessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_face_liveness);
 
         VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
-                .showDebugVisualization(true)
+                .showDebugVisualization(false)
                 .language(Language.ENGLISH)
                 .build();
 

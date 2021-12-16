@@ -34,7 +34,7 @@ public class SelfieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_selfie);
 
         VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
-                .showDebugVisualization(true)
+                .showDebugVisualization(false)
                 .language(Language.ENGLISH)
                 .build();
 
