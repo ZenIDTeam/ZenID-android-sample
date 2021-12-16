@@ -291,7 +291,9 @@ FaceLivenessState:
 - DARK = The picture is dark.
 - HOLD_STILL = Hold still.
 
-### Document picture settings
+### Document picture feature
+
+#### Document picture settings
 
 ```
 DocumentPictureSettings documentPictureSettings = new DocumentPictureSettings.Builder()
@@ -318,7 +320,7 @@ Integer documentBlurAcceptableScore;
 Integer timeToBlurMaxToleranceInSeconds;
 ```
 
-### Face liveness
+### Face liveness feature
 
 The face liveness user instructions are now shuffled to prevent passing the checks with recorded videos. To preserve the previous
 behavior of face liveness, the enableLegacyMode option can be set to true in the `FaceLivenessSettings`.
