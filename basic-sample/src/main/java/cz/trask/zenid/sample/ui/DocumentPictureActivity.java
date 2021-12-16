@@ -47,7 +47,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1, filter2));
 
         VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
-                .showDebugVisualization(true)
+                .showDebugVisualization(false)
                 .language(Language.ENGLISH)
                 .build();
 

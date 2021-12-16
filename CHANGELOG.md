@@ -1,5 +1,13 @@
 # Changelog
 
+### 1.7.0
+
+- New face tracker - The selfie and face livenes features use a more accurate face tracker with much smaller model downloads (37MB -> 2.5MB).
+- BREAKING CHANGE! The face liveness user instructions are now shuffled to prevent passing the checks with recorded videos. To preserve the previous
+  behavior of face liveness, the enableLegacyMode option can be set to true in the `FaceLivenessSettings`.
+- Add new state for face liveness - `HoldStill`                  
+- Add new state for selfie - `BadFaceAngle`
+
 ### 1.6.3
 
 - Add Croatia and Hungary models.
