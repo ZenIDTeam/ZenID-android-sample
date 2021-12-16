@@ -10,6 +10,7 @@ import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessResult;
+import cz.trask.zenid.sdk.faceliveness.FaceLivenessSettings;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessState;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessView;
 import cz.trask.zenid.sdk.Language;
@@ -32,9 +33,15 @@ public class FaceLivenessActivity extends AppCompatActivity {
                 .language(Language.ENGLISH)
                 .build();
 
+        FaceLivenessSettings faceLivenessSettings = new FaceLivenessSettings.Builder()
+                .enableLegacyMode(false) // Use the pre-1.6.3 behavior: turn in any direction then smile.
+                .maxAuxiliaryImageSize(400) // Auxiliary images will be resized to fit into this size while preserving the aspect ratio.
+                .build();
+
         faceLivenessView = findViewById(R.id.faceLivenessView);
         faceLivenessView.setLifecycleOwner(this);
         faceLivenessView.enableDefaultVisualization(visualizationSettings);
+        faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
         faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
             @Override
