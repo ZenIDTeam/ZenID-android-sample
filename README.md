@@ -17,16 +17,18 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
 |  Package name  |  Size (MB)  |  Note  |
 |----------|:-------------:|------|
-|  sdk-core  |  18.4  |  Can be reduced by using abi-filters or abi-split  |
+|  sdk-core  |  24.6  |  Can be reduced by using abi-filters or abi-split  |
 |  sdk-core-models-at  |  7.5  |  |
 |  sdk-core-models-cz  |  2.1  |  |
 |  sdk-core-models-cz-extended  |  6.8  |  |
 |  sdk-core-models-de  |  2.6  |  |
-|  sdk-core-models-it  |  3.6  |  |
-|  sdk-core-models-pl  |  2.8  |  |
+|  sdk-core-models-hr  |  2.7  |  |
+|  sdk-core-models-hu  |  12.9  |  |
+|  sdk-core-models-it  |  5.7  |  |
+|  sdk-core-models-pl  |  9.9  |  |
 |  sdk-core-models-sk  |  4.4  |  |
-|  sdk-faceliveness  |  2.5  |  |
-|  sdk-selfie  |  2.5  |  |
+|  sdk-faceliveness  |  2.4  |  |
+|  sdk-selfie  |  2.4  |  |
 |  sdk-api-zenid  | 0.05  |  |
 
 ###  Supported screen orientations 
