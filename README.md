@@ -25,8 +25,8 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |  sdk-core-models-it  |  3.6  |  |
 |  sdk-core-models-pl  |  2.8  |  |
 |  sdk-core-models-sk  |  4.4  |  |
-|  sdk-faceliveness  |  34.5  |  |
-|  sdk-selfie  |  0.1  |  |
+|  sdk-faceliveness  |  2.5  |  |
+|  sdk-selfie  |  2.5  |  |
 |  sdk-api-zenid  | 0.05  |  |
 
 ###  Supported screen orientations 
