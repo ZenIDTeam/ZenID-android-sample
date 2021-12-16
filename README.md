@@ -278,14 +278,16 @@ SelfieState:
 - BLURRY = The picture is too blurry.
 - DARK = The picture is dark.
 - CONFIRMING_FACE = Face was confirmed.
-    
+- BAD_FACE_ANGLE = When the user's head is turned away from the camera.
+ 
 FaceLivenessState:
-- LOOK_AT_ME = Look in the camera.
-- TURN_HEAD = Slowly turn your head to LEFT and RIGHT.
+- LOOK_AT_ME =  Turn head towards camera.
+- TURN_HEAD = Turn head slowly towards arrow.
 - SMILE = Smile to the camera or move your mouth.
 - DONE = The scanning is done.
 - BLURRY = The picture is too blurry.
 - DARK = The picture is dark.
+- HOLD_STILL = Hold still.
 
 ### Document picture settings
 
@@ -313,6 +315,89 @@ Integer documentBlurAcceptableScore;
 // The time delay for the blur validator to become max tolerant. Default value is 10.
 Integer timeToBlurMaxToleranceInSeconds;
 ```
+
+### Face liveness
+
+The face liveness user instructions are now shuffled to prevent passing the checks with recorded videos. To preserve the previous
+behavior of face liveness, the enableLegacyMode option can be set to true in the `FaceLivenessSettings`.
+
+#### Step pictures
+
+The `onPictureTaken(FaceLivenessResult result)` callback now returns images of the user at the time each step was completed. They are in the auxiliaryImages field. 
+The auxiliary images are an array of blobs containing images compressed in jpeg format. For example they can be process like this: 
+
+```
+for (byte[] arr : result.getAuxiliaryImages()) {
+    File file = new File("picture_" + System.currentTimeMillis() + ".jpg");
+    try (FileOutputStream fos = new FileOutputStream(file)) {
+        file.createNewFile();
+        fos.write(arr);
+    }
+}
+```
+
+FaceLivenessResult also returns metadata (JSON) for the step images in the auxiliaryImageMetadata field. The metadata is an array of objects with the following properties:
+
+- checkName: the name of the check. It can be LegacyAngle, Angle, or Smile. Angle and Smile are the default checks, LegacyAngle and Smile will be used instead of legacy mode is enabled.
+- parameter: a parameter for the check. Angle is the only check with a parameter. It can be either Left, Right, Up or Down.
+- isoTimeUtc: ISO 8601 timestamp of the moment the check was passed.
+- unixEpoch: Unix epoch of the moment the check was passed, in seconds.
+
+For example:
+```
+[
+   {
+      "checkName":"Angle",
+      "isoTimeUtc":"2021-11-11T19:20:10.826Z",
+      "parameter":"Up",
+      "unixEpoch":"1636658410"
+   },
+   {
+      "checkName":"Smile",
+      "isoTimeUtc":"2021-11-11T19:20:15.146Z",
+      "parameter":"",
+      "unixEpoch":"1636658415"
+   },
+   {
+      "checkName":"Angle",
+      "isoTimeUtc":"2021-11-11T19:20:19.536Z",
+      "parameter":"Right",
+      "unixEpoch":"1636658419"
+   },
+   {
+      "checkName":"Angle",
+      "isoTimeUtc":"2021-11-11T19:20:23.787Z",
+      "parameter":"Left",
+      "unixEpoch":"1636658423"
+   },
+   {
+      "checkName":"Angle",
+      "isoTimeUtc":"2021-11-11T19:20:28.145Z",
+      "parameter":"Down",
+      "unixEpoch":"1636658428"
+   }
+]      
+```
+
+#### Face liveness settings
+
+```
+FaceLivenessSettings faceLivenessSettings = new FaceLivenessSettings.Builder()
+        .enableLegacyMode(false) 
+        .maxAuxiliaryImageSize(300)
+        .build();
+
+faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
+```
+
+```
+// Use the pre-1.6.3 behavior: turn in any direction then smile. Default value is false.
+boolean enableLegacyMode;
+
+// Auxiliary images will be resized to fit into this size while preserving the aspect ratio. Default value is 300.
+int maxAuxiliaryImageSize;
+```
+
 
 ### SDK Signature
 

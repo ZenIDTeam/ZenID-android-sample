@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
@@ -35,7 +38,7 @@ public class FaceLivenessActivity extends AppCompatActivity {
 
         FaceLivenessSettings faceLivenessSettings = new FaceLivenessSettings.Builder()
                 .enableLegacyMode(false) // Use the pre-1.6.3 behavior: turn in any direction then smile.
-                .maxAuxiliaryImageSize(400) // Auxiliary images will be resized to fit into this size while preserving the aspect ratio.
+                .maxAuxiliaryImageSize(300) // Auxiliary images will be resized to fit into this size while preserving the aspect ratio.
                 .build();
 
         faceLivenessView = findViewById(R.id.faceLivenessView);
