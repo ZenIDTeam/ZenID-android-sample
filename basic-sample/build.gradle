@@ -9,7 +9,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         ndkVersion "21.3.6528147"
-        versionCode 6
+        versionCode 7
         versionName "1.0"
     }
 
