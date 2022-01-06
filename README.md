@@ -107,6 +107,8 @@ ZenId.setSingletonInstance(zenId);
 zenId.initialize();
 ```
 
+`zenId.initialize();` is supposed to be called only once per application lifetime. You can use helper method `ZenId.isSingletonInstanceExists` to check whether singleton instance already exists or not.
+
 In order to start integration, you will need to get an **API key** and **URL** of the backend system.
 
 ```

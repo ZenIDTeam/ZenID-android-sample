@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.6.5
+
+- Add `ZenId.isSingletonInstanceExists` helper method to check whether singleton instance already exists or not.
+
 ### 1.6.3
 
 - Add Croatia and Hungary models.
