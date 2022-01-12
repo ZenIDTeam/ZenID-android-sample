@@ -27,6 +27,8 @@ public class MyApplication extends Application {
         initZenId();
 
         initApiService();
+
+        LogUtils.logInfo(getApplicationContext(), "Build type: " + BuildConfig.BUILD_TYPE);
     }
 
     private void initZenId() {

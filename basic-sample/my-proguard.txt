@@ -1,0 +1,3 @@
+-keep class * extends cz.trask.zenid.sdk.BaseResult {
+  public <init>(int, int, int, int, int);
+}
