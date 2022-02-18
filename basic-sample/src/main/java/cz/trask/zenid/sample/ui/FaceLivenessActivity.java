@@ -46,6 +46,7 @@ public class FaceLivenessActivity extends AppCompatActivity {
         faceLivenessView.setLifecycleOwner(this);
         faceLivenessView.enableDefaultVisualization(visualizationSettings);
         faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
+        // faceLivenessView.setMode(FaceLivenessMode.VIDEO); // FaceLivenessMode.PICTURE is the default value
         faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
             @Override

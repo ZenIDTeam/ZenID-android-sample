@@ -15,9 +15,11 @@ import cz.trask.zenid.sdk.DocumentAcceptableInput;
 import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
 import cz.trask.zenid.sdk.DocumentPictureResult;
+import cz.trask.zenid.sdk.DocumentPictureSettings;
 import cz.trask.zenid.sdk.DocumentPictureState;
 import cz.trask.zenid.sdk.DocumentPictureView;
 import cz.trask.zenid.sdk.DocumentRole;
+import cz.trask.zenid.sdk.HologramSettings;
 import cz.trask.zenid.sdk.Language;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.api.model.SampleJson;
@@ -51,9 +53,14 @@ public class DocumentPictureActivity extends AppCompatActivity {
                 .language(Language.ENGLISH)
                 .build();
 
+        DocumentPictureSettings documentPictureSettings = new DocumentPictureSettings.Builder()
+                .enableAimingCircle(true)
+                .build();
+
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
         documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
+        documentPictureView.setDocumentPictureSettings(documentPictureSettings);
         documentPictureView.enableDefaultVisualization(visualizationSettings); // enable/disable
         documentPictureView.setCallback(new DocumentPictureView.Callback() {
 

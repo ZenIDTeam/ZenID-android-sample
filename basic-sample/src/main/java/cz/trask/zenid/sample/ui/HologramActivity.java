@@ -14,6 +14,7 @@ import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
 import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.HologramResult;
+import cz.trask.zenid.sdk.HologramSettings;
 import cz.trask.zenid.sdk.HologramState;
 import cz.trask.zenid.sdk.HologramView;
 import cz.trask.zenid.sdk.Language;
@@ -38,10 +39,15 @@ public class HologramActivity extends AppCompatActivity {
                 .language(Language.ENGLISH)
                 .build();
 
+        HologramSettings hologramSettings = new HologramSettings.Builder()
+                .enableAimingCircle(true)
+                .build();
+
         hologramView = findViewById(R.id.hologramView);
         hologramView.setLifecycleOwner(this);
         hologramView.setDocumentAcceptableInput(documentAcceptableInput);
         hologramView.enableDefaultVisualization(visualizationSettings);
+        hologramView.setHologramSettings(hologramSettings);
         hologramView.setCallback(new HologramView.Callback() {
 
             @Override
