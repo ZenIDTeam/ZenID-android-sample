@@ -8,6 +8,10 @@
 - Add new state for face liveness - `HoldStill`                  
 - Add new state for selfie - `BadFaceAngle`
 
+### 1.6.5
+
+- Add `ZenId.isSingletonInstanceExists` helper method to check whether singleton instance already exists or not.
+
 ### 1.6.3
 
 - Add Croatia and Hungary models.

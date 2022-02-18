@@ -32,15 +32,19 @@ public class MyApplication extends Application {
     }
 
     private void initZenId() {
-        ZenId zenId = new ZenId.Builder()
-                .applicationContext(getApplicationContext())
-                .modules(new DocumentModule(), new SelfieModule(), new FaceLivenessModule())
-                .build();
+        if (ZenId.isSingletonInstanceExists()) {
+            Timber.i("Skip building an instance of ZenId");
+        } else {
+            ZenId zenId = new ZenId.Builder()
+                    .applicationContext(getApplicationContext())
+                    .modules(new DocumentModule(), new SelfieModule(), new FaceLivenessModule())
+                    .build();
 
-        ZenId.setSingletonInstance(zenId);
+            ZenId.setSingletonInstance(zenId);
 
-        // This may take a few seconds. Please do it as soon as possible.
-        zenId.initialize();
+            // This may take a few seconds. Please do it as soon as possible.
+            zenId.initialize();
+        }
     }
 
     private void initApiService() {
