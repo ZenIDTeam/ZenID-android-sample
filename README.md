@@ -5,6 +5,7 @@ Android sample app that shows how to use the ZenID Android SDK. The SDK can help
 * OCR and data extraction
 * verification of authenticity
 * real-time face liveness detection
+* Hologram verification
 
 The SDK supports API level 21 and above.
 
@@ -38,6 +39,7 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |  DocumentPictureView |  no limitations  |  
 |  SelfieView  |  portrait  |  
 |  FaceLivenessView  |  portrait  |  
+|  HologramView  |  landscape  |  
 
 ### Installation
 
@@ -173,9 +175,10 @@ If you want to speed up authorization process during development, just ask us. W
 
 Every each use-case has its own view class:
   - cz.trask.zenid.sdk.DocumentPictureView for document picture verification
+  - cz.trask.zenid.sdk.HologramView for the hologram verification
   - cz.trask.zenid.sdk.faceliveness.FaceLivenessView for the real-time face liveness check 
   - cz.trask.zenid.sdk.selfie.SelfieView to take a good selfie picture
-  
+
 To use the DocumentPictureView for instance, simply add a DocumentPictureView to your layout. 
 
 ```
@@ -275,6 +278,11 @@ DocumentPictureState:
 - REFLECTION_PRESENT = The reflection is present on text.
 - OK = The picture is ok.
 - DARK = The picture is dark.
+
+HologramState:
+- TILT_LEFT_AND_RIGHT = Tilt your phone left or right.
+- TILT_UP_AND_DOWN = Tilt your phone up or down.
+- OK = Scanning done, the hologram is ok.
 
 SelfieState:
 - OK = The picture is ok.

@@ -84,6 +84,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initHologramButton() {
+        findViewById(R.id.button_hologram).setOnClickListener(v -> {
+            if (ZenId.get().getSecurity().isAuthorized()) {
+                startActivity(new Intent(getApplicationContext(), HologramActivity.class));
+            } else {
+                logNotAuthorizedError();
+            }
+        });
+    }
+
+
     private void logNotAuthorizedError() {
         String msg = "Your application " + getApplicationContext().getPackageName() + " is not yet authorized.";
         Timber.i(msg);
