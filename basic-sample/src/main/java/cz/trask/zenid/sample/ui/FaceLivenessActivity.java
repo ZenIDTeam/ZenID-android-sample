@@ -12,6 +12,7 @@ import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.api.model.SampleJson;
+import cz.trask.zenid.sdk.faceliveness.FaceLivenessMode;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessResult;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessSettings;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessState;
@@ -45,6 +46,7 @@ public class FaceLivenessActivity extends AppCompatActivity {
         faceLivenessView.setLifecycleOwner(this);
         faceLivenessView.enableDefaultVisualization(visualizationSettings);
         faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
+        // faceLivenessView.setMode(FaceLivenessMode.VIDEO); // FaceLivenessMode.PICTURE is the default value
         faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
             @Override
@@ -53,10 +55,16 @@ public class FaceLivenessActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPictureTaken(FaceLivenessResult result) {
-                Timber.i("onPictureTaken... " + result.getFilePath());
-                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture...");
-                postSelfieSample(result);
+            public void onResult(FaceLivenessResult faceLivenessResult) {
+                FaceLivenessMode faceLivenessMode = faceLivenessResult.getMode();
+                if (FaceLivenessMode.VIDEO.equals(faceLivenessMode)) {
+                    LogUtils.logInfo(getApplicationContext(), "Uploading video...");
+                    postSelfieVideoSample(faceLivenessResult);
+                } else {
+                    LogUtils.logInfo(getApplicationContext(), "Uploading picture...");
+                    postSelfieSample(faceLivenessResult);
+                }
+                finish();
             }
         });
     }
@@ -67,6 +75,22 @@ public class FaceLivenessActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
+
+            }
+
+            @Override
+            public void onFailure(Call<SampleJson> call, Throwable t) {
+                Timber.e(t);
+            }
+        });
+    }
+
+    private void postSelfieVideoSample(FaceLivenessResult result) {
+        MyApplication.apiService.postSelfieVideoSample(result.getVideoFilePath(), result.getSignature()).enqueue(new retrofit2.Callback<SampleJson>() {
+
+            @Override
+            public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+                LogUtils.logInfo(getApplicationContext(), "...video has been uploaded!");
                 finish();
             }
 

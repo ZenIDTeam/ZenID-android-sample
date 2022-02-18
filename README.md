@@ -5,6 +5,7 @@ Android sample app that shows how to use the ZenID Android SDK. The SDK can help
 * OCR and data extraction
 * verification of authenticity
 * real-time face liveness detection
+* Hologram verification
 
 The SDK supports API level 21 and above.
 
@@ -38,6 +39,7 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |  DocumentPictureView |  no limitations  |  
 |  SelfieView  |  portrait  |  
 |  FaceLivenessView  |  portrait  |  
+|  HologramView  |  landscape  |  
 
 ### Installation
 
@@ -109,6 +111,8 @@ ZenId.setSingletonInstance(zenId);
 zenId.initialize();
 ```
 
+`zenId.initialize();` is supposed to be called only once per application lifetime. You can use helper method `ZenId.isSingletonInstanceExists` to check whether singleton instance already exists or not.
+
 In order to start integration, you will need to get an **API key** and **URL** of the backend system.
 
 ```
@@ -171,9 +175,10 @@ If you want to speed up authorization process during development, just ask us. W
 
 Every each use-case has its own view class:
   - cz.trask.zenid.sdk.DocumentPictureView for document picture verification
+  - cz.trask.zenid.sdk.HologramView for the hologram verification
   - cz.trask.zenid.sdk.faceliveness.FaceLivenessView for the real-time face liveness check 
   - cz.trask.zenid.sdk.selfie.SelfieView to take a good selfie picture
-  
+
 To use the DocumentPictureView for instance, simply add a DocumentPictureView to your layout. 
 
 ```
@@ -274,6 +279,11 @@ DocumentPictureState:
 - OK = The picture is ok.
 - DARK = The picture is dark.
 
+HologramState:
+- TILT_LEFT_AND_RIGHT = Tilt your phone left or right.
+- TILT_UP_AND_DOWN = Tilt your phone up or down.
+- OK = Scanning done, the hologram is ok.
+
 SelfieState:
 - OK = The picture is ok.
 - NO_FACE_FOUND = No face was found.
@@ -320,6 +330,18 @@ Integer documentBlurAcceptableScore;
 Integer timeToBlurMaxToleranceInSeconds;
 ```
 
+### Hologram feature
+
+#### Hologram settings
+
+```
+HologramSettings hologramSettings = new HologramSettings.Builder()
+        .enableAimingCircle(true)
+        .build();
+
+hologramView.setHologramSettings(hologramSettings);
+```
+
 ### Face liveness feature
 
 The face liveness user instructions are now shuffled to prevent passing the checks with recorded videos. To preserve the previous
@@ -327,7 +349,7 @@ behavior of face liveness, the enableLegacyMode option can be set to true in the
 
 #### Step pictures
 
-The `onPictureTaken(FaceLivenessResult result)` callback now returns images of the user at the time each step was completed. They are in the auxiliaryImages field. 
+The `onResult(FaceLivenessResult result)` callback now returns images of the user at the time each step was completed. They are in the auxiliaryImages field. 
 The auxiliary images are an array of blobs containing images compressed in jpeg format. For example they can be process like this: 
 
 ```
@@ -401,7 +423,6 @@ boolean enableLegacyMode;
 // Auxiliary images will be resized to fit into this size while preserving the aspect ratio. Default value is 300.
 int maxAuxiliaryImageSize;
 ```
-
 
 ### SDK Signature
 

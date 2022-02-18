@@ -9,20 +9,24 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         ndkVersion "21.3.6528147"
-        versionCode 7
+        versionCode 8
         versionName "1.0"
     }
 
     buildTypes {
         debug {
+            // minifyEnabled true
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
             // ndk { abiFilters 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a' } // Generate code for a specific ABI
+            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'my-proguard.txt'
         }
 
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            signingConfig signingConfigs.debug
+            // ndk { abiFilters 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a' } // Generate code for a specific ABI
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'my-proguard.txt'
         }
     }
 
@@ -55,6 +59,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.otaliastudios:cameraview:2.6.4'
+    implementation 'com.otaliastudios:cameraview:2.7.2'
     implementation fileTree(include: ['*.aar'], dir: '../libs')
 }

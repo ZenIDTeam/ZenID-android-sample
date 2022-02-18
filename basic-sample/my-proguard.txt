@@ -1,0 +1,7 @@
+-keep class cz.trask.zenid.sdk.DocumentPictureResult {
+  public <init>(int, int, int, int, int);
+}
+
+-keep class cz.trask.zenid.sdk.HologramResult {
+  public <init>(int, int, int, int, int);
+}
