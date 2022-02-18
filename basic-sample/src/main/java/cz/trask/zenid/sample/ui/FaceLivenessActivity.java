@@ -64,6 +64,7 @@ public class FaceLivenessActivity extends AppCompatActivity {
                     LogUtils.logInfo(getApplicationContext(), "Uploading picture...");
                     postSelfieSample(faceLivenessResult);
                 }
+                finish();
             }
         });
     }
@@ -74,7 +75,7 @@ public class FaceLivenessActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
-                finish();
+
             }
 
             @Override

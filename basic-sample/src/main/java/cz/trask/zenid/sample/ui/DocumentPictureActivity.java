@@ -78,6 +78,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
             public void onPictureTaken(DocumentPictureResult result) {
                 Timber.i("onPictureTaken... " + result.getFilePath());
                 postDocumentPictureSample(result);
+                finish();
             }
         });
 
@@ -90,7 +91,6 @@ public class DocumentPictureActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
-                finish();
             }
 
             @Override

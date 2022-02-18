@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void logNotAuthorizedError() {
         String msg = "Your application " + getApplicationContext().getPackageName() + " is not yet authorized.";
         Timber.i(msg);

@@ -53,6 +53,7 @@ public class SelfieActivity extends AppCompatActivity {
                 Timber.i("onPictureTaken... " + result.getFilePath());
                 LogUtils.logInfo(getApplicationContext(), "Uploading taken picture...");
                 postSelfieSample(result);
+                finish();
             }
         });
     }
@@ -86,7 +87,6 @@ public class SelfieActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
-                finish();
             }
 
             @Override

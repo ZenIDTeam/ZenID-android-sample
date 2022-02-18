@@ -64,17 +64,18 @@ public class HologramActivity extends AppCompatActivity {
             public void onVideoTaken(HologramResult result) {
                 LogUtils.logInfo(getApplicationContext(), "onVideoTaken... " + result.getVideoFilePath());
                 postHologramSample(result);
+                finish();
             }
         });
     }
 
     private void postHologramSample(HologramResult result) {
+
         MyApplication.apiService.postHologramSample(result).enqueue(new retrofit2.Callback<SampleJson>() {
 
             @Override
             public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...video has been uploaded!");
-                finish();
             }
 
             @Override
