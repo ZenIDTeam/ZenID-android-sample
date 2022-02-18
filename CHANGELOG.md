@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.8.0
+
+- Add face liveness video mode
+- Add hologram verification (Czech and Croatia ID cards) - `HologramView`
+- Bump com.otaliastudios:cameraview dependecy version to 2.7.2
+
 ### 1.7.0
 
 - New face tracker - The selfie and face livenes features use a more accurate face tracker with much smaller model downloads (37MB -> 2.5MB).

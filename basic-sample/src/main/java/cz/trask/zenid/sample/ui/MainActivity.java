@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         initSelfieButton();
 
         initFaceLivenessButton();
+
+        initHologramButton();
     }
 
     private void initAuthorizeButton() {

@@ -330,6 +330,18 @@ Integer documentBlurAcceptableScore;
 Integer timeToBlurMaxToleranceInSeconds;
 ```
 
+### Hologram feature
+
+#### Hologram settings
+
+```
+HologramSettings hologramSettings = new HologramSettings.Builder()
+        .enableAimingCircle(true)
+        .build();
+
+hologramView.setHologramSettings(hologramSettings);
+```
+
 ### Face liveness feature
 
 The face liveness user instructions are now shuffled to prevent passing the checks with recorded videos. To preserve the previous
@@ -337,7 +349,7 @@ behavior of face liveness, the enableLegacyMode option can be set to true in the
 
 #### Step pictures
 
-The `onPictureTaken(FaceLivenessResult result)` callback now returns images of the user at the time each step was completed. They are in the auxiliaryImages field. 
+The `onResult(FaceLivenessResult result)` callback now returns images of the user at the time each step was completed. They are in the auxiliaryImages field. 
 The auxiliary images are an array of blobs containing images compressed in jpeg format. For example they can be process like this: 
 
 ```
@@ -411,7 +423,6 @@ boolean enableLegacyMode;
 // Auxiliary images will be resized to fit into this size while preserving the aspect ratio. Default value is 300.
 int maxAuxiliaryImageSize;
 ```
-
 
 ### SDK Signature
 

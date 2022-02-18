@@ -8,10 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Arrays;
 
 import cz.trask.zenid.sample.LogUtils;
+import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.DocumentAcceptableInput;
 import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
+import cz.trask.zenid.sdk.DocumentPictureResult;
 import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.HologramResult;
 import cz.trask.zenid.sdk.HologramSettings;
@@ -19,6 +21,9 @@ import cz.trask.zenid.sdk.HologramState;
 import cz.trask.zenid.sdk.HologramView;
 import cz.trask.zenid.sdk.Language;
 import cz.trask.zenid.sdk.VisualizationSettings;
+import cz.trask.zenid.sdk.api.model.SampleJson;
+import retrofit2.Call;
+import retrofit2.Response;
 import timber.log.Timber;
 
 public class HologramActivity extends AppCompatActivity {
@@ -58,6 +63,23 @@ public class HologramActivity extends AppCompatActivity {
             @Override
             public void onVideoTaken(HologramResult result) {
                 LogUtils.logInfo(getApplicationContext(), "onVideoTaken... " + result.getVideoFilePath());
+                postHologramSample(result);
+            }
+        });
+    }
+
+    private void postHologramSample(HologramResult result) {
+        MyApplication.apiService.postHologramSample(result).enqueue(new retrofit2.Callback<SampleJson>() {
+
+            @Override
+            public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+                LogUtils.logInfo(getApplicationContext(), "...video has been uploaded!");
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<SampleJson> call, Throwable t) {
+                Timber.e(t);
             }
         });
     }
