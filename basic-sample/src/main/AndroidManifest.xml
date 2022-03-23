@@ -37,9 +37,7 @@
             android:name=".ui.FaceLivenessActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".ui.HologramActivity"
-            android:screenOrientation="landscape" />
+        <activity android:name=".ui.HologramActivity" />
 
     </application>
 
