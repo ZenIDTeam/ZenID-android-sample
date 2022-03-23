@@ -278,6 +278,7 @@ DocumentPictureState:
 - REFLECTION_PRESENT = The reflection is present on text.
 - OK = The picture is ok.
 - DARK = The picture is dark.
+- BARCODE = The barcode is unreadable.
 
 HologramState:
 - TILT_LEFT_AND_RIGHT = Tilt your phone left or right.

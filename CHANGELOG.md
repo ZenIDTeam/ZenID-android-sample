@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.8.1 (2022-03-22)
+
+- Allow hologram verification in portrait mode
+- Add new state for document picture - `Barcode`
+
 ### 1.8.0
 
 - Add face liveness video mode
