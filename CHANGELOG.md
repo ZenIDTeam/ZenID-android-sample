@@ -1,6 +1,6 @@
 # Changelog
 
-### 1.8.1 (2022-03-22)
+### 1.8.1 (2022-03-22) (RecogLibC v2.3.11)
 
 - Allow hologram verification in portrait mode
 - Add new state for document picture - `Barcode`
