@@ -20,8 +20,7 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |----------|:-------------:|------|
 |  sdk-core  |  24.6  |  Can be reduced by using abi-filters or abi-split  |
 |  sdk-core-models-at  |  7.5  |  |
-|  sdk-core-models-cz  |  2.1  |  |
-|  sdk-core-models-cz-extended  |  6.8  |  |
+|  sdk-core-models-cz-*  |  10  | Can be reduced by card type |
 |  sdk-core-models-de  |  2.6  |  |
 |  sdk-core-models-hr  |  2.7  |  |
 |  sdk-core-models-hu  |  12.9  |  |

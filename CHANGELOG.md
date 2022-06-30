@@ -2,8 +2,9 @@
 
 ### 1.9.0 (2022-06-30) (RecogLibC v2.6.3)
 
-- Allow hologram verification in portrait mode
-- Add new state for document picture - `Barcode`
+- Add extra module for the European Union `sdk-core-models-eu`
+- Split CZ module into more granular modules by card type
+- Added read barcode option into `DocumentPictureSettings`
 
 ### 1.8.1 (2022-03-22) (RecogLibC v2.3.11)
 
