@@ -2,6 +2,7 @@
 
 ### 1.9.0 (2022-06-30) (RecogLibC v2.6.3)
 
+- Add models for Austria (AT), Belgium (BE), Bulgaria (BG), Ukraine (UA) and Netherlands (NL) 
 - Add extra module for the European Union `sdk-core-models-eu`
 - Split CZ module into more granular modules by card type
 - Added read barcode option into `DocumentPictureSettings`
