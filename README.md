@@ -9,8 +9,6 @@ Android sample app that shows how to use the ZenID Android SDK. The SDK can help
 
 The SDK supports API level 21 and above.
 
-Identity cards, driving licenses and passports from Czechia and Slovakia are supported. 
-
 Apps need to use a single NDK and STL for all native code and dependencies - [one STL per app](https://developer.android.com/ndk/guides/cpp-support#one_stl_per_app).
 We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an another native library, please do mutual compatibility check as soon as possible.
 
@@ -328,6 +326,19 @@ Integer documentBlurAcceptableScore;
 
 // The time delay for the blur validator to become max tolerant. Default value is 10.
 Integer timeToBlurMaxToleranceInSeconds;
+```
+
+#### Document acceptable input 
+
+Use `documentAcceptableInput` to specify subset of documents which are allowed for scanning. For example, if you want to scan both 
+sides of Czech identity card and front side of Slovak driving license.
+
+```
+DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, null, DocumentCountry.CZ);
+DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.SK);
+DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1, filter2));
+
+documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
 ```
 
 ### Hologram feature

@@ -45,7 +45,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         imageView.setOnClickListener(view -> documentPictureView.activateTakeNextDocumentPicture());
 
         DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, null, DocumentCountry.CZ);
-        DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
+        DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.SK);
         DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1, filter2));
 
         VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
