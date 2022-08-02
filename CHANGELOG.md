@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.10.0 (2022-08-02) (RecogLibC v2.7.2)
+
+- Add more countries (DK EE, ES, FI, FR, GR, LT, LU, LV, RO, SE, SI, VN)
+
 ### 1.9.0 (2022-06-30) (RecogLibC v2.6.3)
 
 - Add models for Austria (AT), Belgium (BE), Bulgaria (BG), Ukraine (UA) and Netherlands (NL) 
