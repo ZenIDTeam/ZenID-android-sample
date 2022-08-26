@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.11.0 (2022-08-26) (RecogLibC v2.8.3)
+
+- Add more countries (DK EE, ES, FI, FR, GR, LT, LU, LV, RO, SE, SI, VN)
+- New customization options `showSmileAnimation` for FaceLivenessVerifier 
+- New look for FaceLivenessVerifier checkmarks
+
 ### 1.9.0 (2022-06-30) (RecogLibC v2.6.3)
 
 - Add models for Austria (AT), Belgium (BE), Bulgaria (BG), Ukraine (UA) and Netherlands (NL) 

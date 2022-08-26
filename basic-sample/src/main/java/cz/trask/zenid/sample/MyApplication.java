@@ -56,8 +56,8 @@ public class MyApplication extends Application {
                 .build();
 
         ApiConfig apiConfig = new ApiConfig.Builder()
-                // .baseUrl("http://your.frauds.zenid.cz/api/")
-                // .apiKey("your_api_key")
+                .baseUrl("https://")
+                .apiKey("")
                 .build();
 
         apiService = new ApiService.Builder()
