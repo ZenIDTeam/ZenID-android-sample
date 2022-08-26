@@ -422,6 +422,7 @@ For example:
 FaceLivenessSettings faceLivenessSettings = new FaceLivenessSettings.Builder()
         .enableLegacyMode(false) 
         .maxAuxiliaryImageSize(300)
+        .showSmileAnimation(true)
         .build();
 
 faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
