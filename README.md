@@ -306,6 +306,8 @@ FaceLivenessState:
 ```
 DocumentPictureSettings documentPictureSettings = new DocumentPictureSettings.Builder()
         .specularAcceptableScore(15)
+        .enableAimingCircle(true)
+        .readBarcode(true)
         .build();
 
 documentPictureView.setDocumentPictureSettings(documentPictureSettings);
@@ -326,6 +328,12 @@ Integer documentBlurAcceptableScore;
 
 // The time delay for the blur validator to become max tolerant. Default value is 10.
 Integer timeToBlurMaxToleranceInSeconds;
+
+// The card outline will be drawn on the video preview if this is true. Default: true
+Boolean drawOutline;
+
+// Setting it to false can be used to disable the barcode check. Default: false
+Boolean readBarcode;
 ```
 
 #### Document acceptable input 
