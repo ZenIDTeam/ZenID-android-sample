@@ -51,6 +51,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
                 .showDebugVisualization(false)
                 .language(Language.ENGLISH)
+                .showTextInformation(true)
                 .build();
 
         DocumentPictureSettings documentPictureSettings = new DocumentPictureSettings.Builder()

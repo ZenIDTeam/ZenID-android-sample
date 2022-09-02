@@ -444,6 +444,17 @@ boolean enableLegacyMode;
 int maxAuxiliaryImageSize;
 ```
 
+### Visualization settings
+
+```
+VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
+        .showDebugVisualization(false) // Enables debug visulisation rendered directly to camera feed. 
+        .language(Language.ENGLISH) // Language of UI
+        .showTextInformation(true) // Enables text information rendering
+        .build();
+
+documentPictureView.enableDefaultVisualization(visualizationSettings);
+```
 ### SDK Signature
 
 The SDK now generates a signature for the snapshots it takes. The backend uses the signature to verify picture origin and integrity.
