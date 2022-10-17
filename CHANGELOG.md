@@ -1,5 +1,21 @@
 # Changelog
 
+### 1.12.0 (2022-10-17) (RecogLibC v2.9.1.0)
+
+- Improvement: Updated Polish passport - support for v2022. 
+- Improvement: Removed support for the oldest slovak driver license (v1993), it will be invalid soon. 
+- New: Support for Montenegrin passports (v2008).
+- New: Support for Norwegian passports (v2011/2015 and v2020).
+- New: Support for Polish passport version 2011.
+- New: Support for Croatian passport version 2009/2015. 
+- New: Support for Moldovan passports (v2011/2014/2018). 
+- New: Support for Icelandic passports (v2019 and v2006). 
+- New: Support for Serbian passports (v2008).
+- New: Support for Bosnian passports (v2014).
+- New: Support for Albanian passports (v2009).
+- New: Support for Macedonian passports (v2007).
+- New: Support for Belarussian passports (v2006 and v2021).
+
 ### 1.11.0 (2022-08-26) (RecogLibC v2.8.3)
 
 - Add more countries (DK EE, ES, FI, FR, GR, LT, LU, LV, RO, SE, SI, VN)
