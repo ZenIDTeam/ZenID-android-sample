@@ -2,6 +2,7 @@ package cz.trask.zenid.sample.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
@@ -50,8 +51,8 @@ public class FaceLivenessActivity extends AppCompatActivity {
         faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
             @Override
-            public void onStateChanged(FaceLivenessState state) {
-                Timber.i("onStateChanged %s", state);
+            public void onStateChanged(FaceLivenessState state, @Nullable String stepParameters) {
+                Timber.i("onStateChanged - state: %s, stepParameters: %s", state, stepParameters);
             }
 
             @Override

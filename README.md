@@ -132,6 +132,20 @@ ApiService apiService = new ApiService.Builder()
         .build();
 ```
 
+#### Init callback
+
+You can use ZenId.InitCallback to be notified when ZENID SDK is ready for use. Initialization itself might take a few seconds. It all depends on count of models (documents).
+
+```
+zenId.initialize(new ZenId.InitCallback() {
+
+    @Override
+    public void onInitialized() {
+        // Initialized
+    }
+});
+```
+
 Please, check out our samples and you will get the whole picture on how it works.
 
 ### Authorization
@@ -422,6 +436,50 @@ For example:
       "unixEpoch":"1636658428"
    }
 ]      
+```
+
+#### Step parameters
+
+During the face liveness check, additional parameters for the current check can be accessed from the callback as a serialized JSON object.
+
+```
+faceLivenessView.setCallback(new FaceLivenessView.Callback() {
+
+    @Override
+    public void onStateChanged(FaceLivenessState state, @Nullable String parameters) {
+        Timber.i("onStateChanged - state: %s, stepParameters: %s", state, parameters);
+    }
+```
+
+The object is only available during the liveness part of the process, when checkboxes are visible. It is null during the preliminary quality check.
+
+The object has the following properties:
+
+|  Property  |  Description  |
+|----------|-------------|
+|  name  |  Name of the step. It can be "CenteredCheck", "AngleCheck Left", "AngleCheck Right", "AngleCheck Up", "AngleCheck Down", "LegacyAngleCheck", or "SmileCheck". CenteredCheck requires the user to look at the camera. The AngleCheck steps require the user to turn their head in a specific direction. The LegacyAngleCheck requires the user to turn his head in any direction. It's only used when legacy mode is enabled. SmileCheck requires the user to smile.  |
+|  totalCheckCount  |  The total number of the checks the user has to pass, including the ones that were already passed.  |
+|  passedCheckCount  |  The number of checks the user has passed.  |
+|  hasFailed  |  Flag that is true if the user has failed the most recent check. After the failed check, a few seconds pass and the check process is restarted - the flag is set to false and passedCheckCount goes back to 0.  |
+|  headYaw/headPitch/headRoll  |  Euler angles of the head in degrees. Only defined if a face is visible.  |
+|  faceCenterX/faceCenterY  |  Coordinates of the center of the face in relative units. Multiply by the width or height of the camera preview to get absolute units. Only defined if a face is visible.  |
+|  faceWidth/faceHeight  |  Size of the face in relative units. Multiply by the width or height of the camera preview to get absolute units. Only defined if a face is visible.  |
+
+For example:
+```
+{
+   "faceCenterX":0.57113116979599,
+   "faceCenterY":0.6632745265960693,
+   "faceHeight":0.2726851999759674,
+   "faceWidth":0.5453703999519348,
+   "hasFailed":false,
+   "headPitch":-5.794335842132568,
+   "headRoll":2.2474241256713867,
+   "headYaw":9.96286392211914,
+   "name":"SmileCheck",
+   "passedCheckCount":1,
+   "totalCheckCount":5
+}
 ```
 
 #### Face liveness settings
