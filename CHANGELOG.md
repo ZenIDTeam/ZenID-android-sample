@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.13.0 (2022-11-07) (RecogLibC v2.11.1)
+
+- Improvement: Additional parameters during the face liveness check.
+
+
 ### 1.12.0 (2022-10-17) (RecogLibC v2.9.1.0)
 
 - Improvement: Updated Polish passport - support for v2022. 
