@@ -3,7 +3,9 @@
 ### 1.13.0 (2022-11-07) (RecogLibC v2.11.1)
 
 - Improvement: Additional parameters during the face liveness check.
-
+- New: InitCallback when ZENID SDK is initialized and ready for use.
+- New: Support for Slovak residency permits v2011. 
+- New: Support for Lithuanian ID cards (v2021).
 
 ### 1.12.0 (2022-10-17) (RecogLibC v2.9.1.0)
 

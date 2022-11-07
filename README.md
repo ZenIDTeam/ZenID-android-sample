@@ -451,6 +451,23 @@ The object has the following properties:
 |  faceCenterX/faceCenterY  |  Coordinates of the center of the face in relative units. Multiply by the width or height of the camera preview to get absolute units. Only defined if a face is visible.  |
 |  faceWidth/faceHeight  |  Size of the face in relative units. Multiply by the width or height of the camera preview to get absolute units. Only defined if a face is visible.  |
 
+For example:
+```
+{
+   "faceCenterX":0.57113116979599,
+   "faceCenterY":0.6632745265960693,
+   "faceHeight":0.2726851999759674,
+   "faceWidth":0.5453703999519348,
+   "hasFailed":false,
+   "headPitch":-5.794335842132568,
+   "headRoll":2.2474241256713867,
+   "headYaw":9.96286392211914,
+   "name":"SmileCheck",
+   "passedCheckCount":1,
+   "totalCheckCount":5
+}
+```
+
 #### Face liveness settings
 
 ```
