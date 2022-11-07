@@ -132,6 +132,20 @@ ApiService apiService = new ApiService.Builder()
         .build();
 ```
 
+#### Init callback
+
+You can use ZenId.InitCallback to be notified when ZENID SDK is ready for use. Initialization itself might take a few seconds. It all depends on count of models (documents).
+
+```
+zenId.initialize(new ZenId.InitCallback() {
+
+    @Override
+    public void onInitialized() {
+        // Initialized
+    }
+});
+```
+
 Please, check out our samples and you will get the whole picture on how it works.
 
 ### Authorization
