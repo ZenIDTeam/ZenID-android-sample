@@ -44,9 +44,9 @@ public class DocumentPictureActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView_camera);
         imageView.setOnClickListener(view -> documentPictureView.activateTakeNextDocumentPicture());
 
-        DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, null, DocumentCountry.CZ);
-        DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.SK);
-        DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1, filter2));
+        // DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, null, DocumentCountry.CZ);
+        // DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.SK);
+        // DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1, filter2));
 
         VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
                 .showDebugVisualization(false)
@@ -60,7 +60,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
 
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
-        documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
+        // documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
         documentPictureView.setDocumentPictureSettings(documentPictureSettings);
         documentPictureView.enableDefaultVisualization(visualizationSettings); // enable/disable
         documentPictureView.setCallback(new DocumentPictureView.Callback() {
