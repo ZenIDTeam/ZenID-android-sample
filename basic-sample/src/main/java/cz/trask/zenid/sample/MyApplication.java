@@ -43,7 +43,12 @@ public class MyApplication extends Application {
             ZenId.setSingletonInstance(zenId);
 
             // This may take a few seconds. Please do it as soon as possible.
-            zenId.initialize();
+            zenId.initialize(new ZenId.InitCallback() {
+                @Override
+                public void onInitialized() {
+                    LogUtils.logInfo(getApplicationContext(), "Initialized.");
+                }
+            });
         }
     }
 
