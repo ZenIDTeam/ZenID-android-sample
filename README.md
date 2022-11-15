@@ -29,6 +29,8 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 |  sdk-selfie  |  2.4  |  |
 |  sdk-api-zenid  | 0.05  |  |
 
+You can find full list of models [here](https://github.com/ZenIDTeam/ZenID-android-sample/tree/master/libs).
+
 ###  Supported screen orientations 
 
 |  View name |  Required mode  |
