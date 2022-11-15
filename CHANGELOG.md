@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.13.1 (2022-11-15) (RecogLibC v2.11.1)
+
+- New: Support for Slovak residency permits v2011. 
+- New: Support for Lithuanian ID cards (v2021).
+
 ### 1.13.0 (2022-11-07) (RecogLibC v2.11.1)
 
 - Improvement: Additional parameters during the face liveness check.

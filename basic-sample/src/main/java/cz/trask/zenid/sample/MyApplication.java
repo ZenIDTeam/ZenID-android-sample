@@ -7,9 +7,7 @@ import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiConfig;
 import cz.trask.zenid.sdk.api.ApiService;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessModule;
-import cz.trask.zenid.sdk.faceliveness.FaceLivenessVerifier;
 import cz.trask.zenid.sdk.selfie.SelfieModule;
-import cz.trask.zenid.sdk.selfie.SelfieVerifier;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
@@ -43,7 +41,12 @@ public class MyApplication extends Application {
             ZenId.setSingletonInstance(zenId);
 
             // This may take a few seconds. Please do it as soon as possible.
-            zenId.initialize();
+            zenId.initialize(new ZenId.InitCallback() {
+                @Override
+                public void onInitialized() {
+                    LogUtils.logInfo(getApplicationContext(), "Initialized.");
+                }
+            });
         }
     }
 
@@ -56,8 +59,8 @@ public class MyApplication extends Application {
                 .build();
 
         ApiConfig apiConfig = new ApiConfig.Builder()
-                .baseUrl("https://")
-                .apiKey("")
+                .baseUrl(BuildConfig.ZENID_URL)
+                .apiKey(BuildConfig.ZENID_APIKEY)
                 .build();
 
         apiService = new ApiService.Builder()
