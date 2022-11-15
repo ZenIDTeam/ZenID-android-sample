@@ -23,4 +23,4 @@ jobs:
           java-version: 1.8
 
       - name: Build with Gradle
-        run: ./gradlew basic-sample:clean build
+        run: ./gradlew basic-sample:clean build -Pzenid_url=https://abc -Pzenid_apikey=abc
