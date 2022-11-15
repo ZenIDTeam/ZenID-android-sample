@@ -28,4 +28,4 @@ jobs:
           echo "zenid_apikey=abc" >> local.properties
 
       - name: Build with Gradle
-        run: ./gradlew basic-sample:clean build -Pzenid_url=https://abc -Pzenid_apikey=abc
+        run: ./gradlew basic-sample:clean build
