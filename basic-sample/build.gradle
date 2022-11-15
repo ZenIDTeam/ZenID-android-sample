@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.2'
@@ -20,6 +23,8 @@ android {
             versionNameSuffix '-DEBUG'
             // ndk { abiFilters 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a' } // Generate code for a specific ABI
             // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'my-proguard.txt'
+            buildConfigField("java.lang.String", "ZENID_URL", "\"" + properties["zenid_url"] + "\"")
+            buildConfigField("java.lang.String", "ZENID_APIKEY", "\"" + properties["zenid_apikey"] + "\"")
         }
 
         release {
@@ -27,6 +32,8 @@ android {
             signingConfig signingConfigs.debug
             // ndk { abiFilters 'x86', 'x86_64', 'arm64-v8a', 'armeabi-v7a' } // Generate code for a specific ABI
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'my-proguard.txt'
+            buildConfigField("java.lang.String", "ZENID_URL", "\"" + properties["zenid_url"] + "\"")
+            buildConfigField("java.lang.String", "ZENID_APIKEY", "\"" + properties["zenid_apikey"] + "\"")
         }
     }
 
