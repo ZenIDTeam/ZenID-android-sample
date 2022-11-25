@@ -442,18 +442,18 @@ For example:
 
 #### Step parameters
 
-During the face liveness check, additional parameters for the current check can be accessed from the callback as a serialized JSON object.
+During the face liveness check, additional parameters for the current check can be accessed from the callback.
 
 ```
 faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
     @Override
-    public void onStateChanged(FaceLivenessState state, @Nullable String parameters) {
-        Timber.i("onStateChanged - state: %s, stepParameters: %s", state, parameters);
+    public void onStateChanged(FaceLivenessState state, @Nullable FaceLivenessStepParams stepParams) {
+        Timber.i("onStateChanged - state: %s, stepParams: %s", state, stepParams.getName());
     }
 ```
 
-The object is only available during the liveness part of the process, when checkboxes are visible. It is null during the preliminary quality check.
+The stepParams object is only available during the liveness part of the process, when checkboxes are visible. It is null during the preliminary quality check.
 
 The object has the following properties:
 

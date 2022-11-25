@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.14.0 (2022-11-24) (RecogLibC v2.11.3)
+
+- Fix issue with Birth Certificate tracking.
+- Additional parameters for face liveness check are returned as java object instead of JSON string.
+- Video parameters (FPS, width, height) are configurable.
+
 ### 1.13.1 (2022-11-15) (RecogLibC v2.11.1)
 
 - New: Support for Slovak residency permits v2011. 

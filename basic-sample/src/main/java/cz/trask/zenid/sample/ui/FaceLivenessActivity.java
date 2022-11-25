@@ -17,6 +17,7 @@ import cz.trask.zenid.sdk.faceliveness.FaceLivenessMode;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessResult;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessSettings;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessState;
+import cz.trask.zenid.sdk.faceliveness.FaceLivenessStepParams;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessView;
 import cz.trask.zenid.sdk.Language;
 import cz.trask.zenid.sdk.selfie.SelfieResult;
@@ -51,8 +52,11 @@ public class FaceLivenessActivity extends AppCompatActivity {
         faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
             @Override
-            public void onStateChanged(FaceLivenessState state, @Nullable String stepParameters) {
-                Timber.i("onStateChanged - state: %s, stepParameters: %s", state, stepParameters);
+            public void onStateChanged(FaceLivenessState state, @Nullable FaceLivenessStepParams stepParams) {
+                Timber.i("onStateChanged - state: %s", state);
+                if (stepParams != null) {
+                    Timber.i("onStateChanged - stepParams.name: %s", stepParams.getName());
+                }
             }
 
             @Override
