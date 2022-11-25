@@ -53,7 +53,10 @@ public class FaceLivenessActivity extends AppCompatActivity {
 
             @Override
             public void onStateChanged(FaceLivenessState state, @Nullable FaceLivenessStepParams stepParams) {
-                Timber.i("onStateChanged - state: %s, stepParams: %s", state, stepParams.getName());
+                Timber.i("onStateChanged - state: %s", state);
+                if (stepParams != null) {
+                    Timber.i("onStateChanged - stepParams.name: %s", stepParams.getName());
+                }
             }
 
             @Override
