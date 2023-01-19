@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
+import cz.trask.zenid.sdk.VideoSettings;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessMode;
@@ -44,11 +45,16 @@ public class FaceLivenessActivity extends AppCompatActivity {
                 .maxAuxiliaryImageSize(300) // Auxiliary images will be resized to fit into this size while preserving the aspect ratio.
                 .build();
 
+        VideoSettings videoSettings = new VideoSettings.Builder()
+                .useVideoParamsFromBackend(true) // This will override other video settings
+                .build();
+
         faceLivenessView = findViewById(R.id.faceLivenessView);
         faceLivenessView.setLifecycleOwner(this);
         faceLivenessView.enableDefaultVisualization(visualizationSettings);
         faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
-        // faceLivenessView.setMode(FaceLivenessMode.VIDEO); // FaceLivenessMode.PICTURE is the default value
+        faceLivenessView.setVideoSettings(videoSettings);
+        faceLivenessView.setMode(FaceLivenessMode.VIDEO); // FaceLivenessMode.PICTURE is the default value
         faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
             @Override
