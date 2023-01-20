@@ -515,6 +515,23 @@ VisualizationSettings visualizationSettings = new VisualizationSettings.Builder(
 
 documentPictureView.enableDefaultVisualization(visualizationSettings);
 ```
+
+### Video settings
+
+```
+VideoSettings videoSettings = new VideoSettings.Builder()
+        .useVideoParamsFromBackend(true) // This will override other video settings
+        .videoFrameRate()
+        .videoMaxHeight()
+        .videoMaxWidth()
+        .videoFrameRateExact() // If set this option to true, it will give as exact preview fps as you want, but the sensor will have less freedom when adapting the exposure to the environment, which may lead to dark preview.
+        .build();
+
+faceLivenessView.setVideoSettings(videoSettings);
+```
+
+Please note that `videoFrameRate` parameter also set the frame rate for the video preview. Double check the value to ensure good user experience.
+
 ### SDK Signature
 
 The SDK now generates a signature for the snapshots it takes. The backend uses the signature to verify picture origin and integrity.
