@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.15.0 (2023-01-20) (RecogLibC v2.12.3)
+
+- Improvement: Video parameters (FPS, width, height) are configurable via backend. Use this option `VideoSettings.useVideoParamsFromBackend(true)` to override local settings.
+- New: Support for Slovak ID cards v2022.
+
 ### 1.14.0 (2022-11-24) (RecogLibC v2.11.3)
 
 - Fix issue with Birth Certificate tracking.
