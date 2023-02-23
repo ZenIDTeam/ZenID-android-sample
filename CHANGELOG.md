@@ -1,5 +1,16 @@
 # Changelog
 
+### 1.16.0 (2023-02-23) (RecogLibC v3.2.4)
+
+- Fix tracking issues when the card is far from the center. 
+- Improvement: Support for new variant of Montenegrin passport. 
+- New: Support for Swedish ID cards v2022.
+- New: Support for Swedish passports v2022.
+- New: Support for Indian passports v2000/2013.
+- New: Support for Danish passports v2021.
+- New: Support for Swiss passports v2022.
+- New: Support for Vietnamese passports v2022. 
+
 ### 1.15.0 (2023-01-20) (RecogLibC v2.12.3)
 
 - Improvement: Video parameters (FPS, width, height) are configurable via backend. Use this option `VideoSettings.useVideoParamsFromBackend(true)` to override local settings.
