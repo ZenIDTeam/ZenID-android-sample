@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.17.0 (2023-03-09) (RecogLibC v3.3.1)
+- The face liveness check takes a selfie picture at a random point while performing the steps.
+- The face liveness check retakes a new selfie picture after a failed attempt.
+
 ### 1.16.0 (2023-02-23) (RecogLibC v3.2.4)
 
 - Fix tracking issues when the card is far from the center. 
