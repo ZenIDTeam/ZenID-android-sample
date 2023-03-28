@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.17.1 (2023-03-28) (RecogLibC v3.3.1)
+- Fix face liveness (legacy mode) crash  
+
 ### 1.17.0 (2023-03-09) (RecogLibC v3.3.1)
 - The face liveness check takes a selfie picture at a random point while performing the steps.
 - The face liveness check retakes a new selfie picture after a failed attempt.
