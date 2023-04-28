@@ -541,7 +541,7 @@ import com.otaliastudios.cameraview.size.SizeSelectors;
 
 documentPictureView.setPreviewStreamSize(SizeSelectors.biggest());
 ```
-Please take a look into the cameraView documentation here https://natario1.github.io/CameraView/docs/capture-size and configure your size selector as you wish.
+Please take a look into the cameraView documentation here https://natario1.github.io/CameraView/docs/capture-size - SizeSelectors utilities and configure your size selector as you wish.
 
 ### SDK Signature
 
