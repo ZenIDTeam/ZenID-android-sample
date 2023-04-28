@@ -532,6 +532,17 @@ faceLivenessView.setVideoSettings(videoSettings);
 
 Please note that `videoFrameRate` parameter also set the frame rate for the video preview. Double check the value to ensure good user experience.
 
+### Preview stream size selection
+
+When you need more control over the frame processing, you can use this method `documentPictureView.setPreviewStreamSize()`. The same thing for face liveness or selfie.
+For instance when you want to have as big resolution as possible:
+```
+import com.otaliastudios.cameraview.size.SizeSelectors;
+
+documentPictureView.setPreviewStreamSize(SizeSelectors.biggest());
+```
+Please take a look into the cameraView documentation here https://natario1.github.io/CameraView/docs/capture-size and configure your size selector as you wish.
+
 ### SDK Signature
 
 The SDK now generates a signature for the snapshots it takes. The backend uses the signature to verify picture origin and integrity.

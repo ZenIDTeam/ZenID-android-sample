@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.17.2 (2023-04-28) (RecogLibC v3.3.1)
+- Preview stream size selection. 
+
 ### 1.17.1 (2023-03-28) (RecogLibC v3.3.1)
 - Fix face liveness (legacy mode) crash  
 
