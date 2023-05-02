@@ -6,6 +6,8 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.otaliastudios.cameraview.size.SizeSelectors;
+
 import java.util.Arrays;
 
 import cz.trask.zenid.sample.LogUtils;
@@ -61,6 +63,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
         documentPictureView = findViewById(R.id.documentPictureView);
         documentPictureView.setLifecycleOwner(this);
         // documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
+        documentPictureView.setPreviewStreamSize(SizeSelectors.biggest());
         documentPictureView.setDocumentPictureSettings(documentPictureSettings);
         documentPictureView.enableDefaultVisualization(visualizationSettings); // enable/disable
         documentPictureView.setCallback(new DocumentPictureView.Callback() {
@@ -82,6 +85,8 @@ public class DocumentPictureActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
 
         activateCameraButton = true;
     }
