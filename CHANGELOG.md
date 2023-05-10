@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.18.1 (2023-05-10) (RecogLibC v3.5.2)
+- Fix parsing BirthNumberChecksum value from MRZ
+
 ### 1.18.0 (2023-05-10) (RecogLibC v3.5.2)
 - Add missing MRZ data into `sdk-api-zenid` package.
 - Fixed a crash that could happen when resetting face liveness workflow with debug visualization enabled.
