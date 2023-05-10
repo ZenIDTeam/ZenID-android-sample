@@ -86,8 +86,6 @@ public class DocumentPictureActivity extends AppCompatActivity {
             }
         });
 
-
-
         activateCameraButton = true;
     }
 
