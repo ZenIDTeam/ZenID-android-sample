@@ -2,6 +2,8 @@ package cz.trask.zenid.sample;
 
 import android.app.Application;
 
+import java.util.concurrent.TimeUnit;
+
 import cz.trask.zenid.sdk.DocumentModule;
 import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiConfig;
@@ -56,6 +58,9 @@ public class MyApplication extends Application {
 
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .addInterceptor(httpLoggingInterceptor)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
                 .build();
 
         ApiConfig apiConfig = new ApiConfig.Builder()
