@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.18.0 (2023-05-10) (RecogLibC v3.5.2)
+- Add missing MRZ data into `sdk-api-zenid` package.
+- Fixed a crash that could happen when resetting face liveness workflow with debug visualization enabled.
+
 ### 1.17.2 (2023-04-28) (RecogLibC v3.3.1)
 - Preview stream size selection. 
 
