@@ -61,6 +61,11 @@ public class HologramActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onVideoRecordingStart() {
+                LogUtils.logInfo(getApplicationContext(), "onVideoRecordingStart... ");
+            }
+
+            @Override
             public void onVideoTaken(HologramResult result) {
                 LogUtils.logInfo(getApplicationContext(), "onVideoTaken... " + result.getVideoFilePath());
                 postHologramSample(result);
