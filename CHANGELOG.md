@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.19.0 (2023-06-13) (RecogLibC v3.7.0)
+- Improvement: Hologram video length reducing. Start recording video when a card is detected. 
+- Improvement: `HologramView.Callback` has got `onVideoRecordingStart` method to notify you when video recording has started.
+
 ### 1.18.1 (2023-05-10) (RecogLibC v3.5.2)
 - Fix parsing BirthNumberChecksum value from MRZ
 
