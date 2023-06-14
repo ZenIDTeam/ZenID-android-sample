@@ -1,6 +1,5 @@
 package cz.trask.zenid.sample.ui;
 
-
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.DocumentAcceptableInput;
 import cz.trask.zenid.sdk.DocumentCountry;
 import cz.trask.zenid.sdk.DocumentPage;
-import cz.trask.zenid.sdk.DocumentPictureResult;
 import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.HologramResult;
 import cz.trask.zenid.sdk.HologramSettings;
@@ -35,7 +33,7 @@ public class HologramActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hologram);
 
-        DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID,  DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
+        DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
         DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1));
 
 
