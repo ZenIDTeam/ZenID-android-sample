@@ -182,7 +182,13 @@ apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
 });
 ```
 
-If you want to speed up authorization process during development, just ask us. We can provide offline response tokens to you. But only for development purposes. Leak into production would undermine security!
+### Select profile
+
+This allows customers to set frontend validator configs on the backend. On Init() call the SDK receives a list of profiles and their respective configs. 
+Calling SelectProfile() sets what profile will be used for subsequent verifier usage.
+```
+ZenId.get().getSecurity().selectProfile("profile-name");
+```
 
 ### Architectural overview of the SDK
 
@@ -314,6 +320,7 @@ FaceLivenessState:
 - BLURRY = The picture is too blurry.
 - DARK = The picture is dark.
 - HOLD_STILL = Hold still.
+- RESETING = Face is not verified, please try again. Move to better light conditions. Minimize sudden movements.
 
 ### Document picture feature
 

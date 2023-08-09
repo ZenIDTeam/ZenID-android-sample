@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.20.0-beta (2023-08-09) (RecogLibC v3.7.15)
+- Method `DocumentPictureView.Callback::onPictureTaken()` has got `boolean nfcRequired` argument for future usage. 
+- Face liveness improvements
+- New SelectProfile feature that allows customers to set frontend validator configs on the backend.
+- New states for DocumentPicture and FaceLiveness.
+
 ### 1.19.0 (2023-06-13) (RecogLibC v3.7.0)
 - Improvement: Hologram video length reducing. Start recording video when a card is detected. 
 - Improvement: `HologramView.Callback` has got `onVideoRecordingStart` method to notify you when video recording has started.
