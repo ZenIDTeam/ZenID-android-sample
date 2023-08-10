@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
+import cz.trask.zenid.sdk.Security;
 import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.model.InitResponseJson;
 import retrofit2.Call;
@@ -46,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
                     Timber.i("responseToken: %s", response);
                     boolean authorized = ZenId.get().getSecurity().authorize(getApplicationContext(), responseToken);
                     Toast.makeText(getApplicationContext(), "Authorized: " + authorized, Toast.LENGTH_SHORT).show();
+
+                    // This is part of a new feature that allows customers to set frontend validator configs on the backend.
+                    // On Init() call the SDK receives a list of profiles and their respective configs.
+                    // Calling SelectProfile() sets what profile will be used for subsequent verifier usage.
+                    ZenId.get().getSecurity().selectProfile(Security.DEFAULT_PROFILE_NAME);
                 }
 
                 @Override

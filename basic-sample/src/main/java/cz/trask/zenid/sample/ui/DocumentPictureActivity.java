@@ -71,7 +71,6 @@ public class DocumentPictureActivity extends AppCompatActivity {
             @Override
             public void onStateChanged(DocumentPictureState state) {
                 Timber.i("onStateChanged %s", state);
-
                 if (state.isMatchFound() && activateCameraButton) {
                     activateCameraButton = false;
                     imageView.postDelayed(() -> imageView.setVisibility(View.VISIBLE), 5000);
@@ -79,7 +78,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPictureTaken(DocumentPictureResult result) {
+            public void onPictureTaken(DocumentPictureResult result, boolean nfcRequired) {
                 Timber.i("onPictureTaken... " + result.getFilePath());
                 postDocumentPictureSample(result);
                 finish();
