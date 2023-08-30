@@ -1,5 +1,6 @@
 package cz.trask.zenid.sample.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -87,8 +88,12 @@ public class DocumentPictureActivity extends AppCompatActivity {
 
             @Override
             public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) {
-                Timber.i("onPictureTaken... " + result.getFilePath());
-                postDocumentPictureSample(result);
+                LogUtils.logInfo(getApplicationContext(), "onPictureTaken... " + result.getFilePath());
+                if (NfcStatus.NFC_REQUIRED.equals(nfcStatus)) {
+                    startActivity(new Intent(getApplicationContext(), NfcActivity.class));
+                } else {
+                    postDocumentPictureSample(result);
+                }
                 finish();
             }
         });
