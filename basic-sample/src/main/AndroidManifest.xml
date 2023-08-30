@@ -18,6 +18,7 @@
 
         <activity
             android:name=".ui.MainActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -38,6 +39,8 @@
             android:screenOrientation="portrait" />
 
         <activity android:name=".ui.HologramActivity" />
+
+        <activity android:name=".ui.NfcActivity" />
 
     </application>
 

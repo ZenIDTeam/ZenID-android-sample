@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
                     // This is part of a new feature that allows customers to set frontend validator configs on the backend.
                     // On Init() call the SDK receives a list of profiles and their respective configs.
                     // Calling SelectProfile() sets what profile will be used for subsequent verifier usage.
-                    ZenId.get().getSecurity().selectProfile(Security.DEFAULT_PROFILE_NAME);
+                    // ZenId.get().getSecurity().selectProfile(Security.DEFAULT_PROFILE_NAME);
+                    ZenId.get().getSecurity().selectProfile("NFC");
                 }
 
                 @Override
