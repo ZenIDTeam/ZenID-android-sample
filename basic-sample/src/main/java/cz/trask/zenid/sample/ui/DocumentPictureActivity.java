@@ -23,6 +23,8 @@ import cz.trask.zenid.sdk.DocumentPictureView;
 import cz.trask.zenid.sdk.DocumentRole;
 import cz.trask.zenid.sdk.HologramSettings;
 import cz.trask.zenid.sdk.Language;
+import cz.trask.zenid.sdk.NfcStatus;
+import cz.trask.zenid.sdk.NfcValidatorException;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import retrofit2.Call;
@@ -44,7 +46,13 @@ public class DocumentPictureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_document_picture);
 
         imageView = findViewById(R.id.imageView_camera);
-        imageView.setOnClickListener(view -> documentPictureView.activateTakeNextDocumentPicture());
+        imageView.setOnClickListener(view -> {
+            try {
+                documentPictureView.activateTakeNextDocumentPicture();
+            } catch (NfcValidatorException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         // DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, null, DocumentCountry.CZ);
         // DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.SK);
@@ -78,7 +86,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPictureTaken(DocumentPictureResult result, boolean nfcRequired) {
+            public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) {
                 Timber.i("onPictureTaken... " + result.getFilePath());
                 postDocumentPictureSample(result);
                 finish();
