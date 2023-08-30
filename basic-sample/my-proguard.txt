@@ -5,3 +5,7 @@
 -keep class cz.trask.zenid.sdk.HologramResult {
   public <init>(int, int, int, int, int);
 }
+
+-keep class net.sf.scuba.smartcards.** { *; }
+-keep class org.bouncycastle.** { *; }
+

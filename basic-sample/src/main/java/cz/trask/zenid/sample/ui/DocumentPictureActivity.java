@@ -1,5 +1,6 @@
 package cz.trask.zenid.sample.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,21 +9,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.otaliastudios.cameraview.size.SizeSelectors;
 
-import java.util.Arrays;
-
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
-import cz.trask.zenid.sdk.DocumentAcceptableInput;
-import cz.trask.zenid.sdk.DocumentCountry;
-import cz.trask.zenid.sdk.DocumentPage;
 import cz.trask.zenid.sdk.DocumentPictureResult;
 import cz.trask.zenid.sdk.DocumentPictureSettings;
 import cz.trask.zenid.sdk.DocumentPictureState;
 import cz.trask.zenid.sdk.DocumentPictureView;
-import cz.trask.zenid.sdk.DocumentRole;
-import cz.trask.zenid.sdk.HologramSettings;
 import cz.trask.zenid.sdk.Language;
+import cz.trask.zenid.sdk.NfcStatus;
+import cz.trask.zenid.sdk.NfcValidatorException;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import retrofit2.Call;
@@ -44,7 +40,13 @@ public class DocumentPictureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_document_picture);
 
         imageView = findViewById(R.id.imageView_camera);
-        imageView.setOnClickListener(view -> documentPictureView.activateTakeNextDocumentPicture());
+        imageView.setOnClickListener(view -> {
+            try {
+                documentPictureView.activateTakeNextDocumentPicture();
+            } catch (NfcValidatorException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         // DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, null, DocumentCountry.CZ);
         // DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.SK);
@@ -78,9 +80,13 @@ public class DocumentPictureActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPictureTaken(DocumentPictureResult result, boolean nfcRequired) {
-                Timber.i("onPictureTaken... " + result.getFilePath());
-                postDocumentPictureSample(result);
+            public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) {
+                LogUtils.logInfo(getApplicationContext(), "onPictureTaken... " + result.getFilePath());
+                if (NfcStatus.NFC_REQUIRED.equals(nfcStatus)) {
+                    startActivity(new Intent(getApplicationContext(), NfcActivity.class));
+                } else {
+                    postDocumentPictureSample(result);
+                }
                 finish();
             }
         });
