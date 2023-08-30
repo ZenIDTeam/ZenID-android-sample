@@ -1,8 +1,13 @@
 # Changelog
 
+### 1.20.0 (2023-08-30) (RecogLibC v3.8.1)
+- New `sdk-nfc` package. 
+- Set targetSdkVersion 31 at least.
+- Method `getInvestigateSamples` requires you to set profile.
+
 ### 1.20.0-beta (2023-08-09) (RecogLibC v3.7.15)
 - Method `DocumentPictureView.Callback::onPictureTaken()` has got `boolean nfcRequired` argument for future usage. 
-- Face liveness improvements
+- Face liveness improvements.
 - New SelectProfile feature that allows customers to set frontend validator configs on the backend.
 - New states for DocumentPicture and FaceLiveness.
 

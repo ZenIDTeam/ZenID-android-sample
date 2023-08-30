@@ -189,6 +189,7 @@ Calling SelectProfile() sets what profile will be used for subsequent verifier u
 ```
 ZenId.get().getSecurity().selectProfile("profile-name");
 ```
+You must set explicitly profile when investigation samples over `ApiService.getInvestigateSamples()`.
 
 ### Architectural overview of the SDK
 
@@ -343,20 +344,8 @@ Boolean enableAimingCircle;
 // Toggles displaying timer that shows seconds remaining for the validators to become max tolerant.
 Boolean showTimer;
 
-// Can be used for fine tuning the sensitivity of the specular validator. Value range 0-100. Default value is 50.
-Integer specularAcceptableScore;
-
-// Can be used for fine tuning the sensitivity of the document blur validator. Value range 0-100. Default value is 50.
-Integer documentBlurAcceptableScore;
-
-// The time delay for the blur validator to become max tolerant. Default value is 10.
-Integer timeToBlurMaxToleranceInSeconds;
-
 // The card outline will be drawn on the video preview if this is true. Default: true
 Boolean drawOutline;
-
-// Setting it to false can be used to disable the barcode check. Default: false
-Boolean readBarcode;
 ```
 
 #### Document acceptable input 
@@ -372,6 +361,85 @@ DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Ar
 documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
 ```
 
+#### NFC
+
+It is up to you to use this package. Optional. First of all, you need to set targetSdkVersion 31 at least.
+When you decide to use this package, please add these dependencies.
+```
+implementation 'net.sf.scuba:scuba-sc-android:0.0.20'
+implementation 'org.jmrtd:jmrtd:0.7.17'
+implementation 'com.gemalto.jp2:jp2-android:1.0.3'
+```
+
+Method `DocumentPictureView.onPictureTaken()` can be implemented like this. Based on NfcStatus you must decide what to do.
+```
+public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) {
+    if (NfcStatus.NFC_REQUIRED.equals(nfcStatus)) {
+        startActivity(new Intent(getApplicationContext(), NfcActivity.class));
+    } else {
+        postDocumentPictureSample(result);
+    }
+    finish();
+}
+```
+
+```
+public enum NfcStatus {
+
+    DEVICE_DOES_NOT_SUPPORT_NFC, // Device does not have NFC reader.
+    SAMPLE_WITHOUT_CHIP, // Sample does not have NFC tag.
+    NFC_VALIDATOR_DISABLED, // NFC validator is disabled on backend side.
+    NFC_REQUIRED; // You must proceed with NFC check.
+}
+```
+
+DON'T upload samples on backend when NFC step is required. Implement NfcActivity instead and let's do NFC check first. 
+Please check the sample codebase. 
+
+Our SDK provides `NfcService` class to wrap interaction with NFC tag
+
+```
+public interface NfcService.Callback {
+
+    // DocumentPictureState must be NFC otherwice NfcService will not work properly.
+    void onZenIdNotNfcState();  
+
+    void onStateChanged(NfcState nfcState); 
+
+    // DocumentPictureState is OK, result is signed and can be send to backend.
+    void onResult(DocumentPictureResult documentPictureResult, NfcResult nfcResult, NfcData nfcData);
+
+    // For instance when MRZ data are not correct and authentication is failing.
+    void onAccessDenied(NfcAccessDeniedException accessDeniedException);
+
+    // For instance when use more with his phone to far away.
+    void onConnectionFailed(NfcConnectionException connectionException);
+
+    void onGeneralException(Exception exception);
+}
+```
+
+```
+public enum NfcState {
+    START, // Connection established.
+    PERSONAL_DATA, // Reading personal data.
+    PHOTO, // Reading photo
+    OK; // All data retrieved
+}
+```
+
+Display photo from NFC. Unfortunately some documents use JPEG2000 image format. If you need to display photo from NFC, please, use this snippet.
+
+```
+String picturePath = nfcResult.getFacePicturePath();
+FacePictureFormat format = nfcResult.getFacePictureFormat();
+Bitmap bitmap;
+if (format.equals(FacePictureFormat.JP2)) {
+    bitmap = new JP2Decoder(picturePath).decode();
+} else {
+    bitmap = BitmapFactory.decodeFile(picturePath);
+}
+```
 ### Hologram feature
 
 #### Hologram settings
