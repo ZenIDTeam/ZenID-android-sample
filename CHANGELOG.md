@@ -4,6 +4,7 @@
 - New `sdk-nfc` package. 
 - Set targetSdkVersion 31 at least.
 - Method `getInvestigateSamples` requires you to set profile.
+- Remove readBarcode, specularAcceptableScore, documentBlurAcceptableScore fields from DocumentPictureSettings. These values are set on backend side.
 
 ### 1.20.0-beta (2023-08-09) (RecogLibC v3.7.15)
 - Method `DocumentPictureView.Callback::onPictureTaken()` has got `boolean nfcRequired` argument for future usage. 
