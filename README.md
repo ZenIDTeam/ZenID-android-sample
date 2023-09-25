@@ -626,6 +626,45 @@ The SDK returns signature within `DocumentPictureResult / SelfieResult / FaceLiv
     
 You can then send the signature to the backend with the /api/sample request.     
 
+Signatures now contain "--ZENID_SIGNATURE--" prefix. The new recommended way of sending `signature` is by adding it as a second file to multipart upload of sample (first file being the image or video itself). Alternative method, if you are uploading image/file as binary body in POST request is to append signature to binary data of image/video as is. Old way of sending signature as request parameter in URL still works, but you can encounter issues due to URL size limits so it is recommended to switch to the new method.
+
+Example using `okhttp3` and `retrofit2` libraries:
+
+```
+public interface RetrofitService {
+
+    @Multipart
+    @POST("sample")
+    Call<SampleJson> postSample(
+            @Part MultipartBody.Part picture,
+            @Part MultipartBody.Part signature,
+            @Query("expectedSampleType") String expectedSampleType,
+            ...
+    );
+}    
+```
+
+```
+private MultipartBody.Part buildJpegPart(@NonNull String picturePath) {
+    File file = new File(picturePath);
+    RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
+    MultipartBody.Part formData = MultipartBody.Part.createFormData("picture", "my picture", requestBody);
+    return formData;
+}
+
+private MultipartBody.Part buildSignaturePart(@NonNull String signature) {
+    RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), signature.getBytes());
+    MultipartBody.Part formData = MultipartBody.Part.createFormData("signature", "my signature", requestBody);
+    return formData;
+}
+
+public Call<SampleJson> postDocumentPictureSample(@NonNull DocumentPictureResult result) {
+    MultipartBody.Part jpegPart = buildJpegPart(result.getFilePath());
+    MultipartBody.Part signaturePart = buildSignaturePart(result.getSignature());
+    return retrofitService.postSample(jpegPart, signaturePart, "DocumentPicture", ...);
+}
+```
+
 ### More details on the sdk-api-zenid module
 
 To run optical character recognition (OCR) and investigate documents (please follow the link at http://your.frauds.zenid.cz/Sensitivity/Validators to get more details what investigation is about), you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls to upload documents, for instance:
