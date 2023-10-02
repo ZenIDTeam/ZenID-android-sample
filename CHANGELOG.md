@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.21.0 (2023-09-27) (RecogLibC v3.8.4)
+- New: Support for Dominican ID cards v2014.
+- Improvement: Dominican ID card MRZ reading.
+
 ### 1.20.0 (2023-08-30) (RecogLibC v3.8.1)
 - New `sdk-nfc` package. 
 - Set targetSdkVersion 31 at least.

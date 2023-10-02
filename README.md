@@ -12,6 +12,11 @@ The SDK supports API level 21 and above.
 Apps need to use a single NDK and STL for all native code and dependencies - [one STL per app](https://developer.android.com/ndk/guides/cpp-support#one_stl_per_app).
 We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an another native library, please do mutual compatibility check as soon as possible.
 
+### Migration
+
+#### 1.20.0 -> 1.21.0
+- Copy and paste libraries
+
 ### Package sizes
 
 |  Package name  |  Size (MB)  |  Note  |
