@@ -17,6 +17,14 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 #### 1.20.0 -> 1.21.0
 - Copy and paste libraries
 
+#### 1.19.0 -> 1.20.0
+- Copy and paste libraries
+- Set targetSdkVersion 31 at least
+- Send ZENID signature as a multipart request [here](https://github.com/ZenIDTeam/ZenID-android-sample#sdk-signature)
+- Implement profile feature [here](https://github.com/ZenIDTeam/ZenID-android-sample#select-profile)
+- Implement new states for DocumentPicture and FaceLiveness
+- Remove readBarcode, specularAcceptableScore, documentBlurAcceptableScore fields from DocumentPictureSettings. These values are set on backend side.
+
 ### Package sizes
 
 |  Package name  |  Size (MB)  |  Note  |
