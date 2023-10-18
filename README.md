@@ -547,7 +547,7 @@ The object has the following properties:
 
 |  Property  |  Description  |
 |----------|-------------|
-|  name  |  Name of the step. It can be "CenteredCheck", "AngleCheck Left", "AngleCheck Right", "AngleCheck Up", "AngleCheck Down", "LegacyAngleCheck", or "SmileCheck". CenteredCheck requires the user to look at the camera. The AngleCheck steps require the user to turn their head in a specific direction. The LegacyAngleCheck requires the user to turn his head in any direction. It's only used when legacy mode is enabled. SmileCheck requires the user to smile.  |
+|  name  |  Name of the step. It can be "CenteredCheck", "AngleCheck Left", "AngleCheck Right", "AngleCheck Up", "AngleCheck Down", "LegacyAngleCheck", "UpPerspectiveCheck" or "SmileCheck". CenteredCheck requires the user to look at the camera. The AngleCheck steps require the user to turn their head in a specific direction. The LegacyAngleCheck requires the user to turn his head in any direction. It's only used when legacy mode is enabled. SmileCheck requires the user to smile, UpPerspective requires turn up and sometimes also turn down or repeat movement.  |
 |  totalCheckCount  |  The total number of the checks the user has to pass, including the ones that were already passed.  |
 |  passedCheckCount  |  The number of checks the user has passed.  |
 |  hasFailed  |  Flag that is true if the user has failed the most recent check. After the failed check, a few seconds pass and the check process is restarted - the flag is set to false and passedCheckCount goes back to 0.  |
