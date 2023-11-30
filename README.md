@@ -14,6 +14,10 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
 ### Migration
 
+#### 1.21.0 -> 1.22.0
+- Copy and paste libraries
+- Remove method setVideoSettings. Local change of video settings is no longer supported. You can set video settings on backend side.
+
 #### 1.20.0 -> 1.21.0
 - Copy and paste libraries
 
@@ -606,19 +610,7 @@ documentPictureView.enableDefaultVisualization(visualizationSettings);
 
 ### Video settings
 
-```
-VideoSettings videoSettings = new VideoSettings.Builder()
-        .useVideoParamsFromBackend(true) // This will override other video settings
-        .videoFrameRate()
-        .videoMaxHeight()
-        .videoMaxWidth()
-        .videoFrameRateExact() // If set this option to true, it will give as exact preview fps as you want, but the sensor will have less freedom when adapting the exposure to the environment, which may lead to dark preview.
-        .build();
-
-faceLivenessView.setVideoSettings(videoSettings);
-```
-
-Please note that `videoFrameRate` parameter also set the frame rate for the video preview. Double check the value to ensure good user experience.
+You can set video settings on backend side.
 
 ### Preview stream size selection
 
