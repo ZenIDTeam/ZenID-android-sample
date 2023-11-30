@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.22.0 (2023-10-30) (RecogLibC v3.9.6)
+- Remove method `setVideoSettings`. These values are set on backend side.
+
 ### 1.21.0 (2023-09-27) (RecogLibC v3.8.4)
 - New: Support for Dominican ID cards v2014.
 - Improvement: Dominican ID card MRZ reading.

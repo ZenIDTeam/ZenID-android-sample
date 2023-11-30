@@ -4,15 +4,15 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     buildToolsVersion '30.0.2'
 
     defaultConfig {
         applicationId "cz.trask.zenid.sample"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         ndkVersion "21.3.6528147"
-        versionCode 34
+        versionCode 35
         versionName "1.0"
     }
 
