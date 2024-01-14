@@ -576,6 +576,20 @@ For example:
 }
 ```
 
+#### Face liveness mode
+
+PICTURE:
+```
+faceLivenessView.setMode(FaceLivenessMode.PICTURE);
+```
+FaceLivenessResult returns selfie picture file. Path to the selfie picture file is in parameter filePath. To post selfie picture to our backend system use method postSelfieSample from module sdk-api-zenid.</br>For more details about api calls see chapter "More details on the sdk-api-zenid module".
+
+VIDEO:
+```
+faceLivenessView.setMode(FaceLivenessMode.VIDEO);
+```
+FaceLivenessResult returns selfie picture file and also selfie video file.</br>Path to the selfie picture file is in parameter filePath. To post selfie picture to our backend system use method postSelfieSample from module sdk-api-zenid.</br>Path to the selfie video file is in parameter videoFilePath. To post selfie video file to our backend system use method postSelfieVideoSample from module sdk-api-zenid.</br>For more details about api calls see chapter "More details on the sdk-api-zenid module".
+
 #### Face liveness settings
 
 ```
@@ -674,19 +688,61 @@ public Call<SampleJson> postDocumentPictureSample(@NonNull DocumentPictureResult
 
 To run optical character recognition (OCR) and investigate documents (please follow the link at http://your.frauds.zenid.cz/Sensitivity/Validators to get more details what investigation is about), you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls to upload documents, for instance:
 ```
-apiService.postDocumentPictureSample(documentCountry, documentRole, documentCode, documentPage, documentPicturePath).enqueue(new retrofit2.Callback<SampleJson>() {
+apiService.postDocumentPictureSample(documentPictureResult, true).enqueue(new retrofit2.Callback<SampleJson>() {
 
     @Override
-    public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+    public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
         String sampleId = response.body().getSampleId();
         Timber.i("sampleId: %s", sampleId);
     }
 
     @Override
-    public void onFailure(Call<SampleJson> call, Throwable t) {
+    public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
         Timber.e(t);
     }
-}); 
+});
+
+apiService.postHologramSample(hologramResult, true).enqueue(new retrofit2.Callback<SampleJson>() {
+
+    @Override
+    public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
+        String sampleId = response.body().getSampleId();
+        Timber.i("sampleId: %s", sampleId);
+    }
+
+    @Override
+    public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
+        Timber.e(t);
+    }
+});
+
+apiService.postSelfieSample(selfieResult.getFilePath(), selfieResult.getSignature(), true).enqueue(new retrofit2.Callback<SampleJson>() {
+
+    @Override
+    public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
+        String sampleId = response.body().getSampleId();
+        Timber.i("sampleId: %s", sampleId);
+    }
+
+    @Override
+    public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
+        Timber.e(t);
+    }
+});
+
+apiService.postSelfieVideoSample(faceLivenessResult.getVideoFilePath(), faceLivenessResult.getSignature(), true).enqueue(new Callback<SampleJson>() {
+
+    @Override
+    public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
+        String sampleId = response.body().getSampleId();
+        Timber.i("sampleId: %s", sampleId);
+    }
+
+    @Override
+    public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
+        Timber.e(t);
+    }
+});
 ```
 
 To run OCR or investigation on more documents altogether (both sides of ID card and/or driving license and so on), you should keep safe `sampleId` of each POST call and then do:
