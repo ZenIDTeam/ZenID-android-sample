@@ -5,7 +5,6 @@ import android.app.Application;
 import java.util.concurrent.TimeUnit;
 
 import cz.trask.zenid.sdk.DocumentModule;
-import cz.trask.zenid.sdk.Security;
 import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.api.ApiConfig;
 import cz.trask.zenid.sdk.api.ApiService;
