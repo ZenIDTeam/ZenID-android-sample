@@ -1,5 +1,27 @@
 # Changelog
 
+### 1.23.0 (2024-04-10) (RecogLibC v4.1.7)
+- New: PACE protocol support for NFC communication.
+- New: SDK provides list of supported countries and documents based on licence activated on the server. Method `ZenId.get().getSecurity().getEnabledFeatures()`
+- New: Check if document has a front/back side. Methods `DocumentVerifier.hasFrontSide(documentRole, documentCountry)` and `DocumentVerifier.hasBackSide(documentRole, documentCountry)`
+- New: Get profiles from backend. Method `Apiservice.getProfiles(apiKey)`
+- New: Step for FaceLiveness `DONT_SMILE`
+- Fix: CameraView prevents application to lock the screen (updated CameraView library).
+  Add URL and credentials to updated CameraView maven repository to your project level gradle file:
+  ```
+  maven {
+    url 'https://maven.pkg.github.com/ZenIDTeam/CameraView'
+    credentials {
+      username = "ZenIDTeam"
+      password = "YOUR_PERSONAL_ACCESS_TOKEN"
+    }
+  }
+  ```
+  Generate your own personal access token and use it as password (YOUR_PERSONAL_ACCESS_TOKEN).
+  You can find more information about Github personal access tokens here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+
+  Change CameraView library version to (2.7.4): `com.otaliastudios:cameraview:2.7.4`
+
 ### 1.22.0 (2023-10-30) (RecogLibC v3.9.6)
 - Remove method `setVideoSettings`. These values are set on backend side.
 

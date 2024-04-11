@@ -14,6 +14,25 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
 ### Migration
 
+#### 1.22.0 -> 1.23.0
+- Copy and paste libraries
+- Update library `net.sf.scuba:scuba-sc-android` to version `0.0.23` and library `org.jmrtd:jmrtd` to version `0.7.21`
+- Add URL and credentials to updated CameraView maven repository to your project level gradle file:
+
+  ```
+  maven {
+    url 'https://maven.pkg.github.com/ZenIDTeam/CameraView'
+    credentials {
+      username = "ZenIDTeam"
+      password = "YOUR_PERSONAL_ACCESS_TOKEN"
+    }
+  }
+  ```
+  Generate your own personal access token and use it as password.
+  You can find more information about Github personal access tokens here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+
+  Change CameraView library version to (2.7.4): `com.otaliastudios:cameraview:2.7.4`
+
 #### 1.21.0 -> 1.22.0
 - Copy and paste libraries
 - Remove method setVideoSettings. Local change of video settings is no longer supported. You can set video settings on backend side.
@@ -64,7 +83,7 @@ You can find full list of models [here](https://github.com/ZenIDTeam/ZenID-andro
 
 ```
 ext {
-    okHttpVersion = '3.14.4'
+    okHttpVersion = '3.14.9'
     retrofitVersion = '2.6.2'
 }
 
@@ -198,6 +217,14 @@ apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
     }
 });
 ```
+
+### Get enabled features
+
+SDK provides list of supported countries and documents based on licence activated on the server.
+```
+ZenId.get().getSecurity().getEnabledFeatures()
+```
+This method returns object `EnabledFeatures` with list of enabled countries, document roles, document pages and verifiers.
 
 ### Select profile
 
@@ -338,6 +365,7 @@ FaceLivenessState:
 - BLURRY = The picture is too blurry.
 - DARK = The picture is dark.
 - HOLD_STILL = Hold still.
+- DONT_SMILE = Don't smile.
 - RESETING = Face is not verified, please try again. Move to better light conditions. Minimize sudden movements.
 
 ### Document picture feature
@@ -376,6 +404,16 @@ DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(Docu
 DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1, filter2));
 
 documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
+```
+
+#### Document front/back side check
+
+Use methods `hasFrontSide` and `hasBackSide` to check if document front/back side is available for scanning.
+
+```
+DocumentVerifier verifier = (DocumentVerifier) ZenId.get().getVerifier(DocumentVerifier.class);
+verifier.hasFrontSide(documentRole, documentCountry)
+verifier.hasBackSide(documentRole, documentCountry)
 ```
 
 #### NFC
@@ -576,6 +614,20 @@ For example:
 }
 ```
 
+#### Face liveness mode
+
+PICTURE:
+```
+faceLivenessView.setMode(FaceLivenessMode.PICTURE);
+```
+FaceLivenessResult returns selfie picture file. Path to the selfie picture file is in parameter filePath. To post selfie picture to our backend system use method postSelfieSample from module sdk-api-zenid.</br>For more details about api calls see chapter "More details on the sdk-api-zenid module".
+
+VIDEO:
+```
+faceLivenessView.setMode(FaceLivenessMode.VIDEO);
+```
+FaceLivenessResult returns selfie picture file and also selfie video file.</br>Path to the selfie picture file is in parameter filePath. To post selfie picture to our backend system use method postSelfieSample from module sdk-api-zenid.</br>Path to the selfie video file is in parameter videoFilePath. To post selfie video file to our backend system use method postSelfieVideoSample from module sdk-api-zenid.</br>For more details about api calls see chapter "More details on the sdk-api-zenid module".
+
 #### Face liveness settings
 
 ```
@@ -674,19 +726,61 @@ public Call<SampleJson> postDocumentPictureSample(@NonNull DocumentPictureResult
 
 To run optical character recognition (OCR) and investigate documents (please follow the link at http://your.frauds.zenid.cz/Sensitivity/Validators to get more details what investigation is about), you need to connect to our backend systems. To do so, you need to use our `ApiService` and and make appropriate calls to upload documents, for instance:
 ```
-apiService.postDocumentPictureSample(documentCountry, documentRole, documentCode, documentPage, documentPicturePath).enqueue(new retrofit2.Callback<SampleJson>() {
+apiService.postDocumentPictureSample(documentPictureResult, true).enqueue(new retrofit2.Callback<SampleJson>() {
 
     @Override
-    public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+    public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
         String sampleId = response.body().getSampleId();
         Timber.i("sampleId: %s", sampleId);
     }
 
     @Override
-    public void onFailure(Call<SampleJson> call, Throwable t) {
+    public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
         Timber.e(t);
     }
-}); 
+});
+
+apiService.postHologramSample(hologramResult, true).enqueue(new retrofit2.Callback<SampleJson>() {
+
+    @Override
+    public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
+        String sampleId = response.body().getSampleId();
+        Timber.i("sampleId: %s", sampleId);
+    }
+
+    @Override
+    public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
+        Timber.e(t);
+    }
+});
+
+apiService.postSelfieSample(selfieResult.getFilePath(), selfieResult.getSignature(), true).enqueue(new retrofit2.Callback<SampleJson>() {
+
+    @Override
+    public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
+        String sampleId = response.body().getSampleId();
+        Timber.i("sampleId: %s", sampleId);
+    }
+
+    @Override
+    public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
+        Timber.e(t);
+    }
+});
+
+apiService.postSelfieVideoSample(faceLivenessResult.getVideoFilePath(), faceLivenessResult.getSignature(), true).enqueue(new Callback<SampleJson>() {
+
+    @Override
+    public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
+        String sampleId = response.body().getSampleId();
+        Timber.i("sampleId: %s", sampleId);
+    }
+
+    @Override
+    public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
+        Timber.e(t);
+    }
+});
 ```
 
 To run OCR or investigation on more documents altogether (both sides of ID card and/or driving license and so on), you should keep safe `sampleId` of each POST call and then do:
