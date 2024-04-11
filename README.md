@@ -17,7 +17,8 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 #### 1.22.0 -> 1.23.0
 - Copy and paste libraries
 - Update library `net.sf.scuba:scuba-sc-android` to version `0.0.23` and library `org.jmrtd:jmrtd` to version `0.7.21`
-- Add URL and credentials to updated CameraView maven repository to your project level gradle file:
+- If you want to use updated version of CameraView library, follow these steps:
+  Add URL and credentials to updated CameraView maven repository to your project level gradle file:
 
   ```
   maven {
@@ -28,10 +29,11 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
     }
   }
   ```
-  Generate your own personal access token and use it as password.
+  Generate your own personal access token and use it as password (YOUR_PERSONAL_ACCESS_TOKEN). Github packages requires credentials even for public packages. Minimal required scope for personal access token is read:packages
   You can find more information about Github personal access tokens here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
 
   Change CameraView library version to (2.7.4): `com.otaliastudios:cameraview:2.7.4`
+  Sync project with gradle files and updated CameraView library will be downloaded.
 
 #### 1.21.0 -> 1.22.0
 - Copy and paste libraries

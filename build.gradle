@@ -21,7 +21,9 @@ allprojects {
                 username = project.findProperty("gpr.username") ?: System.getenv("USERNAME")
                 password = project.findProperty("gpr.password") ?: System.getenv("PASSWORD")
                 // Use username = "ZenIDTeam"
-                // Generate your own personal access token and use it as password (password = YOUR_PERSONAL_ACCESS_TOKEN)
+                // Generate your own personal access token and use it as password (YOUR_PERSONAL_ACCESS_TOKEN).
+                // Github packages requires credentials even for public packages.
+                // Minimal required scope for personal access token is read:packages
                 // You can find more information about Github personal access tokens here:
                 // https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
             }
