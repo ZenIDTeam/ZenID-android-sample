@@ -29,4 +29,7 @@ jobs:
           echo "zenid_apikey=abc" >> local.properties
 
       - name: Build with Gradle
+        env:
+          USERNAME: ${{ secrets.CAMERAVIEW_MAVEN_USERNAME }}
+          TOKEN: ${{ secrets.CAMERAVIEW_MAVEN_PASSWORD }}
         run: ./gradlew basic-sample:clean build
