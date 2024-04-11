@@ -31,5 +31,5 @@ jobs:
       - name: Build with Gradle
         env:
           USERNAME: ${{ secrets.CAMERAVIEW_MAVEN_USERNAME }}
-          TOKEN: ${{ secrets.CAMERAVIEW_MAVEN_PASSWORD }}
+          PASSWORD: ${{ secrets.CAMERAVIEW_MAVEN_PASSWORD }}
         run: ./gradlew basic-sample:clean build

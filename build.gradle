@@ -18,8 +18,8 @@ allprojects {
         maven {
             url 'https://maven.pkg.github.com/ZenIDTeam/CameraView'
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+                username = project.findProperty("gpr.username") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.password") ?: System.getenv("PASSWORD")
                 // Use username = "ZenIDTeam"
                 // Generate your own personal access token and use it as password (password = YOUR_PERSONAL_ACCESS_TOKEN)
                 // You can find more information about Github personal access tokens here:
