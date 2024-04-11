@@ -6,7 +6,8 @@
 - New: Check if document has a front/back side. Methods `DocumentVerifier.hasFrontSide(documentRole, documentCountry)` and `DocumentVerifier.hasBackSide(documentRole, documentCountry)`
 - New: Get profiles from backend. Method `Apiservice.getProfiles(apiKey)`
 - New: Step for FaceLiveness `DONT_SMILE`
-- Fix: CameraView prevents application to lock the screen (updated CameraView library).
+- Fix: CameraView prevents application to lock the screen (updated CameraView library). 
+  If you want to use updated version of CameraView library, follow these steps:
   Add URL and credentials to updated CameraView maven repository to your project level gradle file:
   ```
   maven {
@@ -17,10 +18,11 @@
     }
   }
   ```
-  Generate your own personal access token and use it as password (YOUR_PERSONAL_ACCESS_TOKEN).
-  You can find more information about Github personal access tokens here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-
+  Generate your own personal access token and use it as password (YOUR_PERSONAL_ACCESS_TOKEN). Github packages requires credentials even for public packages. Minimal required scope for personal access token is read:packages
+  You can find more information about Github personal access tokens and how to generate them here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+  
   Change CameraView library version to (2.7.4): `com.otaliastudios:cameraview:2.7.4`
+  Sync project with gradle files and updated CameraView library will be downloaded.
 
 ### 1.22.0 (2023-10-30) (RecogLibC v3.9.6)
 - Remove method `setVideoSettings`. These values are set on backend side.
