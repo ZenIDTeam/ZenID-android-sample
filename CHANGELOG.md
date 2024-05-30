@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.23.1 (2024-05-30) (RecogLibC v4.1.11)
+- Fix (SZENID-2625) java.lang.NullPointerException while calling:
+  - cz.trask.zenid.faceliveness.FaceLivenessStepParams.isHasFailed()
+  - cz.trask.zenid.faceliveness.FaceLivenessStepParams.getPassedCheckCount()
+  - cz.trask.zenid.faceliveness.FaceLivenessStepParams.getTotalCheckCount()
+
 ### 1.23.0 (2024-04-10) (RecogLibC v4.1.7)
 - New: PACE protocol support for NFC communication.
 - New: SDK provides list of supported countries and documents based on licence activated on the server. Method `ZenId.get().getSecurity().getEnabledFeatures()`

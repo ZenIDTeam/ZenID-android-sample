@@ -51,6 +51,9 @@ public class FaceLivenessActivity extends AppCompatActivity {
                 Timber.i("onStateChanged - state: %s", state);
                 if (stepParams != null) {
                     Timber.i("onStateChanged - stepParams.name: %s", stepParams.getName());
+                    Timber.i("onStateChanged - stepParams.isHasFailed: %s", stepParams.isHasFailed());
+                    Timber.i("onStateChanged - stepParams.getPassedCheckCount: %s", stepParams.getPassedCheckCount());
+                    Timber.i("onStateChanged - stepParams.getTotalCheckCount: %s", stepParams.getTotalCheckCount());
                 }
             }
 
