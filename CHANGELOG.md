@@ -32,13 +32,13 @@
   ```
   Generate your own personal access token and use it as password (YOUR_PERSONAL_ACCESS_TOKEN). Github packages requires credentials even for public packages. Minimal required scope for personal access token is read:packages
   You can find more information about Github personal access tokens and how to generate them here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-  - Fix: Fixed vaticanese MRZ structure, and update default MRZ parsing for it. TRASKZENIDPV-1974
-  - Fix: Fixed The number of steps in the face liveness verifier (Index out of range error in backend). TRASKZENIDPV-2331
-  - Fix: Fixed various crashes and "Unknown Document" upload issues. TRASKZENIDPV-2099 TRASKZENIDPV-2065 TRASKZENIDPV-2356
-  - Fix: It is possible to change Profile in face liveness. TRASKZENIDPV-2343
-  - Improvement: Dominican ID Card MRZ checksum handling updated also on client. TRASKZENIDPV-2182
-  - Improvement: Improved smile detection with a new ML model. TRASKZENIDPV-1822
-  - Fix: Fixed empty path while getting the ImagePreview event in NFC state.
+- Fix: Fixed vaticanese MRZ structure, and update default MRZ parsing for it. TRASKZENIDPV-1974
+- Fix: Fixed The number of steps in the face liveness verifier (Index out of range error in backend). TRASKZENIDPV-2331
+- Fix: Fixed various crashes and "Unknown Document" upload issues. TRASKZENIDPV-2099 TRASKZENIDPV-2065 TRASKZENIDPV-2356
+- Fix: It is possible to change Profile in face liveness. TRASKZENIDPV-2343
+- Improvement: Dominican ID Card MRZ checksum handling updated also on client. TRASKZENIDPV-2182
+- Improvement: Improved smile detection with a new ML model. TRASKZENIDPV-1822
+- Fix: Fixed empty path while getting the ImagePreview event in NFC state.
   
 
   Change CameraView library version to (2.7.4): `com.otaliastudios:cameraview:2.7.4`
