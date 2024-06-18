@@ -5,6 +5,7 @@
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.isHasFailed()
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.getPassedCheckCount()
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.getTotalCheckCount()
+- Fix: Lost face in face liveness causes the process to be restarted when "Face must be stable and detectable all the time" is set to true. TRASKZENIDPV-2555 (Backported to 4.1.9)
 
 ### 1.23.0 (2024-04-10) (RecogLibC v4.1.7)
 - New: Support for passports of USA v2006/2017 (NFC only). TRASKZENIDPV-2009
