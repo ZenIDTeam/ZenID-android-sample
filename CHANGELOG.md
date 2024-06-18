@@ -1,5 +1,16 @@
 # Changelog
 
+### 1.25.0 (YYYY-MM-DD) (RecogLibC v4.3.X)
+- Improvement: Removed Time limit for reading data from the NFC chip from settings. TRASKZENIDPV-1859
+- Improvement: Decreased risk of misclassifying documents. SZENID-2633, SZENID-2634, TRASKZENIDPV-2269, TRASKZENIDPV-2689 
+- Fix: If one document is replaced by another during the scanning process using the SDK, all validators are reset, and only the data related to the last scanned document is sent to the backend. SZENID-2666
+
+
+### 1.24.0 (YYYY-MM-DD) (RecogLibC v4.2.10)
+- Fix: Fixed the DocumentVerifier getting stuck in TextNotReadable state while trying to scan the MRZ. TRASKZENIDPV-2567 TRASKZENIDPV-2577 TRASKZENIDPV-1769
+- Fix: Fixed behavior when sometimes focus and reflection validators fail on backend for images uploaded from SDK. TRASKZENIDPV-2556
+- Improvement: Blur and specular validator writes note to backend validator results if accept score was lower then defined threshold because of downcreasing required sensitivity on SDK during processing of cards. TRASKZENIDPV-2556
+
 ### 1.23.1 (2024-05-30) (RecogLibC v4.1.11)
 - Fix (SZENID-2625) java.lang.NullPointerException while calling:
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.isHasFailed()
