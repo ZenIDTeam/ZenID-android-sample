@@ -34,9 +34,9 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
   Change CameraView library version to (2.7.4): `com.otaliastudios:cameraview:2.7.4`
   Sync project with gradle files and updated CameraView library will be downloaded.
-  - The DONT_SMILE state is now used in the FaceLivenessView. It is triggered when the user continually smiles during the face liveness check. During the face liveness process, there is a step where the user is asked to smile. However, this could be defeated by a fraudster who uses a mask with a permanent smile. The "Don't Smile" check is designed to counter this. Typically, this check runs in the background. If the user stops smiling even briefly, the DONT_SMILE state is not activated. This is the most common scenario. However, if the user consistently smiles, we eventually prompt them to stop smiling and then return the DONT_SMILE state.
-  - Added a new validator that checks the MRZ to the SDK. To preserve the previous behavior, disable it the backend "Sensitivity" page in the MRZ validator.
-  - The TEXT_NOT_READABLE state in the DocumentView should now be handled if the MRZ validator is enabled. It was previously used just for NFC, and now it's used by the MRZ validator too.
+- The DONT_SMILE state is now used in the FaceLivenessView. It is triggered when the user continually smiles during the face liveness check. During the face liveness process, there is a step where the user is asked to smile. However, this could be defeated by a fraudster who uses a mask with a permanent smile. The "Don't Smile" check is designed to counter this. Typically, this check runs in the background. If the user stops smiling even briefly, the DONT_SMILE state is not activated. This is the most common scenario. However, if the user consistently smiles, we eventually prompt them to stop smiling and then return the DONT_SMILE state.
+- Added a new validator that checks the MRZ to the SDK. To preserve the previous behavior, disable it the backend "Sensitivity" page in the MRZ validator.
+- The TEXT_NOT_READABLE state in the DocumentView should now be handled if the MRZ validator is enabled. It was previously used just for NFC, and now it's used by the MRZ validator too.
 
 #### 1.21.0 -> 1.22.0
 - Copy and paste libraries
