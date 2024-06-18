@@ -5,13 +5,19 @@
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.isHasFailed()
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.getPassedCheckCount()
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.getTotalCheckCount()
+- Fix: Lost face in face liveness causes the process to be restarted when "Face must be stable and detectable all the time" is set to true. TRASKZENIDPV-2555 (Backported to 4.1.9)
 
 ### 1.23.0 (2024-04-10) (RecogLibC v4.1.7)
+- New: Support for passports of USA v2006/2017 (NFC only). TRASKZENIDPV-2009
+- New: Support for Pakistanese passports v2022 (NFC only). TRASKZENIDPV-2009
+- New: Support for Japanese passports v2013 (NFC only). TRASKZENIDPV-2009
 - New: PACE protocol support for NFC communication.
 - New: SDK provides list of supported countries and documents based on licence activated on the server. Method `ZenId.get().getSecurity().getEnabledFeatures()`
 - New: Check if document has a front/back side. Methods `DocumentVerifier.hasFrontSide(documentRole, documentCountry)` and `DocumentVerifier.hasBackSide(documentRole, documentCountry)`
 - New: Get profiles from backend. Method `Apiservice.getProfiles(apiKey)`
-- New: Step for FaceLiveness `DONT_SMILE`
+- New: Step for FaceLiveness `DONT_SMILE` TRASKZENIDPV-1822
+- New: The outline is drawn when the model is known in advance. TRASKZENIDPV-2261
+- Improvement: Added a new validator that checks the MRZ to the SDK. It is disabled by default but can be enabled in the MRZ Validator settings in the backend Sensitivity page. "MRZ successfully read" is no longer shown in feedback. Use the validator debug view instead. The TEXT_NOT_READABLE state is now used by the MRZ validator, not just by the NFC feature. TRASKZENIDPV-1769
 - Fix: CameraView prevents application to lock the screen (updated CameraView library). 
   If you want to use updated version of CameraView library, follow these steps:
   Add URL and credentials to updated CameraView maven repository to your project level gradle file:
@@ -26,12 +32,30 @@
   ```
   Generate your own personal access token and use it as password (YOUR_PERSONAL_ACCESS_TOKEN). Github packages requires credentials even for public packages. Minimal required scope for personal access token is read:packages
   You can find more information about Github personal access tokens and how to generate them here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+  - Fix: Fixed vaticanese MRZ structure, and update default MRZ parsing for it. TRASKZENIDPV-1974
+  - Fix: Fixed The number of steps in the face liveness verifier (Index out of range error in backend). TRASKZENIDPV-2331
+  - Fix: Fixed various crashes and "Unknown Document" upload issues. TRASKZENIDPV-2099 TRASKZENIDPV-2065 TRASKZENIDPV-2356
+  - Fix: It is possible to change Profile in face liveness. TRASKZENIDPV-2343
+  - Improvement: Dominican ID Card MRZ checksum handling updated also on client. TRASKZENIDPV-2182
+  - Improvement: Improved smile detection with a new ML model. TRASKZENIDPV-1822
+  - Fix: Fixed empty path while getting the ImagePreview event in NFC state.
   
+
   Change CameraView library version to (2.7.4): `com.otaliastudios:cameraview:2.7.4`
   Sync project with gradle files and updated CameraView library will be downloaded.
 
 ### 1.22.0 (2023-10-30) (RecogLibC v3.9.6)
+- New: Support for Andorran passports v2017 (NFC only). TRASKZENIDPV-1572
+- New: Support for Sanmarinese passports v2006 (NFC only). TRASKZENIDPV-1572
+- New: Support for Vaticanian passports v2013 (NFC only). TRASKZENIDPV-1974
+- New: Support for Liechtensteiner passports v2006 (NFC only). TRASKZENIDPV-1974
+- New: System updated to enable support for documents with just extracting its NFC data. TRASKZENIDPV-1572
+- Improvement: Italian ID cards suppord broadened: Italian ID cards v2016/2022. TRASKZENIDPV-1708
+- Improvement: SDK checks if barcode has predefined format. SZENID-2256
+- New: Support for Belgian Passport v2022. TRASKZENIDPV-1358
 - Remove method `setVideoSettings`. These values are set on backend side.
+- Profile name can not contain diacritics (it was causing init SDK crashes). TRASKZENIDPV-1744
+- Fix: Fixed checksum computing for Slovak Driver licenses. TRASKZENIDPV-1981 
 
 ### 1.21.0 (2023-09-27) (RecogLibC v3.8.4)
 - New: Support for Dominican ID cards v2014.
