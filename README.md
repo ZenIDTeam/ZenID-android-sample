@@ -203,6 +203,11 @@ Before you start, make sure "Android Package Name" are filled in the settings pa
 
 These steps need to be performed before any operation on documents, otherwise you will get a RecogLibCException with "Security Error" in the message.
 
+> [!IMPORTANT]
+> getChallengeToken() and getInitSdk() should always be called together as getChallengeToken() resets the session.
+
+> [!IMPORTANT]
+> getChallengeToken() and getInitSdk() should not be called while a card or face is being processed.
 ```
 String challengeToken = ZenId.get().getSecurity().getChallengeToken();
 Timber.i("challengeToken: %s", challengeToken);
