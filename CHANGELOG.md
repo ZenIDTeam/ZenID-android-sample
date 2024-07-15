@@ -1,5 +1,10 @@
 # Changelog
 
+### 4.3.10 (2024-07-15) (RecogLibC v4.3.10)
+- Improvement: Removed Time limit for reading data from the NFC chip from settings. TRASKZENIDPV-1859
+- Improvement: Decreased risk of misclassifying documents. SZENID-2633, SZENID-2634, TRASKZENIDPV-2269, TRASKZENIDPV-2689
+- Fix: If one document is replaced by another during the scanning process using the SDK, all validators are reset, and only the data related to the last scanned document is sent to the backend. SZENID-2666
+
 ### 4.2.17 (2024-07-15) (RecogLibC v4.2.17)
 - Fix: Fixed the DocumentVerifier getting stuck in TextNotReadable state while trying to scan the MRZ. TRASKZENIDPV-2567 TRASKZENIDPV-2577 TRASKZENIDPV-1769
 - Fix: Fixed behavior when sometimes focus and reflection validators fail on backend for images uploaded from SDK. TRASKZENIDPV-2556
