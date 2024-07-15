@@ -1,5 +1,8 @@
 # Changelog
 
+### 4.1.17 (2024-07-15) (RecogLibC v4.1.17)
+- Versioning for Android SDK and Core library is unified from now on
+
 ### 1.23.1 (2024-05-30) (RecogLibC v4.1.11)
 - Fix (SZENID-2625) java.lang.NullPointerException while calling:
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.isHasFailed()
