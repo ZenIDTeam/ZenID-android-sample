@@ -1,5 +1,13 @@
 # Changelog
 
+### 4.2.17 (2024-07-15) (RecogLibC v4.2.17)
+- Fix: Fixed the DocumentVerifier getting stuck in TextNotReadable state while trying to scan the MRZ. TRASKZENIDPV-2567 TRASKZENIDPV-2577 TRASKZENIDPV-1769
+- Fix: Fixed behavior when sometimes focus and reflection validators fail on backend for images uploaded from SDK. TRASKZENIDPV-2556
+- Improvement: Blur and specular validator writes note to backend validator results if accept score was lower then defined threshold because of downcreasing required sensitivity on SDK during processing of cards. TRASKZENIDPV-2556
+
+### 4.1.17 (2024-07-15) (RecogLibC v4.1.17)
+- Versioning for Android SDK and Core library is unified from now on
+
 ### 1.23.1 (2024-05-30) (RecogLibC v4.1.11)
 - Fix (SZENID-2625) java.lang.NullPointerException while calling:
   - cz.trask.zenid.faceliveness.FaceLivenessStepParams.isHasFailed()

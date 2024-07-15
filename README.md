@@ -14,6 +14,15 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
 ### Migration
 
+### 4.1.17 -> 4.2.17
+- Copy and paste libraries
+
+### 1.23.1 -> 4.1.17
+- Copy and paste libraries
+
+### 1.23.0 -> 1.23.1
+- Copy and paste libraries
+
 #### 1.22.0 -> 1.23.0
 - Copy and paste libraries
 - Update library `net.sf.scuba:scuba-sc-android` to version `0.0.23` and library `org.jmrtd:jmrtd` to version `0.7.21`
