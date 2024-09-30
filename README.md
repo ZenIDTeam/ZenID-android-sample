@@ -14,16 +14,69 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
 ### Migration
 
-### 4.2.17 -> 4.3.10
+#### 4.3.10 -> 4.4.3
+- Copy and paste libraries
+- Remove maven credentials to CameraView maven repository from your project level gradle file
+
+  ```
+  maven {
+    url 'https://maven.pkg.github.com/ZenIDTeam/CameraView'
+    credentials {
+      username = "ZenIDTeam"
+      password = "YOUR_PERSONAL_ACCESS_TOKEN"
+    }
+  }
+  ```
+  
+- Remove dependency: `com.otaliastudios:cameraview:2.7.4` from your app level gradle file
+- Add dependencies:
+  `com.google.android.gms:play-services-tasks:18.1.0`
+  `com.otaliastudios.opengl:egloo:0.6.1`
+- You will be forced to implement new callback functions `onError(ZenIdException exception)` in each view callback, e.g.:
+
+  ```
+  documentPictureView.setCallback(new DocumentPictureView.Callback() {
+
+    @Override
+    public void onStateChanged(DocumentPictureState state) { }
+
+    @Override
+    public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) { }
+
+    @Override
+    public void onError(ZenIdException e) {
+      // Handle exception here
+      Timber.e(e);
+    }
+  });
+  ```
+  
+  Also you will be forced to surround some functions with try...catch(ZenIdException exception), e.g.:
+
+  ```
+  try {
+      documentPictureView.setLoggerCallback((module, method, message) -> Timber.tag(module).d("%s - %s", method, message));
+      documentPictureView.setLifecycleOwner(this);
+      documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
+      documentPictureView.setPreviewStreamSize(SizeSelectors.biggest());
+      documentPictureView.setDocumentPictureSettings(documentPictureSettings);
+      documentPictureView.enableDefaultVisualization(visualizationSettings); // enable/disable
+  } catch (Exception e) {
+      // Handle exception here
+      Timber.e(e);
+  }
+  ```
+
+#### 4.2.17 -> 4.3.10
 - Copy and paste libraries
 
-### 4.1.17 -> 4.2.17
+#### 4.1.17 -> 4.2.17
 - Copy and paste libraries
 
-### 1.23.1 -> 4.1.17
+#### 1.23.1 -> 4.1.17
 - Copy and paste libraries
 
-### 1.23.0 -> 1.23.1
+#### 1.23.0 -> 1.23.1
 - Copy and paste libraries
 
 #### 1.22.0 -> 1.23.0
@@ -187,21 +240,59 @@ ApiService apiService = new ApiService.Builder()
         .build();
 ```
 
+You can check our implementation in Sample app (MyApplication class)
+
 #### Init callback
 
 You can use ZenId.InitCallback to be notified when ZENID SDK is ready for use. Initialization itself might take a few seconds. It all depends on count of models (documents).
 
 ```
 zenId.initialize(new ZenId.InitCallback() {
-
     @Override
     public void onInitialized() {
         // Initialized
+    }
+
+    @Override
+    public void onInitializationFailed(ZenIdException e) {
+        // Initialization failed - handle exception
     }
 });
 ```
 
 Please, check out our samples and you will get the whole picture on how it works.
+
+#### Logger callback
+
+In previous versions of Android SDK there was no option to turn on/off logs. Starting from Android SDK version 4.4.3 you can set a LoggerCallback to intercept logs from SDK and print logs according to your preferences.
+Use function setLoggerCallback with parameter LoggerCallback interface to receive logs. You will receive 3 string parameters (module, method, message) which might be helpful during debugging and solving issues.
+
+Global logger:
+
+In this callback you will receive logs from Core library, from various processes and threads.
+Use security module function setLoggerCallback to set listener:
+
+```
+zenId.getSecurity().setLoggerCallback(new LoggerCallback() {
+    @Override
+    public void logMessage(String module, String method, String message) {
+        // Handle logging here (Write the log to console, file, Firebase or some other system you use) e.g.
+        Timber.tag(module).d("%s - %s", method, message)
+    }
+});
+```
+
+Logger for specific view:
+
+You can also set LoggerCallback on each view provided by our SDK DocumentPictureView, FacelivenessView, SelfieView, ...) to catch and print longs from Android SDK. You will receive 3 string parameters (module, method, message) which might be helpful during debugging and solving issues.
+Use view function setLoggerCallback to set listener:
+
+```
+documentPictureView.setLoggerCallback((module, method, message) -> {
+    // Handle logging here e.g.
+    Timber.tag(module).d("%s - %s", method, message);
+});
+```
 
 ### Authorization
 
@@ -214,6 +305,7 @@ Before you start, make sure "Android Package Name" are filled in the settings pa
 * Step 3. Call authorize using the response token obtained in the previous step. It will return a bool representing success or failure.
 
 These steps need to be performed before any operation on documents, otherwise you will get a RecogLibCException with "Security Error" in the message.
+All these steps need to be performed together as one action.
 
 > [!IMPORTANT]
 > getChallengeToken() and getInitSdk() should always be called together as getChallengeToken() resets the session.
@@ -238,6 +330,40 @@ apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
         Timber.e(t);
     }
 });
+
+private void authorize() {
+    String challengeToken = null;
+    try {
+        challengeToken = ZenId.get().getSecurity().getChallengeToken();
+    } catch (ZenIdException e) {
+        Timber.e(e);
+    }
+    Timber.i("challengeToken: %s", challengeToken);
+    apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
+
+        @Override
+        public void onResponse(@NonNull Call<InitResponseJson> call, @NonNull Response<InitResponseJson> response) {
+            InitResponseJson initResponseJson = response.body();
+            if (initResponseJson == null) {
+                Timber.e("Authorization response body is empty!");
+                return;
+            }
+            String responseToken = initResponseJson.getResponse();
+            Timber.i("responseToken: %s", responseToken);
+            try {
+                boolean authorized = ZenId.get().getSecurity().authorize(getApplicationContext(), responseToken);
+                Timber.i("Authorized: %s", authorized);
+            } catch (ZenIdException e) {
+                Timber.e(e);
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<InitResponseJson> call, @NonNull Throwable t) {
+            Timber.e(t);
+        }
+    });
+}
 ```
 
 ### Get enabled features
@@ -264,6 +390,7 @@ Every each use-case has its own view class:
   - cz.trask.zenid.sdk.HologramView for the hologram verification
   - cz.trask.zenid.sdk.faceliveness.FaceLivenessView for the real-time face liveness check 
   - cz.trask.zenid.sdk.selfie.SelfieView to take a good selfie picture
+  - cz.trask.zenid.sdk.nfc.NfcService to read data from chip of documents with dual interface (NFC antenna) via NFC
 
 To use the DocumentPictureView for instance, simply add a DocumentPictureView to your layout. 
 
@@ -311,8 +438,13 @@ documentPictureView.setCallback(new DocumentPictureView.Callback() {
     }
 
     @Override
-    public void onPictureTaken(DocumentResult result) {
+    public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) {
         Timber.i("result: %s", result);
+    }
+
+    @Override
+    public void onError(ZenIdException e) {
+        Timber.e(e);
     }
 });
 ```
@@ -365,8 +497,12 @@ DocumentPictureState:
 - OK = The picture is ok.
 - DARK = The picture is dark.
 - BARCODE = The barcode is unreadable.
+- TEXT_NOT_READABLE = Text on the document is not readable.
+- HOLOGRAM = Hologram verification required.
+- NFC = NFC verification required.
 
 HologramState:
+- CENTER = Align the document to the center of the screen.
 - TILT_LEFT_AND_RIGHT = Tilt your phone left or right.
 - TILT_UP_AND_DOWN = Tilt your phone up or down.
 - OK = Scanning done, the hologram is ok.
@@ -380,15 +516,21 @@ SelfieState:
 - BAD_FACE_ANGLE = When the user's head is turned away from the camera.
  
 FaceLivenessState:
-- LOOK_AT_ME =  Turn head towards camera.
+- LOOK_AT_ME = Turn head towards camera.
 - TURN_HEAD = Turn head slowly towards arrow.
 - SMILE = Smile to the camera or move your mouth.
-- DONE = The scanning is done.
+- OK = The scanning is done.
 - BLURRY = The picture is too blurry.
 - DARK = The picture is dark.
 - HOLD_STILL = Hold still.
 - DONT_SMILE = Don't smile.
 - RESETING = Face is not verified, please try again. Move to better light conditions. Minimize sudden movements.
+
+NfcState:
+- START = Connection established.
+- PERSONAL_DATA = Reading personal data.
+- PHOTO = Reading photo.
+- OK = Reading is done, all data retrieved.
 
 ### Document picture feature
 
@@ -396,9 +538,9 @@ FaceLivenessState:
 
 ```
 DocumentPictureSettings documentPictureSettings = new DocumentPictureSettings.Builder()
-        .specularAcceptableScore(15)
         .enableAimingCircle(true)
-        .readBarcode(true)
+        .showTimer(true)
+        .drawOutline(true)
         .build();
 
 documentPictureView.setDocumentPictureSettings(documentPictureSettings);
@@ -443,8 +585,8 @@ verifier.hasBackSide(documentRole, documentCountry)
 It is up to you to use this package. Optional. First of all, you need to set targetSdkVersion 31 at least.
 When you decide to use this package, please add these dependencies.
 ```
-implementation 'net.sf.scuba:scuba-sc-android:0.0.20'
-implementation 'org.jmrtd:jmrtd:0.7.17'
+implementation 'net.sf.scuba:scuba-sc-android:0.0.23'
+implementation 'org.jmrtd:jmrtd:0.7.21'
 implementation 'com.gemalto.jp2:jp2-android:1.0.3'
 ```
 
@@ -462,7 +604,6 @@ public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) {
 
 ```
 public enum NfcStatus {
-
     DEVICE_DOES_NOT_SUPPORT_NFC, // Device does not have NFC reader.
     SAMPLE_WITHOUT_CHIP, // Sample does not have NFC tag.
     NFC_VALIDATOR_DISABLED, // NFC validator is disabled on backend side.
@@ -500,8 +641,8 @@ public interface NfcService.Callback {
 public enum NfcState {
     START, // Connection established.
     PERSONAL_DATA, // Reading personal data.
-    PHOTO, // Reading photo
-    OK; // All data retrieved
+    PHOTO, // Reading photo.
+    OK; // All data retrieved.
 }
 ```
 
@@ -517,6 +658,13 @@ if (format.equals(FacePictureFormat.JP2)) {
     bitmap = BitmapFactory.decodeFile(picturePath);
 }
 ```
+
+To get number of reading attempts set it your verifier use `nfcService.getNumberOfReadingAttempts()`
+To check if it is allowed to skip this step use `nfcService.isSkipNfcAllowed()`
+If you want to skip NFC verification use `nfcService.skipNfcVerification()` get your result object `DocumentPictureResult result = nfcService.getDocumentPictureResult(NfcActivity.this)` and at this point you can upload the result.
+
+Please check our implementation in Sample app (NfcActivity)
+
 ### Hologram feature
 
 #### Hologram settings
@@ -524,6 +672,7 @@ if (format.equals(FacePictureFormat.JP2)) {
 ```
 HologramSettings hologramSettings = new HologramSettings.Builder()
         .enableAimingCircle(true)
+        .drawOutline(true)
         .build();
 
 hologramView.setHologramSettings(hologramSettings);
@@ -691,8 +840,6 @@ You can set video settings on backend side.
 When you need more control over the frame processing, you can use this method `documentPictureView.setPreviewStreamSize()`. The same thing for face liveness or selfie.
 For instance when you want to have as big resolution as possible:
 ```
-import com.otaliastudios.cameraview.size.SizeSelectors;
-
 documentPictureView.setPreviewStreamSize(SizeSelectors.biggest());
 ```
 Please take a look into the cameraView documentation here https://natario1.github.io/CameraView/docs/capture-size - SizeSelectors utilities and configure your size selector as you wish.

@@ -5,7 +5,9 @@ import android.app.Application;
 import java.util.concurrent.TimeUnit;
 
 import cz.trask.zenid.sdk.DocumentModule;
+import cz.trask.zenid.sdk.LoggerCallback;
 import cz.trask.zenid.sdk.ZenId;
+import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.api.ApiConfig;
 import cz.trask.zenid.sdk.api.ApiService;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessModule;
@@ -47,6 +49,18 @@ public class MyApplication extends Application {
                 @Override
                 public void onInitialized() {
                     LogUtils.logInfo(getApplicationContext(), "Initialized.");
+                }
+
+                @Override
+                public void onInitializationFailed(ZenIdException e) {
+                    Timber.e(e);
+                }
+            });
+
+            zenId.getSecurity().setLoggerCallback(new LoggerCallback() {
+                @Override
+                public void logMessage(String module, String method, String message) {
+
                 }
             });
         }

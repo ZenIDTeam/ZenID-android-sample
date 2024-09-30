@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.gemalto.jp2.JP2Decoder;
@@ -78,21 +79,21 @@ public class NfcActivity extends AppCompatActivity {
         tvNfcState = findViewById(R.id.nfcState);
         bSkipNfc = findViewById(R.id.nfcSkip);
 
-        if (nfcService.isSkipNfcAllowed()) {
-            bSkipNfc.setVisibility(View.VISIBLE);
-        } else {
-            bSkipNfc.setVisibility(View.GONE);
+        try {
+            if (nfcService.isSkipNfcAllowed()) {
+                bSkipNfc.setVisibility(View.VISIBLE);
+            } else {
+                bSkipNfc.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            Timber.e(e);
         }
 
-        bSkipNfc.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                nfcService.skipNfcVerification();
-                DocumentPictureResult result = nfcService.getDocumentPictureResult(NfcActivity.this);
-                postDocumentPictureSample(result);
-                finish();
-            }
+        bSkipNfc.setOnClickListener(v -> {
+            nfcService.skipNfcVerification();
+            DocumentPictureResult result = nfcService.getDocumentPictureResult(NfcActivity.this);
+            postDocumentPictureSample(result);
+            finish();
         });
     }
 
@@ -177,13 +178,13 @@ public class NfcActivity extends AppCompatActivity {
         MyApplication.apiService.postDocumentPictureSample(result).enqueue(new retrofit2.Callback<SampleJson>() {
 
             @Override
-            public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+            public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
                 finish();
             }
 
             @Override
-            public void onFailure(Call<SampleJson> call, Throwable t) {
+            public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
                 Timber.e(t);
             }
         });

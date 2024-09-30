@@ -1,11 +1,9 @@
 package cz.trask.zenid.sample.ui;
 
 import android.os.Bundle;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.Arrays;
-
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
@@ -19,6 +17,7 @@ import cz.trask.zenid.sdk.HologramState;
 import cz.trask.zenid.sdk.HologramView;
 import cz.trask.zenid.sdk.Language;
 import cz.trask.zenid.sdk.VisualizationSettings;
+import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -33,9 +32,10 @@ public class HologramActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hologram);
 
+        hologramView = findViewById(R.id.hologramView);
+
         DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, DocumentPage.FRONT_SIDE, DocumentCountry.CZ);
         DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1));
-
 
         VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
                 .showDebugVisualization(true)
@@ -46,16 +46,23 @@ public class HologramActivity extends AppCompatActivity {
                 .enableAimingCircle(true)
                 .build();
 
-        hologramView = findViewById(R.id.hologramView);
-        hologramView.setLifecycleOwner(this);
-        hologramView.setDocumentAcceptableInput(documentAcceptableInput);
-        hologramView.enableDefaultVisualization(visualizationSettings);
-        hologramView.setHologramSettings(hologramSettings);
+        try {
+//            hologramView.setLoggerCallback((module, method, message) -> Timber.tag(module).d("%s - %s", method, message));
+            hologramView.setLifecycleOwner(this);
+            hologramView.setDocumentAcceptableInput(documentAcceptableInput);
+            hologramView.enableDefaultVisualization(visualizationSettings);
+            hologramView.setHologramSettings(hologramSettings);
+        } catch (Exception e) {
+            Timber.e(e);
+            finish();
+            return;
+        }
+
         hologramView.setCallback(new HologramView.Callback() {
 
             @Override
             public void onStateChanged(HologramState state) {
-                Timber.i("onStateChanged: %s", state);
+//                Timber.i("onStateChanged: %s", state);
             }
 
             @Override
@@ -69,6 +76,11 @@ public class HologramActivity extends AppCompatActivity {
                 postHologramSample(result);
                 finish();
             }
+
+            @Override
+            public void onError(ZenIdException e) {
+                Timber.e(e);
+            }
         });
     }
 
@@ -77,12 +89,12 @@ public class HologramActivity extends AppCompatActivity {
         MyApplication.apiService.postHologramSample(result).enqueue(new retrofit2.Callback<SampleJson>() {
 
             @Override
-            public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+            public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...video has been uploaded!");
             }
 
             @Override
-            public void onFailure(Call<SampleJson> call, Throwable t) {
+            public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
                 Timber.e(t);
             }
         });
