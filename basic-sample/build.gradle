@@ -70,8 +70,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'net.sf.scuba:scuba-sc-android:0.0.23'
     implementation 'org.jmrtd:jmrtd:0.7.21'
-    implementation 'com.gemalto.jp2:jp2-android:1.0.3'
     implementation "com.google.android.gms:play-services-tasks:18.1.0"
     implementation "com.otaliastudios.opengl:egloo:0.6.1"
     implementation fileTree(include: ['*.aar'], dir: '../libs')
+    implementation files('libs/jp2-android-1.0.3.aar')
 }

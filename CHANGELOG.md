@@ -1,6 +1,6 @@
 # Changelog
 
-### 4.4.3 (2024-09-10) (RecogLibC v4.4.3)
+### 4.5.2 (2024-10-04) (RecogLibC v4.5.2)
 - New: Android SDK targets Android API level 35
 - New: Android SDK uses own implementation of CameraView: 
   Remove maven credentials to CameraView maven repository from your project level gradle file
