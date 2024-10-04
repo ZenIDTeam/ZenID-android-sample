@@ -1,5 +1,69 @@
 # Changelog
 
+### 4.4.6 (2024-10-04) (RecogLibC v4.4.6)
+- New: Android SDK targets Android API level 35
+- New: Android SDK uses own implementation of CameraView:
+  Remove maven credentials to CameraView maven repository from your project level gradle file
+
+  ```
+  maven {
+    url 'https://maven.pkg.github.com/ZenIDTeam/CameraView'
+    credentials {
+      username = "ZenIDTeam"
+      password = "YOUR_PERSONAL_ACCESS_TOKEN"
+    }
+  }
+  ```
+
+  Remove dependency: `com.otaliastudios:cameraview:2.7.4` from your app level gradle file
+  Add dependencies:
+  `com.google.android.gms:play-services-tasks:18.1.0`
+  `com.otaliastudios.opengl:egloo:0.6.1`
+- New: You can set Frame processing resolution (it will change quality of result images).
+  To retrieve available resolutions use function `getFrameProcessingAvailableSizes`
+  ```
+  CameraView cameraView = new CameraView(context);
+  List<Size> sizeList = cameraView.getFrameProcessingAvailableSizes(Facing.BACK);
+  ```
+  To set Frame processing resolution use view (DocumentPictureView, FacelivenessView, SelfieView, ...) function `documentPictureView.setFrameProcessingSize(size)`
+  You can also set your own size and SDK will automatically choose closest from available resolutions to the one you selected.
+- New: Android SDK will no longer print logs automatically, instead you can set LoggerCallback to intercept logs from SDK and print logs according to your preferences. For more information check README.md (Section - Logger callback)
+- New: Android SDK has improved error handling. You will be forced to implement new callback functions `onError(ZenIdException exception)` in each view callback, e.g.:
+
+  ```
+  documentPictureView.setCallback(new DocumentPictureView.Callback() {
+
+    @Override
+    public void onStateChanged(DocumentPictureState state) { }
+
+    @Override
+    public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) { }
+
+    @Override
+    public void onError(ZenIdException e) {
+      // Handle exception here
+      Timber.e(e);
+    }
+  });
+  ```
+
+  Also you will be forced to surround some functions with try...catch(ZenIdException exception), e.g.:
+
+  ```
+  try {
+      documentPictureView.setLoggerCallback((module, method, message) -> Timber.tag(module).d("%s - %s", method, message));
+      documentPictureView.setLifecycleOwner(this);
+      documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
+      documentPictureView.setPreviewStreamSize(SizeSelectors.biggest());
+      documentPictureView.setDocumentPictureSettings(documentPictureSettings);
+      documentPictureView.enableDefaultVisualization(visualizationSettings); // enable/disable
+  } catch (Exception e) {
+      // Handle exception here
+      Timber.e(e);
+  }
+  ```
+- Improvement: Introduced DocumentCode, PageCode, and OriginalAcceptableInput to the SDK Signature. TRASKZENIDPV-2973
+
 ### 4.3.10 (2024-07-15) (RecogLibC v4.3.10)
 - Improvement: Removed Time limit for reading data from the NFC chip from settings. TRASKZENIDPV-1859
 - Improvement: Decreased risk of misclassifying documents. SZENID-2633, SZENID-2634, TRASKZENIDPV-2269, TRASKZENIDPV-2689
