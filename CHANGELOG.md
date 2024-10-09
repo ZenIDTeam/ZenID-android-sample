@@ -1,5 +1,8 @@
 # Changelog
 
+### 4.4.6 (2024-10-09) (RecogLibC v4.4.7)
+- New: Android SDK uses new NDK version `26.3.11579264`
+
 ### 4.4.6 (2024-10-04) (RecogLibC v4.4.6)
 - New: Android SDK targets Android API level 35
 - New: Android SDK uses own implementation of CameraView (Camera API v2):

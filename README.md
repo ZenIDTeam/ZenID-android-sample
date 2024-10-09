@@ -15,6 +15,10 @@ We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an
 
 ### Migration
 
+#### 4.4.6 -> 4.4.7
+- Copy and paste libraries
+- Change NDK version to `26.3.11579264`
+
 #### 4.3.10 -> 4.4.6
 - Copy and paste libraries
 - Remove maven credentials to CameraView maven repository from your project level gradle file
