@@ -8,6 +8,7 @@ Android sample app that shows how to use the ZenID Android SDK. The SDK can help
 * Hologram verification
 
 The SDK supports API level 21 and above.
+The SDK targets Android API level 35.
 
 Apps need to use a single NDK and STL for all native code and dependencies - [one STL per app](https://developer.android.com/ndk/guides/cpp-support#one_stl_per_app).
 We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an another native library, please do mutual compatibility check as soon as possible.
