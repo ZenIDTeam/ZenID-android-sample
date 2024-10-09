@@ -2,12 +2,14 @@ package cz.trask.zenid.sample.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.VisualizationSettings;
+import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.api.model.SampleJson;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessMode;
 import cz.trask.zenid.sdk.faceliveness.FaceLivenessResult;
@@ -29,6 +31,8 @@ public class FaceLivenessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_face_liveness);
 
+        faceLivenessView = findViewById(R.id.faceLivenessView);
+
         VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
                 .showDebugVisualization(false)
                 .language(Language.ENGLISH)
@@ -39,22 +43,29 @@ public class FaceLivenessActivity extends AppCompatActivity {
                 .maxAuxiliaryImageSize(300) // Auxiliary images will be resized to fit into this size while preserving the aspect ratio.
                 .build();
 
-        faceLivenessView = findViewById(R.id.faceLivenessView);
-        faceLivenessView.setLifecycleOwner(this);
-        faceLivenessView.enableDefaultVisualization(visualizationSettings);
-        faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
-        faceLivenessView.setMode(FaceLivenessMode.VIDEO); // FaceLivenessMode.PICTURE is the default value
+        try {
+//            faceLivenessView.setLoggerCallback((module, method, message) -> Timber.tag(module).d("%s - %s", method, message));
+            faceLivenessView.setLifecycleOwner(this);
+            faceLivenessView.enableDefaultVisualization(visualizationSettings);
+            faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
+            faceLivenessView.setMode(FaceLivenessMode.VIDEO); // FaceLivenessMode.PICTURE is the default value
+        } catch (Exception e) {
+            Timber.e(e);
+            finish();
+            return;
+        }
+
         faceLivenessView.setCallback(new FaceLivenessView.Callback() {
 
             @Override
             public void onStateChanged(FaceLivenessState state, @Nullable FaceLivenessStepParams stepParams) {
-                Timber.i("onStateChanged - state: %s", state);
-                if (stepParams != null) {
-                    Timber.i("onStateChanged - stepParams.name: %s", stepParams.getName());
-                    Timber.i("onStateChanged - stepParams.isHasFailed: %s", stepParams.isHasFailed());
-                    Timber.i("onStateChanged - stepParams.getPassedCheckCount: %s", stepParams.getPassedCheckCount());
-                    Timber.i("onStateChanged - stepParams.getTotalCheckCount: %s", stepParams.getTotalCheckCount());
-                }
+//                Timber.i("onStateChanged - state: %s", state);
+//                if (stepParams != null) {
+//                    Timber.i("onStateChanged - stepParams.name: %s", stepParams.getName());
+//                    Timber.i("onStateChanged - stepParams.isHasFailed: %s", stepParams.isHasFailed());
+//                    Timber.i("onStateChanged - stepParams.getPassedCheckCount: %s", stepParams.getPassedCheckCount());
+//                    Timber.i("onStateChanged - stepParams.getTotalCheckCount: %s", stepParams.getTotalCheckCount());
+//                }
             }
 
             @Override
@@ -69,6 +80,11 @@ public class FaceLivenessActivity extends AppCompatActivity {
                 }
                 finish();
             }
+
+            @Override
+            public void onError(ZenIdException e) {
+                Timber.e(e);
+            }
         });
     }
 
@@ -76,13 +92,13 @@ public class FaceLivenessActivity extends AppCompatActivity {
         MyApplication.apiService.postSelfieSample(result.getFilePath(), result.getSignature()).enqueue(new retrofit2.Callback<SampleJson>() {
 
             @Override
-            public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+            public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
 
             }
 
             @Override
-            public void onFailure(Call<SampleJson> call, Throwable t) {
+            public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
                 Timber.e(t);
             }
         });
@@ -92,13 +108,13 @@ public class FaceLivenessActivity extends AppCompatActivity {
         MyApplication.apiService.postSelfieVideoSample(result.getVideoFilePath(), result.getSignature()).enqueue(new retrofit2.Callback<SampleJson>() {
 
             @Override
-            public void onResponse(Call<SampleJson> call, Response<SampleJson> response) {
+            public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
                 LogUtils.logInfo(getApplicationContext(), "...video has been uploaded!");
                 finish();
             }
 
             @Override
-            public void onFailure(Call<SampleJson> call, Throwable t) {
+            public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
                 Timber.e(t);
             }
         });
