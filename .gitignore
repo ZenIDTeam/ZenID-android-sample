@@ -1,8 +1,0 @@
-.iml
-.idea
-.gradle
-
-local.properties
-
-#ignore the folder called build anywhere, but not files called build
-build/
