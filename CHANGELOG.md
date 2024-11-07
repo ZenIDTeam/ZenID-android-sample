@@ -1,6 +1,6 @@
 # Changelog
 
-### 4.4.14 (2024-10-09) (RecogLibC v4.4.14)
+### 4.4.14 (2024-11-07) (RecogLibC v4.4.14)
 - Improvement: No changes in Android SDK, improvements in Core library
 
 ### 4.4.7 (2024-10-09) (RecogLibC v4.4.7)
