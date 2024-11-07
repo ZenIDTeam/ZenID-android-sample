@@ -11,9 +11,16 @@ The SDK supports API level 21 and above.
 The SDK targets Android API level 35.
 
 Apps need to use a single NDK and STL for all native code and dependencies - [one STL per app](https://developer.android.com/ndk/guides/cpp-support#one_stl_per_app).
-We use NDK 21.3.6528147 and STL c++_shared by default. If you already rely on an another native library, please do mutual compatibility check as soon as possible.
+We use NDK 26.3.11579264 and STL c++_shared by default. If you already rely on an another native library, please do mutual compatibility check as soon as possible.
+
+#### Compatibility assumptions
+To ensure technical compatibility, version of SDK must not be newer than Version of ZenID backend.
+We strongly recommend to do regular upgrades of SDK libraries along with ZenID backend, to prevent irregularities in controls and other common functionalities of ZenID backend and SDK. Minor version of SDK libraries should not be older than one versions from ZenID backend. For example with ZenID backend installed in version 4.4.x, SDK libraries should not be older than 4.3.x, etc.
 
 ### Migration
+
+#### 4.4.7 -> 4.4.14
+- Copy and paste libraries
 
 #### 4.4.6 -> 4.4.7
 - Copy and paste libraries
