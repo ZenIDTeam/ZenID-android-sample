@@ -19,6 +19,9 @@ We strongly recommend to do regular upgrades of SDK libraries along with ZenID b
 
 ### Migration
 
+#### 4.4.14 -> 4.5.9
+- Copy and paste libraries
+
 #### 4.4.7 -> 4.4.14
 - Copy and paste libraries
 
@@ -229,6 +232,16 @@ zenId.initialize();
 ```
 
 `zenId.initialize();` is supposed to be called only once per application lifetime. You can use helper method `ZenId.isSingletonInstanceExists` to check whether singleton instance already exists or not.
+
+If your application requires to load Country models in Runtime, you can remove dependencies to library modules (sdk-core-models-xx), save files to folder in file system and specify path to this folder in initialization function:
+
+`zenId.initialize("Path to models folder");`
+
+If you want to use library modules, you don't need to specify the path:
+
+`zenId.initialize();`
+
+If you want to load some models from library modules and some models from folder, add library dependencies to your project and also specify path to folder with remaining models.
 
 In order to start integration, you will need to get an **API key** and **URL** of the backend system.
 
