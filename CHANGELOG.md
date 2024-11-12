@@ -1,5 +1,31 @@
 # Changelog
 
+### 4.5.9 (2024-11-12) (RecogLibC v4.5.9)
+- New: Load country models in Application Runtime.
+  If your application requires to load Country models in Runtime, you can remove dependencies to library modules (sdk-core-models-xx), save files to folder in file system and specify path to this folder in initialization function:
+
+  ```
+  zenId.initialize("Path to models folder", new ZenId.InitCallback() {
+      @Override
+      public void onInitialized() { }
+
+      @Override
+      public void onInitializationFailed(ZenIdException exception) { }
+  });
+  ```
+  If you want to use library modules, you don't need to specify the path:
+
+  ```
+  zenId.initialize(new ZenId.InitCallback() {
+      @Override
+      public void onInitialized() { }
+
+      @Override
+      public void onInitializationFailed(ZenIdException exception) { }
+  });
+  ```
+  If you want to load some models from library modules and some models from folder, add library dependencies to your project and also specify path to folder with remaining models.
+
 ### 4.4.14 (2024-11-07) (RecogLibC v4.4.14)
 - Improvement: No changes in Android SDK, improvements in Core library
 
