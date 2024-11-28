@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.4.15 (2024-11-28) (RecogLibC v4.4.15)
+- Fix: Fixed crash due to undefined _Unwind_Resume symbol on some phones running Android 10
+- Fix: Faceliveness process reset after return to the application from background
+
 ### 4.4.14 (2024-11-07) (RecogLibC v4.4.14)
 - Improvement: No changes in Android SDK, improvements in Core library
 
