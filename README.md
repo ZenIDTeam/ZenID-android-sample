@@ -19,8 +19,12 @@ We strongly recommend to do regular upgrades of SDK libraries along with ZenID b
 
 ### Migration
 
-#### 4.4.14 -> 4.5.9
+#### 4.4.15 -> 4.5.9
 - Copy and paste libraries
+
+#### 4.4.14 -> 4.4.15
+- Copy and paste libraries
+- Note: Version is published in branch 4.4.15: https://github.com/ZenIDTeam/ZenID-android-sample/tree/4.4.15
 
 #### 4.4.7 -> 4.4.14
 - Copy and paste libraries

@@ -26,6 +26,11 @@
   ```
   If you want to load some models from library modules and some models from folder, add library dependencies to your project and also specify path to folder with remaining models.
 
+### 4.4.15 (2024-11-28) (RecogLibC v4.4.15)
+- Fix: Fixed crash due to undefined _Unwind_Resume symbol on some phones running Android 10
+- Fix: Faceliveness process reset after return to the application from background
+- Note: Version is published in branch 4.4.15: https://github.com/ZenIDTeam/ZenID-android-sample/tree/4.4.15 
+
 ### 4.4.14 (2024-11-07) (RecogLibC v4.4.14)
 - Improvement: No changes in Android SDK, improvements in Core library
 
