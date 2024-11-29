@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.5.11 (2024-11-29) (RecogLibC v4.5.11)
+- Fix: Fixed crash due to undefined _Unwind_Resume symbol on some phones running Android 10
+- Fix: Faceliveness process reset after return to the application from background
+
 ### 4.5.9 (2024-11-12) (RecogLibC v4.5.9)
 - New: Load country models in Application Runtime.
   If your application requires to load Country models in Runtime, you can remove dependencies to library modules (sdk-core-models-xx), save files to folder in file system and specify path to this folder in initialization function:
