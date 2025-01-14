@@ -19,6 +19,9 @@ We strongly recommend to do regular upgrades of SDK libraries along with ZenID b
 
 ### Migration
 
+#### 4.5.11 -> 4.6.8
+- Copy and paste libraries
+
 #### 4.5.9 -> 4.5.11
 - Copy and paste libraries
 

@@ -1,5 +1,8 @@
 # Changelog
 
+### 4.6.8 (2025-01-14) (RecogLibC v4.6.8)
+- New: From now on, the Documentation and Changelog are migrated and maintained in the manuals on the ZenID backend.
+
 ### 4.5.11 (2024-11-29) (RecogLibC v4.5.11)
 - Fix: Fixed crash due to undefined _Unwind_Resume symbol on some phones running Android 10
 - Fix: Faceliveness process reset after return to the application from background
