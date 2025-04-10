@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **This page is no longer maintained. For up-to-date documentation, visit the online manual directly in the ZenID web application.**
+
 ## ZenID Android SDK
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
