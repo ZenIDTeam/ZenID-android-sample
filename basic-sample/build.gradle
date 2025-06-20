@@ -1,18 +1,23 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.appdistribution'
+
+apply from: 'build-version.gradle'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
+    namespace 'cz.trask.zenid.sample'
     compileSdk 35
 
     defaultConfig {
         applicationId "cz.trask.zenid.sample"
         minSdkVersion 21
         targetSdkVersion 35
-        ndkVersion "26.3.11579264"
-        versionCode 41
-        versionName "1.0"
+        ndkVersion "27.1.12297006"
+        versionCode readVersionCode()
+        versionName project.version.toString()
     }
 
     buildTypes {
@@ -33,6 +38,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'my-proguard.txt'
             buildConfigField("java.lang.String", "ZENID_URL", "\"" + properties["zenid_url"] + "\"")
             buildConfigField("java.lang.String", "ZENID_APIKEY", "\"" + properties["zenid_apikey"] + "\"")
+            firebaseAppDistribution {
+                serviceCredentialsFile = file("$rootDir/basic-sample/zenid-sample-app-firebase-adminsdk-nlrew-3391d15610.json")
+                groups = "ZenID"
+            }
         }
     }
 
@@ -51,7 +60,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    namespace 'cz.trask.zenid.sample'
+    tasks.register("buildAndPublishSampleApp") {
+        group = 'zenid'
+        dependsOn ":copyZenIdSDKArtifacts", "incrementVersionCode", "assembleRelease"
+        tasks.named("incrementVersionCode").get().mustRunAfter(":copyZenIdSDKArtifacts")
+        tasks.named("assembleRelease").get().mustRunAfter("incrementVersionCode")
+        finalizedBy("appDistributionUploadRelease")
+    }
 }
 
 ext {

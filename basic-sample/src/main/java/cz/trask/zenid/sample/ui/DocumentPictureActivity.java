@@ -81,7 +81,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
             @Override
             public void onStateChanged(DocumentPictureState state) {
 //                Timber.i("onStateChanged %s", state);
-                if (state.isMatchFound() && activateCameraButton) {
+                if (state != DocumentPictureState.NO_MATCH_FOUND && activateCameraButton) {
                     activateCameraButton = false;
                     imageView.postDelayed(() -> imageView.setVisibility(View.VISIBLE), 5000);
                 }
