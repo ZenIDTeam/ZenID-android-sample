@@ -1,0 +1,50 @@
+ext {
+    readVersionCode = {
+        println 'Reading code version property'
+        return loadVersionProperties()['code'].toInteger()
+    }
+
+    readVersionMinor = {
+        println 'Reading minor version property'
+        return loadVersionProperties()['minor']
+    }
+
+    readVersionMajor = {
+        println 'Reading major version property'
+        return loadVersionProperties()['major']
+    }
+
+    readVersionName = {
+        println 'Reading & assembling version name'
+        def properties = loadVersionProperties()
+        major = properties['major']
+        minor = properties['minor']
+        return "${major}.${minor}"
+    }
+}
+
+Properties loadVersionProperties() {
+    println '    ....loading version.properties file'
+    def properties = new Properties()
+    properties.load(new FileInputStream(file('version.properties')))
+    return properties
+}
+
+void saveVersionProperties(Properties properties) {
+    println '    ....saving updated version.properties file'
+    def file = file('version.properties')
+    properties.store(new FileOutputStream(file), null)
+}
+
+tasks.register('incrementVersionCode') {
+    group = 'zenid'
+    doLast {
+        println 'Incrementing version code...'
+        def properties = loadVersionProperties()
+        def currentCode = properties['code'].toInteger()
+        def newCode = currentCode + 1
+        properties['code'] = newCode.toString()
+        saveVersionProperties(properties)
+        println "Version code incremented: $currentCode -> $newCode"
+    }
+}
