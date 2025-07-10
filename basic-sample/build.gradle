@@ -1,6 +1,10 @@
+def hasGoogleServices = file("${project.rootDir}/basic-sample/google-services.json").exists()
+
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.appdistribution'
+if (hasGoogleServices) {
+    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.firebase.appdistribution'
+}
 
 apply from: 'build-version.gradle'
 
@@ -38,9 +42,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'my-proguard.txt'
             buildConfigField("java.lang.String", "ZENID_URL", "\"" + properties["zenid_url"] + "\"")
             buildConfigField("java.lang.String", "ZENID_APIKEY", "\"" + properties["zenid_apikey"] + "\"")
-            firebaseAppDistribution {
-                serviceCredentialsFile = file("$rootDir/basic-sample/zenid-sample-app-firebase-adminsdk-nlrew-3391d15610.json")
-                groups = "ZenID"
+            if (hasGoogleServices) {
+                firebaseAppDistribution {
+                    serviceCredentialsFile = file("$rootDir/basic-sample/zenid-sample-app-firebase-adminsdk-nlrew-3391d15610.json")
+                    groups = "ZenID"
+                }
             }
         }
     }

@@ -10,8 +10,10 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:8.5.2'
-        classpath 'com.google.gms:google-services:4.4.2'
-        classpath 'com.google.firebase:firebase-appdistribution-gradle:5.0.0'
+        if (file("${rootDir}/basic-sample/google-services.json").exists()) {
+            classpath 'com.google.gms:google-services:4.4.2'
+            classpath 'com.google.firebase:firebase-appdistribution-gradle:5.0.0'
+        }
     }
 }
 
@@ -23,31 +25,35 @@ allprojects {
 }
 
 def getZenIDVersion() {
-    def output = new ByteArrayOutputStream()
-    def scriptPath = file("../../Scripts/get_zenid_version.ps1").absolutePath
+    try {
+        def output = new ByteArrayOutputStream()
+        def scriptPath = file("../../Scripts/get_zenid_version.ps1").absolutePath
 
-    def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
-    def isMacOs = System.getProperty('os.name').toLowerCase().contains('mac')
+        def isWindows = System.getProperty('os.name').toLowerCase().contains('windows')
+        def isMacOs = System.getProperty('os.name').toLowerCase().contains('mac')
 
-    if (isWindows) {
-        exec {
-            commandLine 'powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath
-            standardOutput = output
+        if (isWindows) {
+            exec {
+                commandLine 'powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath
+                standardOutput = output
+            }
+        } else {
+            exec {
+                commandLine 'pwsh', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath
+                standardOutput = output
+            }
         }
-    } else {
-        exec {
-            commandLine 'pwsh', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', scriptPath
-            standardOutput = output
+
+        def versionFound = output.toString().trim()
+
+        if (versionFound.isEmpty()) {
+            throw new GradleException("Version not found in PowerShell script output.")
         }
+
+        return versionFound
+    } catch (GradleException e) {
+        "1.0"
     }
-
-    def versionFound = output.toString().trim()
-
-    if (versionFound.isEmpty()) {
-        throw new GradleException("Version not found in PowerShell script output.")
-    }
-
-    return versionFound
 }
 
 def copyZenIdSDKArtifacts() {
