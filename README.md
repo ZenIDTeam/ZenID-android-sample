@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **This page is no longer maintained. For up-to-date documentation, visit the online manual directly in the ZenID web application.**
+
 ## ZenID Android SDK
 
 Android sample app that shows how to use the ZenID Android SDK. The SDK can help you with performing the following operations on documents:
@@ -19,18 +22,8 @@ We strongly recommend to do regular upgrades of SDK libraries along with ZenID b
 
 ### Migration
 
-#### 4.5.11 -> 4.6.8
+#### 4.4.14 -> 4.5.9
 - Copy and paste libraries
-
-#### 4.5.9 -> 4.5.11
-- Copy and paste libraries
-
-#### 4.4.15 -> 4.5.9
-- Copy and paste libraries
-
-#### 4.4.14 -> 4.4.15
-- Copy and paste libraries
-- Note: Version is published in branch 4.4.15: https://github.com/ZenIDTeam/ZenID-android-sample/tree/4.4.15
 
 #### 4.4.7 -> 4.4.14
 - Copy and paste libraries
@@ -245,11 +238,11 @@ zenId.initialize();
 
 If your application requires to load Country models in Runtime, you can remove dependencies to library modules (sdk-core-models-xx), save files to folder in file system and specify path to this folder in initialization function:
 
-`zenId.initialize("Path to models folder");`
-
+  `zenId.initialize("Path to models folder");`
+  
 If you want to use library modules, you don't need to specify the path:
 
-`zenId.initialize();`
+  `zenId.initialize();`
 
 If you want to load some models from library modules and some models from folder, add library dependencies to your project and also specify path to folder with remaining models.
 

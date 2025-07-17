@@ -1,14 +1,7 @@
 # Changelog
 
-### 4.6.8 (2025-01-14) (RecogLibC v4.6.8)
-- New: From now on, the Documentation and Changelog are migrated and maintained in the manuals on the ZenID backend.
-
-### 4.5.11 (2024-11-29) (RecogLibC v4.5.11)
-- Fix: Fixed crash due to undefined _Unwind_Resume symbol on some phones running Android 10
-- Fix: Faceliveness process reset after return to the application from background
-
 ### 4.5.9 (2024-11-12) (RecogLibC v4.5.9)
-- New: Load country models in Application Runtime.
+- New: Load country models in Application Runtime. 
   If your application requires to load Country models in Runtime, you can remove dependencies to library modules (sdk-core-models-xx), save files to folder in file system and specify path to this folder in initialization function:
 
   ```
@@ -32,11 +25,6 @@
   });
   ```
   If you want to load some models from library modules and some models from folder, add library dependencies to your project and also specify path to folder with remaining models.
-
-### 4.4.15 (2024-11-28) (RecogLibC v4.4.15)
-- Fix: Fixed crash due to undefined _Unwind_Resume symbol on some phones running Android 10
-- Fix: Faceliveness process reset after return to the application from background
-- Note: Version is published in branch 4.4.15: https://github.com/ZenIDTeam/ZenID-android-sample/tree/4.4.15 
 
 ### 4.4.14 (2024-11-07) (RecogLibC v4.4.14)
 - Improvement: No changes in Android SDK, improvements in Core library
