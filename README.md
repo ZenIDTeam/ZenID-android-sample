@@ -1,5 +1,16 @@
+> [!WARNING]
+> **The following versions contain a bug where a `libnative-lib.so` library in the builds was not compiled with 16KB page support.** <br/>
+> **This means those versions are not ready to be used with Android OSes running in 16KB page size mode.**
+>  - 4.8.6 to 4.8.13 for 4.8.x branch
+>  - 4.9.6 to 4.9.14 for 4.9.x branch
+> 
+> The affected versions are tagged with `[WARNING NOT 16KB-ready]` in the release list.<br/>
+> *(Versions prior to 4.8.6 were never advertised as having 16KB page size support and so aren't tagged)*
+
+<hr />
+
 > [!IMPORTANT]
-> **This page is no longer maintained. For up-to-date documentation, visit the online manual directly in the ZenID web application.**
+> **For up-to-date documentation, visit the online manual directly in the ZenID web application.**
 
 ## ZenID Android SDK
 
