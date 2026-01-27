@@ -1,17 +1,17 @@
 package cz.trask.zenid.sample;
 
 import android.app.Application;
-
 import java.util.concurrent.TimeUnit;
-
-import cz.trask.zenid.sdk.DocumentModule;
-import cz.trask.zenid.sdk.LoggerCallback;
 import cz.trask.zenid.sdk.ZenId;
-import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.api.ApiConfig;
 import cz.trask.zenid.sdk.api.ApiService;
-import cz.trask.zenid.sdk.faceliveness.FaceLivenessModule;
-import cz.trask.zenid.sdk.selfie.SelfieModule;
+import cz.trask.zenid.sdk.internal.verifier.DocumentVerifier;
+import cz.trask.zenid.sdk.internal.verifier.FaceLivenessVerifier;
+import cz.trask.zenid.sdk.internal.verifier.HologramVerifier;
+import cz.trask.zenid.sdk.internal.verifier.IqsHologramVerifier;
+import cz.trask.zenid.sdk.internal.verifier.LicensePlateVerifier;
+import cz.trask.zenid.sdk.internal.verifier.MsLivenessVerifier;
+import cz.trask.zenid.sdk.internal.verifier.SelfieVerifier;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
@@ -34,35 +34,20 @@ public class MyApplication extends Application {
     }
 
     private void initZenId() {
-        if (ZenId.isSingletonInstanceExists()) {
+        if (ZenId.singletonInstanceExists()) {
             Timber.i("Skip building an instance of ZenId");
         } else {
             ZenId zenId = new ZenId.Builder()
                     .applicationContext(getApplicationContext())
-                    .modules(new DocumentModule(), new SelfieModule(), new FaceLivenessModule())
+                    .verifiers(new DocumentVerifier(), new HologramVerifier(), new IqsHologramVerifier(), new FaceLivenessVerifier(), new SelfieVerifier(), new MsLivenessVerifier(), new LicensePlateVerifier())
                     .build();
 
             ZenId.setSingletonInstance(zenId);
 
             // This may take a few seconds. Please do it as soon as possible.
-            zenId.initialize(new ZenId.InitCallback() {
-                @Override
-                public void onInitialized() {
-                    LogUtils.logInfo(getApplicationContext(), "Initialized.");
-                }
+            zenId.initialize();
 
-                @Override
-                public void onInitializationFailed(ZenIdException e) {
-                    Timber.e(e);
-                }
-            });
-
-            zenId.getSecurity().setLoggerCallback(new LoggerCallback() {
-                @Override
-                public void logMessage(String module, String method, String message) {
-
-                }
-            });
+            zenId.setLoggerCallback((module, method, message) -> Timber.tag(module).d("%s - %s", method, message));
         }
     }
 

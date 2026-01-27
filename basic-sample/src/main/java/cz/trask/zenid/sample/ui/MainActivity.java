@@ -1,10 +1,13 @@
 package cz.trask.zenid.sample.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.ZenId;
@@ -14,8 +17,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
+import android.Manifest;
 
 public class MainActivity extends AppCompatActivity {
+
+    /*-------------------------*/
+    /*         FIELDS          */
+    /*-------------------------*/
+
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
+
+    private String challengeToken;
+
+    /*-------------------------*/
+    /*   OVERRIDDEN METHODS    */
+    /*-------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         initSelfieButton();
 
         initFaceLivenessButton();
+
+        initMsLivenessButton();
 
         initHologramButton();
 
@@ -42,15 +60,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startActivity(MSLivenessActivity.newIntent(getApplicationContext(), challengeToken));
+            } else {
+                Toast.makeText(this, "Camera permission is required for face liveness", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /*-------------------------*/
+    /*     PRIVATE METHODS     */
+    /*-------------------------*/
+
     private void authorize() {
-        String challengeToken = null;
+        challengeToken = null;
         try {
             challengeToken = ZenId.get().getSecurity().getChallengeToken();
         } catch (ZenIdException e) {
             Timber.e(e);
         }
         Timber.i("challengeToken: %s", challengeToken);
-        MyApplication.apiService.getInitSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
+        MyApplication.apiService.initSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
 
             @Override
             public void onResponse(@NonNull Call<InitResponseJson> call, @NonNull Response<InitResponseJson> response) {
@@ -87,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initDocumentVerifierButton() {
         findViewById(R.id.button_documentPicture).setOnClickListener(v -> {
-            if (isInitialized() && isAuthorized()) {
+            if (isAuthorized()) {
                 startActivity(new Intent(getApplicationContext(), DocumentPictureActivity.class));
             } else {
                 logNotAuthorizedError();
@@ -97,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSelfieButton() {
         findViewById(R.id.button_selfie).setOnClickListener(v -> {
-            if (isInitialized() && isAuthorized()) {
+            if (isAuthorized()) {
                 startActivity(new Intent(getApplicationContext(), SelfieActivity.class));
             } else {
                 logNotAuthorizedError();
@@ -107,8 +141,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFaceLivenessButton() {
         findViewById(R.id.button_faceLiveness).setOnClickListener(v -> {
-            if (isInitialized() && isAuthorized()) {
+            if (isAuthorized()) {
                 startActivity(new Intent(getApplicationContext(), FaceLivenessActivity.class));
+            } else {
+                logNotAuthorizedError();
+            }
+        });
+    }
+
+    private void initMsLivenessButton() {
+        findViewById(R.id.button_ms_faceLiveness).setOnClickListener(v -> {
+            if (isAuthorized()) {
+                requestCameraPermissionAndStartMsLiveness();
             } else {
                 logNotAuthorizedError();
             }
@@ -117,16 +161,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initHologramButton() {
         findViewById(R.id.button_hologram).setOnClickListener(v -> {
-            if (isInitialized() && isAuthorized()) {
+            if (isAuthorized()) {
                 startActivity(new Intent(getApplicationContext(), HologramActivity.class));
             } else {
                 logNotAuthorizedError();
             }
         });
-    }
-
-    private boolean isInitialized() {
-        return ZenId.isSingletonInstanceExists();
     }
 
     private boolean isAuthorized() {
@@ -137,5 +177,15 @@ public class MainActivity extends AppCompatActivity {
         String msg = "Your application " + getApplicationContext().getPackageName() + " is not yet authorized.";
         Timber.i(msg);
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void requestCameraPermissionAndStartMsLiveness() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            startActivity(MSLivenessActivity.newIntent(getApplicationContext(), challengeToken));
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST_CODE);
+        }
     }
 }

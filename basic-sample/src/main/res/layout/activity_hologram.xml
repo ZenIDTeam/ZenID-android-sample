@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     >
 
-    <cz.trask.zenid.sdk.HologramView
+    <cz.trask.zenid.sdk.view.HologramView
         android:id="@+id/hologramView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

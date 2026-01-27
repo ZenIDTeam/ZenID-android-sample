@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     >
 
-    <cz.trask.zenid.sdk.faceliveness.FaceLivenessView
+    <cz.trask.zenid.sdk.view.FaceLivenessView
         android:id="@+id/faceLivenessView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,6 +1,7 @@
 package cz.trask.zenid.sample.ui;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,22 +11,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.gemalto.jp2.JP2Decoder;
-
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
-import cz.trask.zenid.sdk.DocumentPictureResult;
-import cz.trask.zenid.sdk.NfcData;
-import cz.trask.zenid.sdk.NfcKey;
 import cz.trask.zenid.sdk.api.model.SampleJson;
+import cz.trask.zenid.sdk.models.NfcKey;
+import cz.trask.zenid.sdk.models.UploadReadyData;
 import cz.trask.zenid.sdk.nfc.FacePictureFormat;
 import cz.trask.zenid.sdk.nfc.NfcAccessDeniedException;
 import cz.trask.zenid.sdk.nfc.NfcConnectionException;
+import cz.trask.zenid.sdk.nfc.NfcData;
 import cz.trask.zenid.sdk.nfc.NfcResult;
 import cz.trask.zenid.sdk.nfc.NfcService;
 import cz.trask.zenid.sdk.nfc.NfcState;
@@ -34,6 +32,10 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 public class NfcActivity extends AppCompatActivity {
+
+    /*-------------------------*/
+    /*         FIELDS          */
+    /*-------------------------*/
 
     private NfcAdapter nfcAdapter;
     private ImageView ivFacePicture;
@@ -49,6 +51,10 @@ public class NfcActivity extends AppCompatActivity {
     private TextView tvGender;
     private Button bSkipNfc;
     private NfcService nfcService;
+
+    /*-------------------------*/
+    /*   OVERRIDDEN METHODS    */
+    /*-------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +96,13 @@ public class NfcActivity extends AppCompatActivity {
         }
 
         bSkipNfc.setOnClickListener(v -> {
-            nfcService.skipNfcVerification();
-            DocumentPictureResult result = nfcService.getDocumentPictureResult(NfcActivity.this);
-            postDocumentPictureSample(result);
-            finish();
+            UploadReadyData uploadReadyData = nfcService.skipNfcVerification();
+            if (uploadReadyData != null) {
+                postSample(this, uploadReadyData);
+                finish();
+            } else {
+                Timber.e("Upload ready data is empty");
+            }
         });
     }
 
@@ -118,8 +127,12 @@ public class NfcActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
+    /*-------------------------*/
+    /*     PRIVATE METHODS     */
+    /*-------------------------*/
+
     private void handleIntent(Intent intent) {
-        nfcService.handleIntent(getApplicationContext(), intent, new NfcService.Callback() {
+        nfcService.handleIntent(intent, new NfcService.Callback() {
 
             @Override
             public void onZenIdNotNfcState() {
@@ -132,7 +145,7 @@ public class NfcActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResult(DocumentPictureResult documentPictureResult, NfcResult nfcResult, NfcData nfcData) {
+            public void onResult(UploadReadyData uploadReadyData, NfcResult nfcResult, NfcData nfcData) {
                 String picturePath = nfcResult.getFacePicturePath();
                 FacePictureFormat format = nfcResult.getFacePictureFormat();
                 Bitmap bitmap;
@@ -152,7 +165,7 @@ public class NfcActivity extends AppCompatActivity {
                 tvSecondaryIdentifier.setText("Secondary identifier: " + nfcResult.getSecondaryIdentifier());
                 tvGender.setText("Gender: " + nfcResult.getGender());
 
-                postDocumentPictureSample(documentPictureResult);
+                postSample(NfcActivity.this, uploadReadyData);
             }
 
             @Override
@@ -174,13 +187,24 @@ public class NfcActivity extends AppCompatActivity {
         });
     }
 
-    private void postDocumentPictureSample(DocumentPictureResult result) {
-        MyApplication.apiService.postDocumentPictureSample(result).enqueue(new retrofit2.Callback<SampleJson>() {
+    private void postSample(Context context, UploadReadyData uploadReadyData) {
+        MyApplication.apiService.postSample(uploadReadyData.getSignedSamplePackage()).enqueue(new retrofit2.Callback<SampleJson>() {
 
             @Override
             public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
-                LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
-                finish();
+                SampleJson sample = response.body();
+                if (sample == null) {
+                    Timber.e("Response body is empty");
+                    return;
+                }
+
+                if (sample.getState().equals("NotDone") || sample.getState().equals("Error")) {
+                    LogUtils.logInfo(context, "Upload failed... " + sample.getErrorCode());
+                    return;
+                }
+
+                String msg = String.format("Document result sent; SampleId: %s", sample.getSampleId());
+                LogUtils.logInfo(context, msg);
             }
 
             @Override

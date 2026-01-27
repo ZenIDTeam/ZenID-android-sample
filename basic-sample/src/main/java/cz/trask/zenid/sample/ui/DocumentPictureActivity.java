@@ -1,24 +1,29 @@
 package cz.trask.zenid.sample.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+import java.util.List;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
-import cz.trask.zenid.sdk.DocumentPictureResult;
-import cz.trask.zenid.sdk.DocumentPictureSettings;
-import cz.trask.zenid.sdk.DocumentPictureState;
-import cz.trask.zenid.sdk.DocumentPictureView;
-import cz.trask.zenid.sdk.Language;
-import cz.trask.zenid.sdk.NfcStatus;
 import cz.trask.zenid.sdk.VisualizationSettings;
+import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.api.model.SampleJson;
-import cz.trask.zenid.sdk.camera.size.SizeSelectors;
+import cz.trask.zenid.sdk.enums.CommonVerifierFeedback;
+import cz.trask.zenid.sdk.enums.Country;
+import cz.trask.zenid.sdk.enums.DocumentRole;
+import cz.trask.zenid.sdk.enums.SupportedLanguages;
+import cz.trask.zenid.sdk.internal.verifier.DocumentVerifier;
+import cz.trask.zenid.sdk.models.DocumentFilter;
+import cz.trask.zenid.sdk.models.DocumentVerifierSettings;
+import cz.trask.zenid.sdk.models.DocumentVerifierStateContainerForPublicData;
+import cz.trask.zenid.sdk.models.UploadReadyData;
+import cz.trask.zenid.sdk.view.DocumentView;
 import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
@@ -28,91 +33,77 @@ import timber.log.Timber;
  */
 public class DocumentPictureActivity extends AppCompatActivity {
 
-    private DocumentPictureView documentPictureView;
-    private ImageView imageView;
-    private boolean activateCameraButton = false;
+    /*-------------------------*/
+    /*   OVERRIDDEN METHODS    */
+    /*-------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document_picture);
 
-        documentPictureView = findViewById(R.id.documentPictureView);
-        imageView = findViewById(R.id.imageView_camera);
-
-        imageView.setOnClickListener(view -> {
-            try {
-                documentPictureView.activateTakeNextDocumentPicture();
-            } catch (Exception e) {
-                Timber.e(e);
-                finish();
-            }
-        });
-
-//        DocumentAcceptableInput.Filter filter1 = new DocumentAcceptableInput.Filter(DocumentRole.ID, null, DocumentCountry.CZ);
-//        DocumentAcceptableInput.Filter filter2 = new DocumentAcceptableInput.Filter(DocumentRole.DRIVING_LICENSE, DocumentPage.FRONT_SIDE, DocumentCountry.SK);
-//        DocumentAcceptableInput documentAcceptableInput = new DocumentAcceptableInput(Arrays.asList(filter1, filter2));
-
-        VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
-                .showDebugVisualization(false)
-                .language(Language.ENGLISH)
-                .showTextInformation(true)
-                .build();
-
-        DocumentPictureSettings documentPictureSettings = new DocumentPictureSettings.Builder()
-                .enableAimingCircle(true)
-                .build();
+        DocumentView documentView = findViewById(R.id.documentPictureView);
 
         try {
-            documentPictureView.setLoggerCallback((module, method, message) -> Timber.tag(module).d("%s - %s", method, message));
-            documentPictureView.setLifecycleOwner(this);
-//            documentPictureView.setDocumentAcceptableInput(documentAcceptableInput);
-            documentPictureView.setPreviewStreamSize(SizeSelectors.biggest());
-            documentPictureView.setDocumentPictureSettings(documentPictureSettings);
-            documentPictureView.enableDefaultVisualization(visualizationSettings); // enable/disable
+            documentView.setLifecycleOwner(this);
+            documentView.setVerifierSettings(createDocumentVerifierSettings());
+            documentView.enableDefaultVisualization(createVisualizationSettings());
         } catch (Exception e) {
             Timber.e(e);
             finish();
             return;
         }
 
-        documentPictureView.setCallback(new DocumentPictureView.Callback() {
+        documentView.setCallback(new DocumentView.DocumentViewCallback() {
 
             @Override
-            public void onStateChanged(DocumentPictureState state) {
-//                Timber.i("onStateChanged %s", state);
-                if (state != DocumentPictureState.NO_MATCH_FOUND && activateCameraButton) {
-                    activateCameraButton = false;
-                    imageView.postDelayed(() -> imageView.setVisibility(View.VISIBLE), 5000);
-                }
+            public void onStateChanged(DocumentVerifierStateContainerForPublicData stateContainer) {
+                CommonVerifierFeedback feedback = stateContainer.getFeedback();
+//                Timber.i("onStateChanged %s", feedback.name());
             }
 
             @Override
-            public void onPictureTaken(DocumentPictureResult result, NfcStatus nfcStatus) {
-                LogUtils.logInfo(getApplicationContext(), "onPictureTaken... " + result.getFilePath());
-                if (NfcStatus.NFC_REQUIRED.equals(nfcStatus)) {
-                    startActivity(new Intent(getApplicationContext(), NfcActivity.class));
-                } else {
-                    postDocumentPictureSample(result);
-                }
+            public void onScanNfc() {
+                startActivity(new Intent(getApplicationContext(), NfcActivity.class));
+            }
+
+            @Override
+            public void onResult(UploadReadyData uploadReadyData) {
+                ZenId.get().getVerifier(DocumentVerifier.class).unload();
+                postSample(getApplicationContext(), uploadReadyData);
+                setResult(RESULT_OK);
                 finish();
             }
 
             @Override
-            public void onError(ZenIdException e) {
-
+            public void onError(ZenIdException exception) {
+                LogUtils.logInfo(DocumentPictureActivity.this, exception.getMessage());
             }
         });
-
-        activateCameraButton = true;
     }
 
-    private void postDocumentPictureSample(DocumentPictureResult result) {
-        MyApplication.apiService.postDocumentPictureSample(result).enqueue(new retrofit2.Callback<SampleJson>() {
+    /*-------------------------*/
+    /*     PRIVATE METHODS     */
+    /*-------------------------*/
+
+    private void postSample(Context context, UploadReadyData uploadReadyData) {
+        MyApplication.apiService.postSample(uploadReadyData.getSignedSamplePackage()).enqueue(new retrofit2.Callback<SampleJson>() {
 
             @Override
             public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
-                LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
+                SampleJson sample = response.body();
+                if (sample == null) {
+                    Timber.e("Response body is empty");
+                    return;
+                }
+
+                if (sample.getState().equals("NotDone") || sample.getState().equals("Error")) {
+                    LogUtils.logInfo(context, "Upload failed... " + sample.getErrorCode());
+                    return;
+                }
+
+                String msg = String.format("Document result sent; SampleId: %s", sample.getSampleId());
+                LogUtils.logInfo(context, msg);
             }
 
             @Override
@@ -122,4 +113,26 @@ public class DocumentPictureActivity extends AppCompatActivity {
         });
     }
 
+    private DocumentVerifierSettings createDocumentVerifierSettings() {
+        DocumentVerifierSettings documentVerifierSettings = new DocumentVerifierSettings();
+
+        documentVerifierSettings.setEnableAimingCircle(true);
+        documentVerifierSettings.setShowTimer(false);
+        documentVerifierSettings.setDrawOutline(true);
+
+//        List<DocumentFilter> dbFilters = new ArrayList<>();
+//        dbFilters.add(new DocumentFilter(DocumentRole.Idc, Country.Cz, null, null, null));
+//        dbFilters.add(new DocumentFilter(DocumentRole.Drv, Country.Cz, PageCodes.F, null, null));
+//        documentVerifierSettings.setAcceptableInput(new AcceptableInput(dbFilters));
+
+        return documentVerifierSettings;
+    }
+
+    private VisualizationSettings createVisualizationSettings() {
+        return new VisualizationSettings.Builder()
+                .showDebugVisualization(false)
+                .language(SupportedLanguages.English)
+                .showTextInformation(true)
+                .build();
+    }
 }

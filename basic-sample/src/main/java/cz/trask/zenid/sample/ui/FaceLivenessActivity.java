@@ -1,9 +1,9 @@
 package cz.trask.zenid.sample.ui;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
@@ -11,112 +11,104 @@ import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.api.model.SampleJson;
-import cz.trask.zenid.sdk.faceliveness.FaceLivenessMode;
-import cz.trask.zenid.sdk.faceliveness.FaceLivenessResult;
-import cz.trask.zenid.sdk.faceliveness.FaceLivenessSettings;
-import cz.trask.zenid.sdk.faceliveness.FaceLivenessState;
-import cz.trask.zenid.sdk.faceliveness.FaceLivenessStepParams;
-import cz.trask.zenid.sdk.faceliveness.FaceLivenessView;
-import cz.trask.zenid.sdk.Language;
+import cz.trask.zenid.sdk.enums.CommonVerifierFeedback;
+import cz.trask.zenid.sdk.enums.SupportedLanguages;
+import cz.trask.zenid.sdk.models.FaceLivenessStateContainerForPublicData;
+import cz.trask.zenid.sdk.models.FaceLivenessVerifierSettings;
+import cz.trask.zenid.sdk.models.UploadReadyData;
+import cz.trask.zenid.sdk.view.FaceLivenessView;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
 public class FaceLivenessActivity extends AppCompatActivity {
 
-    private FaceLivenessView faceLivenessView;
+    /*-------------------------*/
+    /*   OVERRIDDEN METHODS    */
+    /*-------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_face_liveness);
 
-        faceLivenessView = findViewById(R.id.faceLivenessView);
-
-        VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
-                .showDebugVisualization(false)
-                .language(Language.ENGLISH)
-                .build();
-
-        FaceLivenessSettings faceLivenessSettings = new FaceLivenessSettings.Builder()
-                .enableLegacyMode(false) // Use the pre-1.6.3 behavior: turn in any direction then smile.
-                .maxAuxiliaryImageSize(300) // Auxiliary images will be resized to fit into this size while preserving the aspect ratio.
-                .build();
+        FaceLivenessView faceLivenessView = findViewById(R.id.faceLivenessView);
 
         try {
-//            faceLivenessView.setLoggerCallback((module, method, message) -> Timber.tag(module).d("%s - %s", method, message));
             faceLivenessView.setLifecycleOwner(this);
-            faceLivenessView.enableDefaultVisualization(visualizationSettings);
-            faceLivenessView.setFaceLivenessSettings(faceLivenessSettings);
-            faceLivenessView.setMode(FaceLivenessMode.VIDEO); // FaceLivenessMode.PICTURE is the default value
+            faceLivenessView.setVerifierSettings(createFaceLivenessSettings());
+            faceLivenessView.enableDefaultVisualization(createVisualizationSettings());
         } catch (Exception e) {
             Timber.e(e);
             finish();
             return;
         }
 
-        faceLivenessView.setCallback(new FaceLivenessView.Callback() {
+        faceLivenessView.setCallback(new FaceLivenessView.FaceLivenessViewCallback() {
 
             @Override
-            public void onStateChanged(FaceLivenessState state, @Nullable FaceLivenessStepParams stepParams) {
-//                Timber.i("onStateChanged - state: %s", state);
-//                if (stepParams != null) {
-//                    Timber.i("onStateChanged - stepParams.name: %s", stepParams.getName());
-//                    Timber.i("onStateChanged - stepParams.isHasFailed: %s", stepParams.isHasFailed());
-//                    Timber.i("onStateChanged - stepParams.getPassedCheckCount: %s", stepParams.getPassedCheckCount());
-//                    Timber.i("onStateChanged - stepParams.getTotalCheckCount: %s", stepParams.getTotalCheckCount());
-//                }
+            public void onStateChanged(FaceLivenessStateContainerForPublicData stateContainer) {
+                CommonVerifierFeedback feedback = stateContainer.getFeedback();
+//                Timber.i("onStateChanged: %s", feedback.name());
             }
 
             @Override
-            public void onResult(FaceLivenessResult faceLivenessResult) {
-                FaceLivenessMode faceLivenessMode = faceLivenessResult.getMode();
-                if (FaceLivenessMode.VIDEO.equals(faceLivenessMode)) {
-                    LogUtils.logInfo(getApplicationContext(), "Uploading video...");
-                    postSelfieVideoSample(faceLivenessResult);
-                } else {
-                    LogUtils.logInfo(getApplicationContext(), "Uploading picture...");
-                    postSelfieSample(faceLivenessResult);
+            public void onResult(UploadReadyData uploadReadyData) {
+                postSample(getApplicationContext(), uploadReadyData);
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void onError(ZenIdException exception) {
+                LogUtils.logInfo(FaceLivenessActivity.this, exception.getMessage());
+            }
+        });
+    }
+
+    /*-------------------------*/
+    /*     PRIVATE METHODS     */
+    /*-------------------------*/
+
+    private void postSample(Context context, UploadReadyData uploadReadyData) {
+        MyApplication.apiService.postSample(uploadReadyData.getSignedSamplePackage()).enqueue(new Callback<SampleJson>() {
+
+            @Override
+            public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
+                SampleJson sample = response.body();
+                if (sample == null) {
+                    Timber.e("Response body is empty");
+                    return;
                 }
-                finish();
-            }
 
-            @Override
-            public void onError(ZenIdException e) {
-                Timber.e(e);
-            }
-        });
-    }
+                if (sample.getState().equals("NotDone") || sample.getState().equals("Error")) {
+                    LogUtils.logInfo(context, "Upload failed... " + sample.getErrorCode());
+                    return;
+                }
 
-    private void postSelfieSample(FaceLivenessResult result) {
-        MyApplication.apiService.postSelfieSample(result.getFilePath(), result.getSignature()).enqueue(new retrofit2.Callback<SampleJson>() {
-
-            @Override
-            public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
-                LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
-
+                String msg = String.format("FaceLiveness result sent; SampleId: %s", sample.getSampleId());
+                LogUtils.logInfo(getApplicationContext(), msg);
             }
 
             @Override
             public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
-                Timber.e(t);
+                Timber.e("Response body is empty");
             }
         });
     }
 
-    private void postSelfieVideoSample(FaceLivenessResult result) {
-        MyApplication.apiService.postSelfieVideoSample(result.getVideoFilePath(), result.getSignature()).enqueue(new retrofit2.Callback<SampleJson>() {
+    private FaceLivenessVerifierSettings createFaceLivenessSettings() {
+        FaceLivenessVerifierSettings faceLivenessVerifierSettings = new FaceLivenessVerifierSettings();
+        faceLivenessVerifierSettings.setEnableLegacyMode(false);
+        faceLivenessVerifierSettings.setShowSmileAnimation(true);
+        return faceLivenessVerifierSettings;
+    }
 
-            @Override
-            public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
-                LogUtils.logInfo(getApplicationContext(), "...video has been uploaded!");
-                finish();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<SampleJson> call, @NonNull Throwable t) {
-                Timber.e(t);
-            }
-        });
+    private VisualizationSettings createVisualizationSettings() {
+        return new VisualizationSettings.Builder()
+                .showDebugVisualization(false)
+                .language(SupportedLanguages.English)
+                .build();
     }
 }

@@ -54,6 +54,21 @@
         />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_ms_faceLiveness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textColor="@color/colorBlack"
+        android:text="MS Liveness verification"
+        app:backgroundTint="@color/colorGrey"
+        />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_hologram"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

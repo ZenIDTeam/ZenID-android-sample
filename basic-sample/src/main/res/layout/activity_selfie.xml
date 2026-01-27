@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     >
 
-    <cz.trask.zenid.sdk.selfie.SelfieView
+    <cz.trask.zenid.sdk.view.SelfieView
         android:id="@+id/selfieView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

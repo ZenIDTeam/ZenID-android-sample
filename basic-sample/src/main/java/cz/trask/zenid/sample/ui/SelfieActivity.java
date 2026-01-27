@@ -1,22 +1,24 @@
 package cz.trask.zenid.sample.ui;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
-import cz.trask.zenid.sdk.Language;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.api.model.SampleJson;
-import cz.trask.zenid.sdk.selfie.SelfieResult;
-import cz.trask.zenid.sdk.selfie.SelfieState;
-import cz.trask.zenid.sdk.selfie.SelfieView;
+import cz.trask.zenid.sdk.enums.CommonVerifierFeedback;
+import cz.trask.zenid.sdk.enums.SupportedLanguages;
+import cz.trask.zenid.sdk.models.SelfieStateContainerForPublicData;
+import cz.trask.zenid.sdk.models.SelfieVerifierSettings;
+import cz.trask.zenid.sdk.models.UploadReadyData;
+import cz.trask.zenid.sdk.view.SelfieView;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
@@ -25,81 +27,71 @@ import timber.log.Timber;
  */
 public class SelfieActivity extends AppCompatActivity {
 
-    private SelfieView selfieView;
+    /*-------------------------*/
+    /*   OVERRIDDEN METHODS    */
+    /*-------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selfie);
 
-        selfieView = findViewById(R.id.selfieView);
-
-        VisualizationSettings visualizationSettings = new VisualizationSettings.Builder()
-                .showDebugVisualization(false)
-                .language(Language.ENGLISH)
-                .build();
+        SelfieView selfieView = findViewById(R.id.selfieView);
 
         try {
-//            selfieView.setLoggerCallback((module, method, message) -> Timber.tag(module).d("%s - %s", method, message));
             selfieView.setLifecycleOwner(this);
-            selfieView.enableDefaultVisualization(visualizationSettings);
+            selfieView.setVerifierSettings(createSelfieVerifierSettings());
+            selfieView.enableDefaultVisualization(createVisualizationSettings());
         } catch (Exception e) {
             Timber.e(e);
             finish();
             return;
         }
 
-        selfieView.setCallback(new SelfieView.Callback() {
+        selfieView.setCallback(new SelfieView.SelfieViewCallback() {
 
             @Override
-            public void onStateChanged(SelfieState state) {
-//                Timber.i("onStateChanged %s", state);
+            public void onStateChanged(SelfieStateContainerForPublicData stateContainer) {
+                CommonVerifierFeedback feedback = stateContainer.getFeedback();
+                Timber.i("onStateChanged: %s", feedback.name());
             }
 
             @Override
-            public void onPictureTaken(SelfieResult result) {
-                Timber.i("onPictureTaken... " + result.getFilePath());
-                LogUtils.logInfo(getApplicationContext(), "Uploading taken picture...");
-                postSelfieSample(result);
+            public void onResult(UploadReadyData uploadReadyData) {
+                postSample(getApplicationContext(), uploadReadyData);
+                setResult(Activity.RESULT_OK);
                 finish();
             }
 
             @Override
-            public void onError(ZenIdException e) {
-                Timber.e(e);
+            public void onError(ZenIdException exception) {
+                LogUtils.logInfo(SelfieActivity.this, exception.getMessage());
             }
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (isCameraPermissionDenied(grantResults)) {
-            if (shouldShowRequestPermissionRationale()) {
-                Timber.i("Camera permission denied but selfieView will immediately request camera permission again.");
-            } else {
-                selfieView.setAutoRequestPermissions(false);
-                Timber.i("Camera permission denied with -don't ask again- option.");
-            }
-        } else {
-            Timber.i("Camera permission granted!");
-        }
-    }
+    /*-------------------------*/
+    /*     PRIVATE METHODS     */
+    /*-------------------------*/
 
-    private boolean isCameraPermissionDenied(int[] grantResults) {
-        return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED;
-    }
-
-    private boolean shouldShowRequestPermissionRationale() {
-        return ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA);
-    }
-
-    private void postSelfieSample(SelfieResult result) {
-        MyApplication.apiService.postSelfieSample(result.getFilePath(), result.getSignature()).enqueue(new retrofit2.Callback<SampleJson>() {
+    private void postSample(Context context, UploadReadyData uploadReadyData) {
+        MyApplication.apiService.postSample(uploadReadyData.getSignedSamplePackage()).enqueue(new Callback<SampleJson>() {
 
             @Override
             public void onResponse(@NonNull Call<SampleJson> call, @NonNull Response<SampleJson> response) {
-                LogUtils.logInfo(getApplicationContext(), "...picture has been uploaded!");
+                SampleJson sample = response.body();
+                if (sample == null) {
+                    Timber.e("Response body is empty");
+                    return;
+                }
+
+                if (sample.getState().equals("NotDone") || sample.getState().equals("Error")) {
+                    LogUtils.logInfo(context, "Upload failed... " + sample.getErrorCode());
+                    return;
+                }
+
+                String msg = String.format("Selfie result sent; SampleId: %s", sample.getSampleId());
+                LogUtils.logInfo(getApplicationContext(), msg);
             }
 
             @Override
@@ -107,5 +99,16 @@ public class SelfieActivity extends AppCompatActivity {
                 Timber.e(t);
             }
         });
+    }
+
+    private SelfieVerifierSettings createSelfieVerifierSettings() {
+        return new SelfieVerifierSettings();
+    }
+
+    private VisualizationSettings createVisualizationSettings() {
+        return new VisualizationSettings.Builder()
+                .showDebugVisualization(false)
+                .language(SupportedLanguages.English)
+                .build();
     }
 }

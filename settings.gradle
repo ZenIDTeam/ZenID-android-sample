@@ -1,1 +1,20 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        exclusiveContent {
+            forRepository { maven { url = uri("$rootDir/azure-maven-repository") } }
+            filter { includeModule("com.azure", "azure-ai-vision-face-ui-assets") }
+        }
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://www.jitpack.io")
+            content {
+                includeGroup("com.github.Tgo1014")
+                includeGroup("com.github.zhpanvip")
+            }
+        }
+    }
+}
+
 include ':basic-sample'
