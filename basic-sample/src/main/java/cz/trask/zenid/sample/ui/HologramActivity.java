@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import cz.trask.zenid.sample.LanguageUtils;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
@@ -113,7 +115,7 @@ public class HologramActivity extends AppCompatActivity {
     private VisualizationSettings createVisualizationSettings() {
         return new VisualizationSettings.Builder()
                 .showDebugVisualization(false)
-                .language(SupportedLanguages.English)
+                .language(LanguageUtils.getLanguage())
                 .showTextInformation(true)
                 .build();
     }

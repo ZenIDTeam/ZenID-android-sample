@@ -110,7 +110,7 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.4.2"
     implementation "androidx.camera:camera-view:1.4.2"
     implementation "org.threeten:threetenbp:1.6.8:no-tzdb"
-    implementation("com.azure:azure-ai-vision-face-ui:1.4.2")
+    implementation("com.azure:azure-ai-vision-face-ui:1.4.5")
     
     implementation "org.threeten:threetenbp:1.6.8:no-tzdb"
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'

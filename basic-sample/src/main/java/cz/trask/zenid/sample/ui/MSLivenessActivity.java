@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import cz.trask.sdk.ms_liveness.MSLivenessView;
+import cz.trask.zenid.sample.LanguageUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sdk.VisualizationSettings;
 import cz.trask.zenid.sdk.ZenIdException;
@@ -158,7 +159,7 @@ public class MSLivenessActivity extends AppCompatActivity {
 
     private VisualizationSettings createDefaultVisualizationSettings() {
         return new VisualizationSettings.Builder()
-                .language(SupportedLanguages.English)
+                .language(LanguageUtils.getLanguage())
                 .showDebugVisualization(false)
                 .showTextInformation(true)
                 .build();

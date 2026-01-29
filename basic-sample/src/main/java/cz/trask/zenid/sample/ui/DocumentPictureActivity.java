@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.trask.zenid.sample.LanguageUtils;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
@@ -131,7 +133,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
     private VisualizationSettings createVisualizationSettings() {
         return new VisualizationSettings.Builder()
                 .showDebugVisualization(false)
-                .language(SupportedLanguages.English)
+                .language(LanguageUtils.getLanguage())
                 .showTextInformation(true)
                 .build();
     }
