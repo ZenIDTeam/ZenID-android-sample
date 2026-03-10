@@ -11,9 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.gemalto.jp2.JP2Decoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.concurrent.Executors;
 import cz.trask.zenid.sample.LogUtils;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
@@ -27,6 +31,10 @@ import cz.trask.zenid.sdk.nfc.NfcData;
 import cz.trask.zenid.sdk.nfc.NfcResult;
 import cz.trask.zenid.sdk.nfc.NfcService;
 import cz.trask.zenid.sdk.nfc.NfcState;
+import dev.keiji.jp2k.Callback;
+import dev.keiji.jp2k.Config;
+import dev.keiji.jp2k.Jp2kDecoderAsync;
+import kotlin.Unit;
 import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
@@ -121,7 +129,7 @@ public class NfcActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
         Timber.i("New NFC event");
         handleIntent(intent);
@@ -148,13 +156,12 @@ public class NfcActivity extends AppCompatActivity {
             public void onResult(UploadReadyData uploadReadyData, NfcResult nfcResult, NfcData nfcData) {
                 String picturePath = nfcResult.getFacePicturePath();
                 FacePictureFormat format = nfcResult.getFacePictureFormat();
-                Bitmap bitmap;
                 if (format.equals(FacePictureFormat.JP2)) {
-                    bitmap = new JP2Decoder(picturePath).decode();
+                    loadImage(picturePath);
                 } else {
-                    bitmap = BitmapFactory.decodeFile(picturePath);
+                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+                    ivFacePicture.setImageBitmap(bitmap);
                 }
-                ivFacePicture.setImageBitmap(bitmap);
                 tvDocumentCode.setText("Document code: " + nfcResult.getDocumentCode());
                 tvIssuingState.setText("Issuing state: " + nfcResult.getIssuingState());
                 tvNationality.setText("Nationality: " + nfcResult.getNationality());
@@ -212,5 +219,54 @@ public class NfcActivity extends AppCompatActivity {
                 Timber.e(t);
             }
         });
+    }
+
+    private void loadImage(String picturePath) {
+        byte[] jp2kBytes;
+        try {
+            jp2kBytes = readFileToBytes(picturePath);
+            Jp2kDecoderAsync decoder = new Jp2kDecoderAsync(Executors.newSingleThreadExecutor(), new Config());
+            decoder.init(this, new Callback<Unit>() {
+                @Override
+                public void onSuccess(Unit result) {
+                    decoder.decodeImage(jp2kBytes, new Callback<Bitmap>() {
+                        @Override
+                        public void onSuccess(Bitmap bitmap) {
+                            runOnUiThread(() -> ivFacePicture.setImageBitmap(bitmap));
+                            decoder.close();
+                        }
+
+                        @Override
+                        public void onError(@NonNull Exception e) {
+                            Timber.e(e);
+                            runOnUiThread(() -> Toast.makeText(NfcActivity.this, "Error decoding image", Toast.LENGTH_SHORT).show());
+                            decoder.close();
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(@NonNull Exception e) {
+                    Timber.e(e);
+                    runOnUiThread(() -> Toast.makeText(NfcActivity.this, "Error decoding image", Toast.LENGTH_SHORT).show());
+                }
+            });
+        } catch (IOException e) {
+            Timber.e(e);
+            runOnUiThread(() -> Toast.makeText(NfcActivity.this, "Error reading image file", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private byte[] readFileToBytes(String filePath) throws IOException {
+        File file = new File(filePath);
+        try (FileInputStream fis = new FileInputStream(file)) {
+            byte[] bytes = new byte[(int) file.length()];
+            int totalRead = 0;
+            int read;
+            while (totalRead < bytes.length && (read = fis.read(bytes, totalRead, bytes.length - totalRead)) != -1) {
+                totalRead += read;
+            }
+            return bytes;
+        }
     }
 }

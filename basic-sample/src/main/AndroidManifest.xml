@@ -6,7 +6,7 @@
     <uses-sdk tools:overrideLibrary="cz.trask.zenid.sdk" />
     -->
 
-    <uses-sdk tools:overrideLibrary="com.azure.android.ai.vision.face.ui"/>
+    <uses-sdk tools:overrideLibrary="com.azure.android.ai.vision.face.ui, dev.keiji.jp2k, androidx.javascriptengine"/>
 
     <application
         android:name=".MyApplication"
@@ -31,11 +31,15 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.DocumentPictureActivity" />
+
+        <activity android:name=".ui.NfcActivity" />
+
+        <activity android:name=".ui.HologramActivity" />
+
         <activity
             android:name=".ui.SelfieActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ui.DocumentPictureActivity" />
 
         <activity
             android:name=".ui.FaceLivenessActivity"
@@ -44,10 +48,6 @@
         <activity
             android:name=".ui.MSLivenessActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ui.HologramActivity" />
-
-        <activity android:name=".ui.NfcActivity" />
 
     </application>
 
