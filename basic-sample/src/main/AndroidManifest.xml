@@ -6,7 +6,7 @@
     <uses-sdk tools:overrideLibrary="cz.trask.zenid.sdk" />
     -->
 
-    <uses-sdk tools:overrideLibrary="com.azure.android.ai.vision.face.ui, dev.keiji.jp2k, androidx.javascriptengine"/>
+    <uses-sdk tools:overrideLibrary="com.azure.android.ai.vision.face.ui, com.azure.android.ai.vision.face.ui.api, dev.keiji.jp2k, androidx.javascriptengine"/>
 
     <application
         android:name=".MyApplication"
