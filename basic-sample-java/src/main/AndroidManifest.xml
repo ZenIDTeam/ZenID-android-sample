@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+    <uses-sdk tools:overrideLibrary="cz.trask.zenid.sdk" />
+    -->
+
+    <uses-sdk tools:overrideLibrary="com.azure.android.ai.vision.face.ui, com.azure.android.ai.vision.face.ui.api, dev.keiji.jp2k, androidx.javascriptengine"/>
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- This Activity has to be exported (exported = true), because it's a launcher activity with Intent filter -->
+        <!-- nosemgrep: java.android.security.exported_activity.exported_activity -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.DocumentPictureActivity"
+            android:configChanges="orientation|screenSize" />
+
+        <activity android:name=".ui.NfcActivity" />
+
+        <activity
+            android:name=".ui.HologramActivity"
+            android:configChanges="orientation|screenSize" />
+
+        <activity
+            android:name=".ui.SelfieActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.FaceLivenessActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.MSLivenessActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.QrScannerActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.PickerActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.ResultActivity"
+            android:screenOrientation="portrait" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ZenID Sample Java</string>
+    <string name="select_server">Select server</string>
+    <string name="default_label">Default</string>
+    <string name="none_label">None</string>
+    <string name="section_server_settings">Server settings</string>
+    <string name="section_document_settings">Document scanner settings</string>
+    <string name="section_verifiers">Verifiers</string>
+    <string name="qr_scanner_hint">Point at a ZenID QR code</string>
+</resources>
