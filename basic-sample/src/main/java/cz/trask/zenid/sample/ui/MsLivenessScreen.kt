@@ -27,9 +27,11 @@ import java.util.Locale
 @Composable
 fun MsLivenessScreen(
     mainViewModel: MainViewModel,
-    navController: NavController
+    navController: NavController,
+    restart: Boolean = false
 ) {
-    val challengeToken = mainViewModel.uiState.collectAsStateWithLifecycle().value.challengeToken
+    val uiState = mainViewModel.uiState.collectAsStateWithLifecycle().value
+    val initialToken = uiState.challengeToken
 
     AndroidView(
         modifier = Modifier.fillMaxSize(),
@@ -67,20 +69,22 @@ fun MsLivenessScreen(
 
                 override fun onError(exception: ZenIdException) {
                     Timber.e(exception)
-                    if (challengeToken != null) {
-                        msLivenessView.restart(challengeToken)
-                    } else {
-                        navController.popBackStack()
+                    navController.navigate(Routes.msLiveness(restart = true)) {
+                        popUpTo(Routes.MS_LIVENESS) { inclusive = true }
                     }
                 }
 
-                override fun onBackPressed() {
+                override fun onBackPressed(action: String) {
                     navController.popBackStack()
                 }
             })
 
-            if (challengeToken != null) {
-                msLivenessView.start(challengeToken)
+            if (initialToken != null) {
+                if (restart) {
+                    msLivenessView.restart(initialToken)
+                } else {
+                    msLivenessView.start(initialToken)
+                }
             } else {
                 navController.popBackStack()
             }

@@ -204,7 +204,7 @@ private fun MainScreenContent(state: MainUiState, navController: NavController, 
                         OptionRow(
                             title = "MS Liveness",
                             icon = Icons.Outlined.Visibility,
-                            onClick = { navController.navigate(Routes.MS_LIVENESS) }
+                            onClick = { navController.navigate(Routes.msLiveness()) }
                         )
                     }
                     item {

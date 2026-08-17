@@ -80,7 +80,7 @@ public class MSLivenessActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onBackPressed() {
+            public void onBackPressed(@NonNull String action) {
                 finish();
             }
         });

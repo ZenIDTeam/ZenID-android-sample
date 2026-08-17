@@ -14,7 +14,7 @@ import cz.trask.zenid.sample.viewmodel.PickerViewModel
 object Routes {
     const val MAIN = "main"
     const val QR_SCANNER = "qr_scanner"
-    const val MS_LIVENESS = "ms_liveness"
+    const val MS_LIVENESS = "ms_liveness/{restart}"
     const val NFC = "nfc"
     const val RESULT = "result"
     const val PICKER = "picker/{type}"
@@ -22,6 +22,7 @@ object Routes {
 
     fun picker(type: String) = "picker/$type"
     fun scanner(verifier: String) = "scanner/$verifier"
+    fun msLiveness(restart: Boolean = false) = "ms_liveness/$restart"
 }
 
 @Composable
@@ -72,10 +73,15 @@ fun AppNavigation(mainViewModel: MainViewModel = viewModel()) {
                 navController = navController
             )
         }
-        composable(Routes.MS_LIVENESS) {
+        composable(
+            route = Routes.MS_LIVENESS,
+            arguments = listOf(navArgument("restart") { type = NavType.BoolType; defaultValue = false })
+        ) { backStackEntry ->
+            val restart = backStackEntry.arguments?.getBoolean("restart") ?: false
             MsLivenessScreen(
                 mainViewModel = mainViewModel,
-                navController = navController
+                navController = navController,
+                restart = restart
             )
         }
         composable(Routes.NFC) {
