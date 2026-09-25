@@ -66,6 +66,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packaging {
+        // BouncyCastle 1.85 (via jmrtd) ships META-INF/LICENSE.md in both bcprov and bcutil.
+        resources {
+            pickFirsts += 'META-INF/LICENSE.md'
+        }
+    }
+
     buildFeatures {
         buildConfig = true
     }
@@ -80,7 +87,7 @@ android {
 }
 
 ext {
-    okHttpVersion = '5.3.2'
+    okHttpVersion = '5.4.0'
     retrofitVersion = '3.0.0'
 }
 
@@ -93,14 +100,14 @@ dependencies {
 
     // UI
     implementation 'com.google.android.material:material:1.14.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
 
     // Camera
     implementation "com.otaliastudios.opengl:egloo:0.6.1"
 
     // NFC card reader
-    implementation 'net.sf.scuba:scuba-sc-android:0.0.26'
-    implementation 'org.jmrtd:jmrtd:0.8.6'
+    implementation 'net.sf.scuba:scuba-sc-android:0.0.27'
+    implementation 'org.jmrtd:jmrtd:0.8.8'
 
     // Rest API
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
@@ -112,16 +119,16 @@ dependencies {
     implementation "com.google.android.gms:play-services-tasks:18.4.1"
 
     // MS Liveness
-    implementation "androidx.camera:camera-core:1.6.1"
-    implementation "androidx.camera:camera-camera2:1.6.1"
-    implementation "androidx.camera:camera-lifecycle:1.6.1"
-    implementation "androidx.camera:camera-view:1.6.1"
-    implementation "org.threeten:threetenbp:1.7.3:no-tzdb"
+    implementation "androidx.camera:camera-core:1.6.2"
+    implementation "androidx.camera:camera-camera2:1.6.2"
+    implementation "androidx.camera:camera-lifecycle:1.6.2"
+    implementation "androidx.camera:camera-view:1.6.2"
+    implementation "org.threeten:threetenbp:1.7.4:no-tzdb"
     implementation("com.azure:azure-ai-vision-face-ui:1.5.0")
     
     // JSON converter
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.3'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.21.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.3'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.22.3'
 
     // QR code scanning
     implementation 'com.google.mlkit:barcode-scanning:17.3.0'
