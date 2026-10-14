@@ -10,6 +10,7 @@ import cz.trask.zenid.sdk.api.model.InitResponseJson
 import cz.trask.zenid.sdk.api.model.InvestigationResponseJson
 import cz.trask.zenid.sdk.api.model.ProfilesResponseJson
 import cz.trask.zenid.sdk.api.model.SampleJson
+import cz.trask.zenid.sdk.enums.DocumentRole
 import cz.trask.zenid.sdk.models.UploadReadyData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +26,7 @@ data class MainUiState(
     val isAuthorized: Boolean = false,
     val isAuthorizing: Boolean = false,
     val serverUrl: String = "",
+    val customData: String? = null,
     val profiles: List<String> = emptyList(),
     val selectedProfile: String = "",
     val country: String? = null,
@@ -50,6 +52,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     init {
         _uiState.value = _uiState.value.copy(
             serverUrl = settings.serverUrl ?: "",
+            customData = settings.customData,
             selectedProfile = settings.profile,
             country = settings.country,
             role = settings.role,
@@ -68,11 +71,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             return
         }
         _uiState.value = _uiState.value.copy(isAuthorizing = true, error = null, challengeToken = challengeToken)
-        MyApplication.apiService?.initSdk(challengeToken)?.enqueue(object : Callback<InitResponseJson> {
+        MyApplication.apiService?.initSdk(challengeToken, settings.customData)?.enqueue(object : Callback<InitResponseJson> {
             override fun onResponse(call: Call<InitResponseJson>, response: Response<InitResponseJson>) {
                 viewModelScope.launch {
                     val responseToken = response.body()?.response ?: run {
-                        _uiState.value = _uiState.value.copy(isAuthorizing = false, error = "Auth response empty")
+                        val reason = if (response.isSuccessful) "empty response" else "HTTP ${response.code()} ${response.message()}"
+                        _uiState.value = _uiState.value.copy(isAuthorizing = false, error = "initSdk failed: $reason")
                         return@launch
                     }
                     try {
@@ -82,6 +86,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                             if (profile != null) ZenId.get().security.selectProfile(profile)
                             _uiState.value = _uiState.value.copy(isAuthorized = true, isAuthorizing = false)
                             loadProfiles()
+                            validateSelections()
                         } else {
                             _uiState.value = _uiState.value.copy(isAuthorizing = false, error = "Authorization failed")
                         }
@@ -109,6 +114,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         (getApplication() as MyApplication).rebuildApiService()
         _uiState.value = _uiState.value.copy(serverUrl = normalizedUrl, isAuthorized = false)
         authorize()
+    }
+
+    // Stored on the SDK session at initSdk, so a new value needs a new authorization.
+    fun setCustomData(value: String?) {
+        settings.customData = value?.trim()?.ifEmpty { null }
+        _uiState.value = _uiState.value.copy(customData = settings.customData)
+        if (_uiState.value.serverUrl.isNotEmpty()) authorize()
     }
 
     fun setProfile(name: String) {
@@ -202,6 +214,37 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             }) ?: run {
             _lastResult.value = "No API service"
             _isLoadingResult.value = false
+        }
+    }
+
+    // Clears persisted selections that are no longer available in the license.
+    private fun validateSelections() {
+        try {
+            val zenId = ZenId.get()
+            val state = _uiState.value
+            var country = state.country
+            var countryFilter = countryOf(country)
+            if (countryFilter != null && !zenId.supportedCountries.contains(countryFilter)) {
+                country = null
+                countryFilter = null
+            }
+            var role = state.role
+            if (role != null && zenId.getSupportedDocuments(countryFilter).none { it.name == role }) {
+                role = null
+            }
+            var page = state.page
+            val roleFilter = role?.let { DocumentRole.valueOf(it) }
+            if (page != null && zenId.getSupportedDocumentPageCodes(countryFilter, roleFilter).none { it.name == page }) {
+                page = null
+            }
+            if (country != state.country || role != state.role || page != state.page) {
+                settings.country = country
+                settings.role = role
+                settings.page = page
+                _uiState.value = _uiState.value.copy(country = country, role = role, page = page)
+            }
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 

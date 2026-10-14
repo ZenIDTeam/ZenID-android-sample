@@ -22,6 +22,12 @@ public class AppSettings {
         else prefs.edit().putString("api_key", value).apply();
     }
 
+    public String getCustomData() { return prefs.getString("custom_data", null); }
+    public void setCustomData(String value) {
+        if (value == null) prefs.edit().remove("custom_data").apply();
+        else prefs.edit().putString("custom_data", value).apply();
+    }
+
     public String getProfile() { return prefs.getString("profile", ""); }
     public void setProfile(String value) { prefs.edit().putString("profile", value != null ? value : "").apply(); }
 

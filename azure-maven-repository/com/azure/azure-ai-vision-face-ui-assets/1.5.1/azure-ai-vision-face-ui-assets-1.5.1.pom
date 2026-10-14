@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.azure</groupId>
   <artifactId>azure-ai-vision-face-ui-assets</artifactId>
-  <version>1.5.0</version>
+  <version>1.5.1</version>
   <packaging>aar</packaging>
   <name>Microsoft Azure AI Vision Face UI Android Client SDK Library</name>
   <description>This package contains the Azure AI Vision Face UI Android client library .</description>

@@ -3,6 +3,7 @@ package cz.trask.zenid.sample.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 import android.view.View;
 import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
@@ -77,6 +78,13 @@ public class MSLivenessActivity extends AppCompatActivity {
             public void onError(@NonNull ZenIdException exception) {
                 Timber.e(exception);
                 restartActivity();
+            }
+
+            @Override
+            public void onVerificationFailed(@NonNull String message) {
+                // Terminal: another attempt cannot help, so do not restart.
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                finish();
             }
 
             @Override

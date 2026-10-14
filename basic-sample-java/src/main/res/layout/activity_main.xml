@@ -153,6 +153,62 @@
 
                 <View
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="?attr/colorOutlineVariant" />
+
+                <!-- CustomData row -->
+                <LinearLayout
+                    android:id="@+id/rowCustomData"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_account_circle"
+                        android:contentDescription="@null"
+                        app:tint="?attr/colorOnSurfaceVariant"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="CustomData"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/textCustomData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/none_label"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:maxWidth="180dp"
+                        android:paddingEnd="4dp" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:contentDescription="@null"
+                        app:tint="?attr/colorPrimary" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
                     android:layout_height="16dp"
                     android:background="?attr/colorSurfaceContainer" />
 

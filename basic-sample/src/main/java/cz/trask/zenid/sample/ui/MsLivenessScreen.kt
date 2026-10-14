@@ -3,6 +3,7 @@ package cz.trask.zenid.sample.ui
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -72,6 +73,13 @@ fun MsLivenessScreen(
                     navController.navigate(Routes.msLiveness(restart = true)) {
                         popUpTo(Routes.MS_LIVENESS) { inclusive = true }
                     }
+                }
+
+                override fun onVerificationFailed(message: String) {
+                    // Terminal: another attempt cannot help, so say why and leave instead of restarting.
+                    Timber.e("Verification failed: $message")
+                    Toast.makeText(ctx, message, Toast.LENGTH_LONG).show()
+                    navController.popBackStack()
                 }
 
                 override fun onBackPressed(action: String) {

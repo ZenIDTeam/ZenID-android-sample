@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,6 +24,8 @@ import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.api.model.InitResponseJson;
 import cz.trask.zenid.sdk.api.model.ProfilesResponseJson;
+import cz.trask.zenid.sdk.enums.Country;
+import cz.trask.zenid.sdk.enums.DocumentRole;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textServer;
     private TextView textProfile;
+    private TextView textCustomData;
     private TextView textCountry;
     private TextView textRole;
     private TextView textPage;
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         textServer = findViewById(R.id.textServer);
         textProfile = findViewById(R.id.textProfile);
+        textCustomData = findViewById(R.id.textCustomData);
         textCountry = findViewById(R.id.textCountry);
         textRole = findViewById(R.id.textRole);
         textPage = findViewById(R.id.textPage);
@@ -168,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.rowProfile).setOnClickListener(v ->
                 openPicker("profile", MyApplication.appSettings.getProfile()));
+
+        findViewById(R.id.rowCustomData).setOnClickListener(v -> editCustomData());
 
         findViewById(R.id.rowCountry).setOnClickListener(v ->
                 openPicker("country", MyApplication.appSettings.getCountry()));
@@ -254,9 +261,31 @@ public class MainActivity extends AppCompatActivity {
         refreshSettingsUi();
     }
 
+    // Stored on the SDK session at initSdk, so a new value needs a new authorization.
+    private void editCustomData() {
+        EditText input = new EditText(this);
+        input.setSingleLine();
+        input.setText(MyApplication.appSettings.getCustomData());
+        new AlertDialog.Builder(this)
+                .setTitle("CustomData")
+                .setMessage("Your identifier of the person being verified. Stored on the SDK session and inherited by uploads.")
+                .setView(input)
+                .setPositiveButton("Save", (d, w) -> {
+                    String value = input.getText().toString().trim();
+                    MyApplication.appSettings.setCustomData(value.isEmpty() ? null : value);
+                    refreshSettingsUi();
+                    if (MyApplication.appSettings.getServerUrl() != null) authorize();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
     private void refreshSettingsUi() {
         String serverUrl = MyApplication.appSettings.getServerUrl();
         updateServerText(serverUrl);
+
+        String customData = MyApplication.appSettings.getCustomData();
+        textCustomData.setText(customData != null ? customData : getString(R.string.none_label));
 
         String profile = MyApplication.appSettings.getProfile();
         textProfile.setText(profile != null && !profile.isEmpty() ? profile : getString(R.string.default_label));
@@ -312,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        MyApplication.apiService.initSdk(challengeToken).enqueue(new Callback<InitResponseJson>() {
+        MyApplication.apiService.initSdk(challengeToken, MyApplication.appSettings.getCustomData()).enqueue(new Callback<InitResponseJson>() {
             @Override
             public void onResponse(@NonNull Call<InitResponseJson> call, @NonNull Response<InitResponseJson> response) {
                 InitResponseJson body = response.body();
@@ -330,6 +359,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         verifiersSection.setVisibility(View.VISIBLE);
                         loadProfiles();
+                        validateSelections();
                     }
                 } catch (ZenIdException e) {
                     Timber.e(e);
@@ -343,6 +373,48 @@ public class MainActivity extends AppCompatActivity {
                 loadingOverlay.setVisibility(View.GONE);
             }
         });
+    }
+
+    // Clears persisted selections that are no longer available in the license.
+    private void validateSelections() {
+        try {
+            ZenId zenId = ZenId.get();
+            String country = MyApplication.appSettings.getCountry();
+            String role = MyApplication.appSettings.getRole();
+            String page = MyApplication.appSettings.getPage();
+            boolean changed = false;
+
+            Country countryFilter = PickerActivity.toCountry(country);
+            if (countryFilter != null && !zenId.getSupportedCountries().contains(countryFilter)) {
+                country = null;
+                countryFilter = null;
+                changed = true;
+            }
+            if (role != null && !containsName(zenId.getSupportedDocuments(countryFilter), role)) {
+                role = null;
+                changed = true;
+            }
+            DocumentRole roleFilter = role != null ? DocumentRole.valueOf(role) : null;
+            if (page != null && !containsName(zenId.getSupportedDocumentPageCodes(countryFilter, roleFilter), page)) {
+                page = null;
+                changed = true;
+            }
+            if (changed) {
+                MyApplication.appSettings.setCountry(country);
+                MyApplication.appSettings.setRole(role);
+                MyApplication.appSettings.setPage(page);
+                refreshSettingsUi();
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    private static boolean containsName(List<? extends Enum<?>> values, String name) {
+        for (Enum<?> value : values) {
+            if (value.name().equals(name)) return true;
+        }
+        return false;
     }
 
     private void loadProfiles() {

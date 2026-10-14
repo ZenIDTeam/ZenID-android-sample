@@ -10,6 +10,7 @@ class AppSettings(context: Context) {
 
     var serverUrl: String? by NullableStringPref("server_url")
     var apiKey: String? by NullableStringPref("api_key")
+    var customData: String? by NullableStringPref("custom_data")
     var profile: String by StringPref("profile", "")
     var country: String? by NullableStringPref("country")
     var role: String? by NullableStringPref("role")

@@ -106,8 +106,9 @@ dependencies {
     implementation "com.otaliastudios.opengl:egloo:0.6.1"
 
     // NFC card reader
-    implementation 'net.sf.scuba:scuba-sc-android:0.0.27'
     implementation 'org.jmrtd:jmrtd:0.8.8'
+    implementation 'net.sf.scuba:scuba-sc-android:0.0.27'
+    implementation 'dev.keiji.jp2k:jp2k-decoder-android:0.3.0'
 
     // Rest API
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
@@ -124,7 +125,7 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.6.2"
     implementation "androidx.camera:camera-view:1.6.2"
     implementation "org.threeten:threetenbp:1.7.4:no-tzdb"
-    implementation("com.azure:azure-ai-vision-face-ui:1.5.0")
+    implementation("com.azure:azure-ai-vision-face-ui:1.5.1")
     
     // JSON converter
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.3'

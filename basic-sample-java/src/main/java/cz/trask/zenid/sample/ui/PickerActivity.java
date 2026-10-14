@@ -15,9 +15,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import cz.trask.zenid.sample.R;
-import cz.trask.zenid.sdk.models.ZenidModels;
+import cz.trask.zenid.sdk.ZenId;
+import cz.trask.zenid.sdk.enums.Country;
+import cz.trask.zenid.sdk.enums.DocumentRole;
+import cz.trask.zenid.sdk.enums.PageCodes;
 import java.util.ArrayList;
 import java.util.List;
+import timber.log.Timber;
 
 public class PickerActivity extends AppCompatActivity {
 
@@ -110,36 +114,32 @@ public class PickerActivity extends AppCompatActivity {
         return null;
     }
 
+    static Country toCountry(String name) {
+        return name == null || name.isEmpty() || ANY_COUNTRY.equals(name) ? null : Country.valueOf(name);
+    }
+
     private List<String> optionsForType(String type, List<String> profiles, String country, String role) {
-        if ("country".equals(type)) {
-            List<String> result = new ArrayList<>();
-            for (ZenidModels.ZenidModel m : ZenidModels.getModels()) {
-                String name = m.getCountry().name();
-                if (!result.contains(name)) result.add(name);
-            }
-            if (result.size() > 1) result.add(0, ANY_COUNTRY);
-            return result;
-        } else if ("role".equals(type)) {
-            List<String> result = new ArrayList<>();
-            for (ZenidModels.ZenidModel m : ZenidModels.getModels()) {
-                if (!ANY_COUNTRY.equals(country) && !m.getCountry().name().equals(country)) continue;
-                String name = m.getDocumentRole().name();
-                if (!result.contains(name)) result.add(name);
-            }
-            return result;
-        } else if ("page".equals(type)) {
-            List<String> result = new ArrayList<>();
-            for (ZenidModels.ZenidModel m : ZenidModels.getModels()) {
-                if (!ANY_COUNTRY.equals(country) && !m.getCountry().name().equals(country)) continue;
-                if (!m.getDocumentRole().name().equals(role)) continue;
-                String name = m.getPageCode().name();
-                if (!result.contains(name)) result.add(name);
-            }
-            return result;
-        } else if ("profile".equals(type) && profiles != null) {
-            return profiles;
+        if ("profile".equals(type)) {
+            return profiles != null ? profiles : new ArrayList<>();
         }
-        return new ArrayList<>();
+        // Offer only what the license allows.
+        List<String> result = new ArrayList<>();
+        try {
+            ZenId zenId = ZenId.get();
+            if ("country".equals(type)) {
+                for (Country c : zenId.getSupportedCountries()) result.add(c.name());
+                if (result.size() > 1) result.add(0, ANY_COUNTRY);
+            } else if ("role".equals(type)) {
+                for (DocumentRole r : zenId.getSupportedDocuments(toCountry(country))) result.add(r.name());
+            } else if ("page".equals(type)) {
+                DocumentRole roleFilter = role != null ? DocumentRole.valueOf(role) : null;
+                for (PageCodes p : zenId.getSupportedDocumentPageCodes(toCountry(country), roleFilter)) result.add(p.name());
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+            return new ArrayList<>();
+        }
+        return result;
     }
 
     interface OnOptionSelected {

@@ -1,5 +1,6 @@
 package cz.trask.zenid.sample.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
@@ -59,9 +61,18 @@ fun ScannerScreen(
             }
         }
     }
-    val handleError: (ZenIdException) -> Unit = remember {
+    val context = LocalContext.current
+    val handleError: (ZenIdException) -> Unit = remember(context) {
         { e ->
             Timber.e(e)
+            navController.popBackStack()
+        }
+    }
+    // A failed verification is terminal and produces no sample, so say why before leaving -
+    // otherwise it looks exactly like the user pressing Back.
+    val handleVerificationFailed: (String) -> Unit = remember(context) {
+        { message ->
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             navController.popBackStack()
         }
     }
@@ -88,6 +99,7 @@ fun ScannerScreen(
                             override fun onScanNfc() = handleNfc()
                             override fun onResult(data: UploadReadyData) = handleResult(data)
                             override fun onError(e: ZenIdException) = handleError(e)
+                            override fun onVerificationFailed(message: String) = handleVerificationFailed(message)
                         })
                     }
                 }
@@ -100,6 +112,7 @@ fun ScannerScreen(
                             override fun onStateChanged(s: cz.trask.zenid.sdk.models.SelfieStateContainerForPublicData) = Unit
                             override fun onResult(data: UploadReadyData) = handleResult(data)
                             override fun onError(e: ZenIdException) = handleError(e)
+                            override fun onVerificationFailed(message: String) = handleVerificationFailed(message)
                         })
                     }
                 }
@@ -116,6 +129,7 @@ fun ScannerScreen(
                             override fun onStateChanged(s: cz.trask.zenid.sdk.models.FaceLivenessStateContainerForPublicData) = Unit
                             override fun onResult(data: UploadReadyData) = handleResult(data)
                             override fun onError(e: ZenIdException) = handleError(e)
+                            override fun onVerificationFailed(message: String) = handleVerificationFailed(message)
                         })
                     }
                 }
@@ -132,6 +146,7 @@ fun ScannerScreen(
                             override fun onStateChanged(s: cz.trask.zenid.sdk.models.DocumentVerifierStateContainerForPublicData) = Unit
                             override fun onResult(data: UploadReadyData) = handleResult(data)
                             override fun onError(e: ZenIdException) = handleError(e)
+                            override fun onVerificationFailed(message: String) = handleVerificationFailed(message)
                         })
                     }
                 }

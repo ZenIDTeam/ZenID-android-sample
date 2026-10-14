@@ -1,6 +1,7 @@
 package cz.trask.zenid.sample.ui;
 
 import android.os.Bundle;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import cz.trask.zenid.sample.LanguageUtils;
 import cz.trask.zenid.sample.R;
@@ -47,6 +48,13 @@ public class SelfieActivity extends AppCompatActivity {
             @Override
             public void onError(ZenIdException exception) {
                 Timber.e(exception);
+            }
+
+            @Override
+            public void onVerificationFailed(String message) {
+                // Terminal: the capture has stopped and onResult will not be called.
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }

@@ -50,6 +50,5 @@ Zenid is powered by Open Source libraries.
  * plusaes (Boost Software License 1.0)
  * Rapidcsv (BSD 3-Clause license)
  * Tensorflow Lite (Apache License 2.0)
- * TooJpeg (zlib License)
  * JMRTD (LGPL License)
  * CameraView (MIT License)

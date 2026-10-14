@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.ManageAccounts
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Style
 import androidx.compose.material.icons.outlined.Visibility
@@ -28,6 +29,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,6 +40,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -60,13 +63,46 @@ import androidx.core.net.toUri
 @Composable
 fun MainScreen(navController: NavController, viewModel: MainViewModel) {
     val state by viewModel.uiState.collectAsState()
-    MainScreenContent(state, navController, onLogout = { viewModel.logout() })
+    MainScreenContent(
+        state,
+        navController,
+        onLogout = { viewModel.logout() },
+        onCustomData = { viewModel.setCustomData(it) },
+        onRetry = { viewModel.authorize() }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MainScreenContent(state: MainUiState, navController: NavController, onLogout: () -> Unit = {}) {
+private fun MainScreenContent(
+    state: MainUiState,
+    navController: NavController,
+    onLogout: () -> Unit = {},
+    onCustomData: (String?) -> Unit = {},
+    onRetry: () -> Unit = {}
+) {
     val showLogoutDialog = remember { mutableStateOf(false) }
+    val showCustomDataDialog = remember { mutableStateOf(false) }
+    var customDataDraft by remember { mutableStateOf(state.customData ?: "") }
+
+    if (showCustomDataDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showCustomDataDialog.value = false },
+            title = { Text("CustomData") },
+            text = {
+                Column {
+                    Text("Your identifier of the person being verified. Stored on the SDK session and inherited by uploads.")
+                    OutlinedTextField(value = customDataDraft, onValueChange = { customDataDraft = it }, singleLine = true)
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showCustomDataDialog.value = false; onCustomData(customDataDraft) }) { Text("Save") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCustomDataDialog.value = false }) { Text("Cancel") }
+            }
+        )
+    }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     if (showLogoutDialog.value) {
@@ -129,9 +165,35 @@ private fun MainScreenContent(state: MainUiState, navController: NavController, 
                         icon = Icons.Outlined.ManageAccounts,
                         enabled = state.serverUrl.isNotEmpty(),
                         valueBold = true,
-                        showDivider = false,
                         onClick = { navController.navigate(Routes.picker("profile")) }
                     )
+                }
+                item {
+                    OptionRow(
+                        title = "CustomData",
+                        value = state.customData ?: "None",
+                        icon = Icons.Outlined.Person,
+                        enabled = state.serverUrl.isNotEmpty(),
+                        valueBold = true,
+                        showDivider = false,
+                        onClick = { customDataDraft = state.customData ?: ""; showCustomDataDialog.value = true }
+                    )
+                }
+                state.error?.let { error ->
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = error,
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.weight(1f)
+                            )
+                            TextButton(onClick = onRetry) { Text("Retry") }
+                        }
+                    }
                 }
 
                 item {

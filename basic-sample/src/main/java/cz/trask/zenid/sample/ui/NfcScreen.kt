@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import cz.trask.zenid.sample.viewmodel.MainViewModel
 import cz.trask.zenid.sdk.models.UploadReadyData
 import cz.trask.zenid.sdk.nfc.FacePictureFormat
@@ -86,72 +87,90 @@ fun NfcScreen(
 
         state = state.copy(showSkip = showSkip)
 
-        val intent = Intent(activity, activity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        val pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_MUTABLE)
-        nfcAdapter.enableForegroundDispatch(activity, pendingIntent, null, null)
+        val callback = object : NfcService.Callback {
+            override fun onZenIdNotNfcState() {
+                state = state.copy(status = "Not in NFC state")
+            }
 
-        val nfcListener: (Intent) -> Unit = { nfcIntent ->
-            nfcService.handleIntent(nfcIntent, object : NfcService.Callback {
-                override fun onZenIdNotNfcState() {
-                    state = state.copy(status = "Not in NFC state")
-                }
+            override fun onStateChanged(nfcState: NfcState) {
+                state = state.copy(status = "NFC State: ${nfcState.name}")
+            }
 
-                override fun onStateChanged(nfcState: NfcState) {
-                    state = state.copy(status = "NFC State: ${nfcState.name}")
-                }
+            override fun onResult(uploadReadyData: UploadReadyData, nfcResult: NfcResult, nfcData: NfcData) {
+                val info = listOf(
+                    "Document code" to (nfcResult.documentCode ?: ""),
+                    "Issuing state" to (nfcResult.issuingState ?: ""),
+                    "Nationality" to (nfcResult.nationality ?: ""),
+                    "Document number" to (nfcResult.documentNumber ?: ""),
+                    "Date of birth" to (nfcResult.dateOfBirth ?: ""),
+                    "Date of expiry" to (nfcResult.dateOfExpiry ?: ""),
+                    "Primary identifier" to (nfcResult.primaryIdentifier ?: ""),
+                    "Secondary identifier" to (nfcResult.secondaryIdentifier ?: ""),
+                    "Gender" to (nfcResult.gender?.name ?: "")
+                )
+                state = state.copy(status = "NFC read successful", documentInfo = info)
 
-                override fun onResult(uploadReadyData: UploadReadyData, nfcResult: NfcResult, nfcData: NfcData) {
-                    val info = listOf(
-                        "Document code" to (nfcResult.documentCode ?: ""),
-                        "Issuing state" to (nfcResult.issuingState ?: ""),
-                        "Nationality" to (nfcResult.nationality ?: ""),
-                        "Document number" to (nfcResult.documentNumber ?: ""),
-                        "Date of birth" to (nfcResult.dateOfBirth ?: ""),
-                        "Date of expiry" to (nfcResult.dateOfExpiry ?: ""),
-                        "Primary identifier" to (nfcResult.primaryIdentifier ?: ""),
-                        "Secondary identifier" to (nfcResult.secondaryIdentifier ?: ""),
-                        "Gender" to (nfcResult.gender?.name ?: "")
-                    )
-                    state = state.copy(status = "NFC read successful", documentInfo = info)
-
-                    val picturePath = nfcResult.facePicturePath
-                    if (picturePath != null) {
-                        if (nfcResult.facePictureFormat == FacePictureFormat.JP2) {
-                            decodeJp2k(context, picturePath) { bitmap ->
-                                state = state.copy(faceBitmap = bitmap)
-                            }
-                        } else {
-                            state = state.copy(faceBitmap = BitmapFactory.decodeFile(picturePath))
+                val picturePath = nfcResult.facePicturePath
+                if (picturePath != null) {
+                    if (nfcResult.facePictureFormat == FacePictureFormat.JP2) {
+                        decodeJp2k(context, picturePath) { bitmap ->
+                            state = state.copy(faceBitmap = bitmap)
                         }
+                    } else {
+                        state = state.copy(faceBitmap = BitmapFactory.decodeFile(picturePath))
                     }
-                    mainViewModel.postSampleAndNavigate(uploadReadyData) { onDone() }
+                    // Both branches above read the file before returning, so it can go now.
+                    File(picturePath).delete()
                 }
+                mainViewModel.postSampleAndNavigate(uploadReadyData) { onDone() }
+            }
 
-                override fun onAccessDenied(exception: NfcAccessDeniedException) {
-                    val key = nfcService.nfcKey ?: return
-                    state = state.copy(
-                        status = "Access denied - birth: ${key.birthDate}, doc: ${key.documentNumber}, expiry: ${key.expiryDate}"
-                    )
-                }
+            override fun onAccessDenied(exception: NfcAccessDeniedException) {
+                val key = nfcService.nfcKey ?: return
+                state = state.copy(
+                    status = "Access denied - birth: ${key.birthDate}, doc: ${key.documentNumber}, expiry: ${key.expiryDate}"
+                )
+            }
 
-                override fun onConnectionFailed(exception: NfcConnectionException) {
-                    state = state.copy(status = "Connection lost")
-                }
+            override fun onConnectionFailed(exception: NfcConnectionException) {
+                state = state.copy(status = "Connection lost")
+            }
 
-                override fun onGeneralException(exception: Exception) {
-                    state = state.copy(status = "Error: ${exception.message}")
-                }
-            })
+            override fun onGeneralException(exception: Exception) {
+                state = state.copy(status = "Error: ${exception.message}")
+            }
+
+            override fun onVerificationFailed(message: String) {
+                state = state.copy(status = "Verification failed: $message")
+            }
         }
+        // Registered up front so that a failed skipNfcVerification() is reported even when no tag
+        // was ever tapped and handleIntent() never ran.
+        nfcService.setCallback(callback)
+
+        val nfcListener: (Intent) -> Unit = { nfcIntent -> nfcService.handleIntent(nfcIntent, callback) }
         activity.addOnNewIntentListener(nfcListener)
 
-        onDispose {
-            nfcAdapter.disableForegroundDispatch(activity)
-            activity.removeOnNewIntentListener(nfcListener)
+        onDispose { activity.removeOnNewIntentListener(nfcListener) }
+    }
+
+    // The system takes the foreground dispatch away whenever the app leaves the foreground, and
+    // delivering the tag intent itself takes it out for a moment, so it has to be registered again
+    // on every resume - registered once, it only ever reads the first tag.
+    LifecycleResumeEffect(Unit) {
+        val nfcAdapter = NfcAdapter.getDefaultAdapter(activity)?.takeIf { it.isEnabled }
+        if (nfcAdapter != null) {
+            val intent = Intent(activity, activity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            val pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_MUTABLE)
+            nfcAdapter.enableForegroundDispatch(activity, pendingIntent, null, null)
         }
+        onPauseOrDispose { nfcAdapter?.disableForegroundDispatch(activity) }
     }
 
     NfcScreenContent(state = state, onSkip = {
+        // No sample means the core refused the skip; it reports the reason through the callback,
+        // which has already put it in the status by the time this returns - do not overwrite it.
+        // Continuing here would send the document without the page that carries the chip data.
         val uploadReadyData = nfcService.skipNfcVerification()
         if (uploadReadyData != null) {
             mainViewModel.postSampleAndNavigate(uploadReadyData) { onDone() }

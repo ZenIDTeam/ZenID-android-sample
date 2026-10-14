@@ -27,6 +27,15 @@ import cz.trask.zenid.sdk.nfc.NfcData;
 import cz.trask.zenid.sdk.nfc.NfcResult;
 import cz.trask.zenid.sdk.nfc.NfcService;
 import cz.trask.zenid.sdk.nfc.NfcState;
+import dev.keiji.jp2k.Callback;
+import dev.keiji.jp2k.Config;
+import dev.keiji.jp2k.Jp2kDecoderAsync;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import kotlin.Unit;
 import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
@@ -51,6 +60,67 @@ public class NfcActivity extends AppCompatActivity {
     private TextView tvGender;
     private Button bSkipNfc;
     private NfcService nfcService;
+
+    private final NfcService.Callback nfcCallback = new NfcService.Callback() {
+
+        @Override
+        public void onZenIdNotNfcState() {
+            LogUtils.logInfo(getApplicationContext(), "Not NFC state!!!");
+        }
+
+        @Override
+        public void onStateChanged(NfcState state) {
+            tvNfcState.setText("NFC State: " + state.name());
+        }
+
+        @Override
+        public void onResult(UploadReadyData uploadReadyData, NfcResult nfcResult, NfcData nfcData) {
+            String picturePath = nfcResult.getFacePicturePath();
+            if (picturePath != null) {
+                if (nfcResult.getFacePictureFormat() == FacePictureFormat.JP2) {
+                    loadImage(picturePath);
+                } else {
+                    ivFacePicture.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                }
+                // Both branches above read the file before returning, so it can go now.
+                new File(picturePath).delete();
+            }
+            tvDocumentCode.setText("Document code: " + nfcResult.getDocumentCode());
+            tvIssuingState.setText("Issuing state: " + nfcResult.getIssuingState());
+            tvNationality.setText("Nationality: " + nfcResult.getNationality());
+            tvDocumentNumber.setText("Document number: " + nfcResult.getDocumentNumber());
+            tvDateOfBirth.setText("Date of birth: " + nfcResult.getDateOfBirth());
+            tvDateOfExpiry.setText("Date of expiry: " + nfcResult.getDateOfExpiry());
+            tvPrimaryIdentifiery.setText("Primary identifier: " + nfcResult.getPrimaryIdentifier());
+            tvSecondaryIdentifier.setText("Secondary identifier: " + nfcResult.getSecondaryIdentifier());
+            tvGender.setText("Gender: " + nfcResult.getGender());
+
+            postSample(NfcActivity.this, uploadReadyData);
+        }
+
+        @Override
+        public void onAccessDenied(NfcAccessDeniedException accessDeniedException) {
+            NfcKey key = nfcService.getNfcKey();
+            tvNfcState.setText(key == null
+                    ? "Access denied"
+                    : String.format("ERROR... birthDate: %s, documentNumber: %s, expiryDate: %s", key.getBirthDate(), key.getDocumentNumber(), key.getExpiryDate()));
+        }
+
+        @Override
+        public void onConnectionFailed(NfcConnectionException exception) {
+            tvNfcState.setText("Connection lost.");
+        }
+
+        @Override
+        public void onGeneralException(Exception exception) {
+            tvNfcState.setText("General exception: " + exception.getMessage());
+        }
+
+        @Override
+        public void onVerificationFailed(String message) {
+            tvNfcState.setText(message);
+        }
+    };
 
     /*-------------------------*/
     /*   OVERRIDDEN METHODS    */
@@ -95,7 +165,14 @@ public class NfcActivity extends AppCompatActivity {
             Timber.e(e);
         }
 
+        // Registered up front so that a failed skipNfcVerification() is reported even when no tag
+        // was ever tapped and handleIntent() never ran.
+        nfcService.setCallback(nfcCallback);
+
         bSkipNfc.setOnClickListener(v -> {
+            // No sample means the core refused the skip; it reports the reason through the callback,
+            // which has already put it in tvNfcState by the time this returns - do not overwrite it.
+            // Finishing here would send the document without the page that carries the chip data.
             UploadReadyData uploadReadyData = nfcService.skipNfcVerification();
             if (uploadReadyData != null) {
                 postSample(this, uploadReadyData);
@@ -132,58 +209,7 @@ public class NfcActivity extends AppCompatActivity {
     /*-------------------------*/
 
     private void handleIntent(Intent intent) {
-        nfcService.handleIntent(intent, new NfcService.Callback() {
-
-            @Override
-            public void onZenIdNotNfcState() {
-                LogUtils.logInfo(getApplicationContext(), "Not NFC state!!!");
-            }
-
-            @Override
-            public void onStateChanged(NfcState state) {
-                tvNfcState.setText("NFC State: " + state.name());
-            }
-
-            @Override
-            public void onResult(UploadReadyData uploadReadyData, NfcResult nfcResult, NfcData nfcData) {
-                String picturePath = nfcResult.getFacePicturePath();
-                FacePictureFormat format = nfcResult.getFacePictureFormat();
-                if (format.equals(FacePictureFormat.JP2)) {
-                    loadImage(picturePath);
-                } else {
-                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
-                    ivFacePicture.setImageBitmap(bitmap);
-                }
-                tvDocumentCode.setText("Document code: " + nfcResult.getDocumentCode());
-                tvIssuingState.setText("Issuing state: " + nfcResult.getIssuingState());
-                tvNationality.setText("Nationality: " + nfcResult.getNationality());
-                tvDocumentNumber.setText("Document number: " + nfcResult.getDocumentNumber());
-                tvDateOfBirth.setText("Date of birth: " + nfcResult.getDateOfBirth());
-                tvDateOfExpiry.setText("Date of expiry: " + nfcResult.getDateOfExpiry());
-                tvPrimaryIdentifiery.setText("Primary identifier: " + nfcResult.getPrimaryIdentifier());
-                tvSecondaryIdentifier.setText("Secondary identifier: " + nfcResult.getSecondaryIdentifier());
-                tvGender.setText("Gender: " + nfcResult.getGender());
-
-                postSample(NfcActivity.this, uploadReadyData);
-            }
-
-            @Override
-            public void onAccessDenied(NfcAccessDeniedException accessDeniedException) {
-                NfcKey key = nfcService.getNfcKey();
-                String msg = String.format("ERROR... birthDate: %s, documentNumber: %s, expiryDate: %s", key.getBirthDate(), key.getDocumentNumber(), key.getExpiryDate());
-                tvNfcState.setText(msg);
-            }
-
-            @Override
-            public void onConnectionFailed(NfcConnectionException exception) {
-                tvNfcState.setText("Connection lost.");
-            }
-
-            @Override
-            public void onGeneralException(Exception exception) {
-                tvNfcState.setText("General exception");
-            }
-        });
+        nfcService.handleIntent(intent, nfcCallback);
     }
 
     private void postSample(Context context, UploadReadyData uploadReadyData) {
@@ -218,7 +244,48 @@ public class NfcActivity extends AppCompatActivity {
     }
 
     private void loadImage(String picturePath) {
-        // JP2K decoding not available in Java sample; show the image path as text
-        Toast.makeText(this, "JP2K image: " + picturePath, Toast.LENGTH_SHORT).show();
+        byte[] jp2kBytes;
+        try {
+            jp2kBytes = Files.readAllBytes(new File(picturePath).toPath());
+        } catch (IOException e) {
+            Timber.e(e);
+            Toast.makeText(this, "Error reading image file", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Jp2kDecoderAsync decoder = new Jp2kDecoderAsync(executor, new Config());
+        decoder.init(this, new Callback<Unit>() {
+            @Override
+            public void onSuccess(Unit result) {
+                decoder.decodeImage(jp2kBytes, new Callback<Bitmap>() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
+                        runOnUiThread(() -> ivFacePicture.setImageBitmap(bitmap));
+                        close();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Exception e) {
+                        showDecodingError(e);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(@NonNull Exception e) {
+                showDecodingError(e);
+            }
+
+            private void showDecodingError(Exception e) {
+                Timber.e(e);
+                runOnUiThread(() -> Toast.makeText(NfcActivity.this, "Error decoding image", Toast.LENGTH_SHORT).show());
+                close();
+            }
+
+            private void close() {
+                decoder.close();
+                executor.shutdown();
+            }
+        });
     }
 }

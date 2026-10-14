@@ -146,7 +146,7 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.6.2"
     implementation "androidx.camera:camera-view:1.6.2"
     implementation "org.threeten:threetenbp:1.7.4:no-tzdb"
-    implementation("com.azure:azure-ai-vision-face-ui:1.5.0")
+    implementation("com.azure:azure-ai-vision-face-ui:1.5.1")
     
     // JSON converter
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.3'
