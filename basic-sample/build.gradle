@@ -66,6 +66,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packaging {
+        // BouncyCastle 1.85 (via jmrtd) ships META-INF/LICENSE.md in both bcprov and bcutil.
+        resources {
+            pickFirsts += 'META-INF/LICENSE.md'
+        }
+    }
+
     tasks.register("buildAndPublishSampleApp") {
         group = 'zenid'
         dependsOn ":copyZenIdSDKArtifacts", "incrementVersionCode", "assembleRelease"
@@ -93,8 +100,8 @@ dependencies {
     implementation "com.otaliastudios.opengl:egloo:0.6.1"
 
     // NFC card reader
-    implementation 'net.sf.scuba:scuba-sc-android:0.0.26'
-    implementation 'org.jmrtd:jmrtd:0.8.5'
+    implementation 'net.sf.scuba:scuba-sc-android:0.0.27'
+    implementation 'org.jmrtd:jmrtd:0.8.8'
     implementation 'dev.keiji.jp2k:jp2k-decoder-android:0.3.0'
 
     // Rest API
@@ -119,8 +126,8 @@ dependencies {
     implementation("com.azure:azure-ai-vision-face-ui:1.4.8")
     
     // JSON converter
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.1'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.21.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.3'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.22.3'
 
     // Logger
     implementation 'com.jakewharton.timber:timber:5.0.1'
