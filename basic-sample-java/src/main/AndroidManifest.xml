@@ -9,7 +9,6 @@
     <uses-sdk tools:overrideLibrary="com.azure.android.ai.vision.face.ui, com.azure.android.ai.vision.face.ui.api, dev.keiji.jp2k, androidx.javascriptengine"/>
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-permission android:name="android.permission.NFC" />
 
     <application
