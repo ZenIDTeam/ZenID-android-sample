@@ -7,10 +7,12 @@ import java.util.Collections;
 import cz.trask.zenid.sample.LanguageUtils;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.VisualizationSettings;
+import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.ZenIdException;
 import cz.trask.zenid.sdk.enums.Country;
 import cz.trask.zenid.sdk.enums.DocumentRole;
 import cz.trask.zenid.sdk.enums.PageCodes;
+import cz.trask.zenid.sdk.internal.verifier.HologramVerifier;
 import cz.trask.zenid.sdk.models.AcceptableInput;
 import cz.trask.zenid.sdk.models.DocumentFilter;
 import cz.trask.zenid.sdk.models.DocumentVerifierSettings;
@@ -62,6 +64,7 @@ public class HologramActivity extends AppCompatActivity {
 
             @Override
             public void onResult(UploadReadyData uploadReadyData) {
+                ZenId.get().getVerifier(HologramVerifier.class).unload();
                 startActivity(ResultActivity.newIntent(HologramActivity.this, uploadReadyData.getSignedSamplePackage()));
                 finish();
             }
@@ -74,6 +77,7 @@ public class HologramActivity extends AppCompatActivity {
             @Override
             public void onVerificationFailed(String message) {
                 // Terminal: the capture has stopped and onResult will not be called.
+                ZenId.get().getVerifier(HologramVerifier.class).unload();
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 finish();
             }

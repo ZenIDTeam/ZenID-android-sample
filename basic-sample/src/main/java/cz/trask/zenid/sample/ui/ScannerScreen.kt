@@ -19,12 +19,18 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import cz.trask.zenid.sample.viewmodel.ANY_COUNTRY
 import cz.trask.zenid.sample.viewmodel.MainViewModel
+import cz.trask.zenid.sdk.UniversalVerifierManager
 import cz.trask.zenid.sdk.VisualizationSettings
+import cz.trask.zenid.sdk.ZenId
 import cz.trask.zenid.sdk.ZenIdException
 import cz.trask.zenid.sdk.enums.Country
 import cz.trask.zenid.sdk.enums.DocumentRole
 import cz.trask.zenid.sdk.enums.PageCodes
 import cz.trask.zenid.sdk.enums.SupportedLanguages
+import cz.trask.zenid.sdk.internal.verifier.DocumentVerifier
+import cz.trask.zenid.sdk.internal.verifier.FaceLivenessVerifier
+import cz.trask.zenid.sdk.internal.verifier.HologramVerifier
+import cz.trask.zenid.sdk.internal.verifier.SelfieVerifier
 import cz.trask.zenid.sdk.models.AcceptableInput
 import cz.trask.zenid.sdk.models.DocumentFilter
 import cz.trask.zenid.sdk.models.DocumentVerifierSettings
@@ -47,8 +53,17 @@ fun ScannerScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by mainViewModel.uiState.collectAsState()
 
-    val handleResult: (UploadReadyData) -> Unit = remember {
+    // Release this verifier once its step has genuinely ended. Deliberately not on the NFC handoff:
+    // NfcService keeps using this same document verifier session to read the chip, so unloading here
+    // would destroy it before the read. The models are shared and stay cached either way - they are
+    // freed by unloadAllVerifiers() in AppNavigation, when the user leaves the flow.
+    val unloadVerifier: () -> Unit = remember(verifierType) {
+        { verifierClass(verifierType)?.let { ZenId.get().getVerifier(it).unload() } }
+    }
+
+    val handleResult: (UploadReadyData) -> Unit = remember(unloadVerifier) {
         { uploadReadyData ->
+            unloadVerifier()
             mainViewModel.postSampleAndNavigate(uploadReadyData) {
                 navController.navigate(Routes.RESULT)
             }
@@ -62,17 +77,19 @@ fun ScannerScreen(
         }
     }
     val context = LocalContext.current
-    val handleError: (ZenIdException) -> Unit = remember(context) {
+    val handleError: (ZenIdException) -> Unit = remember(context, unloadVerifier) {
         { e ->
             Timber.e(e)
+            unloadVerifier()
             navController.popBackStack()
         }
     }
     // A failed verification is terminal and produces no sample, so say why before leaving -
     // otherwise it looks exactly like the user pressing Back.
-    val handleVerificationFailed: (String) -> Unit = remember(context) {
+    val handleVerificationFailed: (String) -> Unit = remember(context, unloadVerifier) {
         { message ->
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            unloadVerifier()
             navController.popBackStack()
         }
     }
@@ -154,6 +171,14 @@ fun ScannerScreen(
             }
         }
     )
+}
+
+private fun verifierClass(verifierType: String): Class<out UniversalVerifierManager>? = when (verifierType) {
+    "document" -> DocumentVerifier::class.java
+    "selfie" -> SelfieVerifier::class.java
+    "face_liveness" -> FaceLivenessVerifier::class.java
+    "hologram" -> HologramVerifier::class.java
+    else -> null
 }
 
 private fun buildDocumentSettings(countryStr: String?, role: DocumentRole?, page: PageCodes?): DocumentVerifierSettings {

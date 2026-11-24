@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import cz.trask.zenid.sample.viewmodel.MainViewModel
 import cz.trask.zenid.sample.viewmodel.PickerType
 import cz.trask.zenid.sample.viewmodel.PickerViewModel
+import cz.trask.zenid.sdk.ZenId
 
 object Routes {
     const val MAIN = "main"
@@ -94,6 +95,9 @@ fun AppNavigation(mainViewModel: MainViewModel = viewModel()) {
             ResultScreen(
                 mainViewModel = mainViewModel,
                 onClose = {
+                    // Back at the menu, no capture view is alive: free the recognition models.
+                    // Per-verifier unload() would not, they are shared and cached for the process.
+                    ZenId.get().unloadAllVerifiers()
                     navController.navigate(Routes.MAIN) {
                         popUpTo(Routes.MAIN) { inclusive = false }
                     }

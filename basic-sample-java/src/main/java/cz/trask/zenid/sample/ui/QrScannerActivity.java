@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.util.Size;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
@@ -82,6 +84,7 @@ public class QrScannerActivity extends AppCompatActivity {
         cameraExecutor.shutdown();
     }
 
+    @OptIn(markerClass = ExperimentalGetImage.class)
     private void startCamera() {
         PreviewView previewView = findViewById(R.id.previewView);
         BarcodeScanner scanner = BarcodeScanning.getClient();

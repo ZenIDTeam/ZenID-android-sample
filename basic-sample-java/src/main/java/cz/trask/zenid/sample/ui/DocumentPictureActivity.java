@@ -73,6 +73,7 @@ public class DocumentPictureActivity extends AppCompatActivity {
             @Override
             public void onVerificationFailed(String message) {
                 // Terminal: the capture has stopped and onResult will not be called.
+                ZenId.get().getVerifier(DocumentVerifier.class).unload();
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 finish();
             }

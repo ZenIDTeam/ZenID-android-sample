@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import cz.trask.zenid.sample.LanguageUtils;
 import cz.trask.zenid.sample.R;
 import cz.trask.zenid.sdk.VisualizationSettings;
+import cz.trask.zenid.sdk.ZenId;
 import cz.trask.zenid.sdk.ZenIdException;
+import cz.trask.zenid.sdk.internal.verifier.SelfieVerifier;
 import cz.trask.zenid.sdk.models.SelfieStateContainerForPublicData;
 import cz.trask.zenid.sdk.models.SelfieVerifierSettings;
 import cz.trask.zenid.sdk.models.UploadReadyData;
@@ -41,6 +43,7 @@ public class SelfieActivity extends AppCompatActivity {
 
             @Override
             public void onResult(UploadReadyData uploadReadyData) {
+                ZenId.get().getVerifier(SelfieVerifier.class).unload();
                 startActivity(ResultActivity.newIntent(SelfieActivity.this, uploadReadyData.getSignedSamplePackage()));
                 finish();
             }
@@ -53,6 +56,7 @@ public class SelfieActivity extends AppCompatActivity {
             @Override
             public void onVerificationFailed(String message) {
                 // Terminal: the capture has stopped and onResult will not be called.
+                ZenId.get().getVerifier(SelfieVerifier.class).unload();
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 finish();
             }

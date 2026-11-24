@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cz.trask.zenid.sample.MyApplication;
 import cz.trask.zenid.sample.R;
+import cz.trask.zenid.sdk.ZenId;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -61,5 +62,17 @@ public class ResultActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Leaving the result screen ends the identification flow, so free the models too - but not
+        // on a configuration change, which destroys the activity only to recreate it. The
+        // per-verifier unload() each capture screen does destroys the verifier but not the models -
+        // they are shared and stay cached for the whole process.
+        if (isFinishing()) {
+            ZenId.get().unloadAllVerifiers();
+        }
     }
 }
